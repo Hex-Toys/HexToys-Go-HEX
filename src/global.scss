@@ -1,0 +1,27 @@
+$width : 576px;
+$bg_color: #000;
+$str_color:rgb(60, 190, 112);
+@mixin mobile_potrait{
+    @media screen and (max-width: $width) and (orientation:portrait){
+        @content
+    }
+};
+@mixin mobile_landscape{
+    @media screen and (max-height: $width) and (orientation:landscape){
+        @content
+    }
+};
+
+@font-face {
+    font-family: ZenDots;
+    src: url(ZenDots-Regular.ttf);
+}
+
+button:disabled {
+    background-color: rgba(239, 239, 239, 0.3) !important;
+    color: rgba(3, 3, 3, 0.3) !important;
+    // border-color: rgba(118, 118, 118, 0.3) !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+    cursor: not-allowed !important;
+}

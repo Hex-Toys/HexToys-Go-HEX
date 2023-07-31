@@ -1,0 +1,105 @@
+@import "../../../global.scss";
+.avartar {
+    width: 72px;
+    height: 72px;
+    border-radius: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    @include mobile_potrait{
+    }
+    &.lg{
+        width: 72px;
+        height: 72px;
+    }
+    &.md{
+        width: 60px;
+        height: 60px;
+    }
+    &.sm{
+        width: 42px;
+        height: 42px;
+    }
+    &.bg_color_dark{
+        background: #6B6B6B;
+    }
+    &.bg_color_light{
+        background: #CCCCCC;
+    }
+    &.no-padding {
+        padding: 0;
+        border: none;
+    }
+    &.border_light{
+        border: 2px solid #7777F8;
+    }
+    &.border_dark{
+        background: linear-gradient(to right,#FF00FF, #FE511B);
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 72px;
+            box-sizing: border-box;
+            border: 2px solid transparent;
+            background: linear-gradient(to right, #FF00FF, #FE511B) border-box;
+            transition: all 0.3s ease;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: destination-out;
+            mask-composite: exclude;
+        }
+        .video_img_card{
+            width: calc(100% - 4px);
+            height: calc(100% - 4px);
+
+            &.border_dark{
+                border: 1px #191C1F solid;
+            }
+            &.border_light{
+                border: 1px #fff solid;
+            }
+        }
+    }
+    .video_img_card{
+        width: 100%;
+        height: 100%;
+        position: relative;
+        border-radius: 72px;
+        overflow: hidden;
+        box-sizing: border-box;
+        z-index: 1;
+        @include mobile_potrait {
+        }
+        .image{   
+            position: absolute;
+            width: 100%;             
+            height: 100%;
+            object-fit: cover;
+            top : 0;
+            left : 0;
+        }
+        .videoEmbed{
+            position: absolute;
+            width: 100%;             
+            height: 100%;
+            object-fit: cover;
+            top : 0;
+            left : 0;
+        }
+        .img_cover{
+            position: absolute;
+            width: 100%;             
+            height: 100%;
+            top : 0;
+            left : 0;
+        }
+    }
+}

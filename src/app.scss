@@ -1,0 +1,186 @@
+@import "global.scss";
+
+.sections{
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+    background: #191C1F;
+    z-index: 1;
+    overflow: hidden;
+    @include mobile_potrait{
+        height: 100%;
+    }
+}
+html{
+    @include mobile_potrait{
+        height: 100%;
+    }
+}
+body{
+    @include mobile_potrait{
+        height: 100%;
+    }
+}
+#root{
+    @include mobile_potrait{
+        height: 100%;
+    }
+    
+}
+div[data-rk]{
+    @include mobile_potrait{
+        height: 100%;
+    }
+}
+
+.myToast{
+    left: calc(50% - 75px) !important;
+    width: 400px !important;
+    max-width: 100% !important;
+    background: #09ba06  !important;
+    border: 1px solid #09ba06;
+    backdrop-filter: blur(5px);
+    display: flex;
+    flex-direction: row;
+    >div{
+        color: #fff;
+        width: fit-content !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: flex-start;
+        flex-direction: row !important;
+        font-size: 12px;
+    }
+    
+}
+.text_color_1_dark{
+    color: #fff;
+}
+.text_color_1_light{
+    color : #000
+}
+
+.text_color_2_dark{
+    color: #C8CDD0;
+}
+.text_color_2_light{
+    color : #383F42
+}
+
+.text_color_3_dark{
+    color: #B2B9BD;
+}
+
+.text_color_3_light{
+    color : #383F42
+}
+
+.text_color_4_dark{
+    color: #ffffff99;
+}
+
+.text_color_4_light{
+    color : #00000099;
+}
+.text_color_5_dark{
+    color: #7780A1;
+}
+
+.text_color_5_light{
+    color : #7780A1;
+}
+
+.bg_1_dark{
+    background-color: #191C1F;
+}
+.bg_1_light{
+    background-color: #F6F7FC;
+}
+
+.bg_2_dark{
+    background-color: #191C1F;
+}
+.bg_2_light{
+    background-color: #fff;
+}
+.text_color_gradient_1{
+    background: linear-gradient(to right,#FF00FF, #FE511B);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.text_color_gradient_2{
+    background: linear-gradient(to bottom,#FF00FF, #FE511B);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.button{
+    padding : 16px 20px;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(92.73deg, #FF00FF 0.61%, #FE511B 99.34%);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    @include mobile_potrait{
+        font-size: 0.8rem;
+        border-radius: 5px;
+    }
+    @include mobile_landscape{
+        font-size: 0.8rem;
+        margin-left: 1rem;
+    }
+    &:disabled{
+        background: #00000000 !important;
+        border-color: #626262 !important;
+        box-shadow: 0px 0px 0px #ff0099;
+        p{
+            color: #626262 !important;
+        }
+    }
+    &:hover{
+        background: linear-gradient(to bottom, #FF00FF 0.61%, #FE511B 99.34%);
+        p{
+        }
+    }
+    
+    p{
+        z-index: 1;
+        color: #fff;
+        line-height: 1;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        @include mobile_potrait{
+            font-size: 0.8rem;
+        }
+
+    }
+}
+.effect1{
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0.04;
+    @include mobile_potrait{
+        width: 30vw;
+    }
+}
+.effect2{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    opacity: 0.04;
+    @include mobile_potrait{
+        width: 30vw;
+    }
+}

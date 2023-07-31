@@ -1,0 +1,270 @@
+@import "../../global.scss";
+.topBarDropdown{
+    
+    .popperClose{
+        pointer-events: none;
+    }
+    div{
+        display: flex;
+        button{
+            background-color: #ffffff00;
+            color: #fff;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            @include mobile_potrait{
+                font-size: 10px;
+            }
+            @include mobile_landscape{
+                font-size: 10px;
+            }
+            
+            .mobileLabel{
+                display: none;
+
+            }
+            .fas{
+                margin-left: 0.5rem;
+            }
+
+        }
+    }
+    .pooperNav {
+        position: static !important;
+        left: unset !important;
+        top: unset !important;
+        transform: none !important;
+        will-change: none !important;
+        &>div{
+            box-shadow: none !important;
+            margin-left: 1.5rem;
+            transition: none !important;
+            margin-top: 0 !important;
+            margin-bottom: 5px !important;
+            padding: 0px !important;
+        }
+    }
+    .dropdownBtn {
+        border-radius: 3px;
+        box-shadow: 0 2px 5px 0 #00000042;
+        top: 100%;
+        min-width: 160px;
+        margin: 2px 5px 0;
+        font-size: 14px;
+        text-align: left;
+        list-style: none;
+        background-color: #00141f;
+        border: 1px #0eabff33 solid;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        @include mobile_potrait{
+            font-size: 10px;
+            
+            
+        }
+        @include mobile_landscape{
+            font-size: 10px;
+            margin-left: 0.5rem !important;
+            min-width: 100px;
+        }
+    }
+    .dropdown {
+        border-radius: 3px;
+        box-shadow: 0 2px 5px 0 #00000042;
+        top: 100%;
+        z-index: 1000;
+        min-width: 120px;
+        padding: 5px 5px;
+        margin: 2px 5px 0;
+        font-size: 14px;
+        text-align: left;
+        list-style: none;
+        background-color: #000000aa;
+        border: 1px #0eabff20 solid;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        @include mobile_potrait{
+            font-size: 10px;
+            
+            
+        }
+        @include mobile_landscape{
+            font-size: 10px;
+            margin-left: 0.5rem !important;
+            min-width: 100px;
+        }
+    }
+    .menuList{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-direction: column;
+        padding: 0px;
+        margin: 0;
+
+        .dropdownItem{
+            width: calc(100% - 20px);
+            font-size: 13px;
+            padding: 10px 10px;
+            margin: 0 0px;
+            border-radius: 2px;
+            position: relative;
+            transition: all 150ms linear;
+            display: block;
+            clear: both;
+            font-weight: 400;
+            height: fit-content;
+            color: #fff !important;
+            min-height: unset;
+            // background: transparent !important;
+            &:hover{
+                background-color: #0ac6d433;
+                color: #FFFFFF;
+            }
+            span{
+                display: none;
+            }
+            @include mobile_potrait{
+                font-size: 10px;
+                padding: 5px 10px;
+                margin: 0 0px;
+            }
+            @include mobile_landscape{
+                font-size: 10px;
+                padding: 5px 10px;
+                margin: 0 0px;
+            }
+        }
+        .dropdownItem{
+            width: calc(100% - 10px);
+            font-size: 13px;
+            padding: 7px 5px;
+            margin: 0 0px;
+            border-radius: 2px;
+            position: relative;
+            transition: all 150ms linear;
+            display: block;
+            clear: both;
+            font-weight: 400;
+            height: fit-content;
+            color: #fff !important;
+            min-height: unset;
+            // background: transparent !important;
+            &:hover{
+                background-color: #0ac6d433;
+                color: #FFFFFF;
+            }
+            span{
+                display: none;
+            }
+            @include mobile_potrait{
+                font-size: 10px;
+                padding: 5px 10px;
+                margin: 0 0px;
+            }
+            @include mobile_landscape{
+                font-size: 10px;
+                padding: 5px 10px;
+                margin: 0 0px;
+            }
+        }
+    }
+    .popperResponsive{
+        z-index: 1200;
+        position: absolute !important;
+    }
+    
+    
+}
+
+
+
+
+//   infoHover: {
+//     "&:hover": {
+//       backgroundColor: infoColor,
+//       color: "#FFFFFF",
+//       ...infoBoxShadow,
+//     },
+//   },
+//   successHover: {
+//     "&:hover": {
+//       backgroundColor: successColor,
+//       color: "#FFFFFF",
+//       ...successBoxShadow,
+//     },
+//   },
+//   warningHover: {
+//     "&:hover": {
+//       backgroundColor: warningColor,
+//       color: "#FFFFFF",
+//       ...warningBoxShadow,
+//     },
+//   },
+//   dangerHover: {
+//     "&:hover": {
+//       backgroundColor: dangerColor,
+//       color: "#FFFFFF",
+//       ...dangerBoxShadow,
+//     },
+//   },
+//   roseHover: {
+//     "&:hover": {
+//       backgroundColor: roseColor,
+//       color: "#FFFFFF",
+//       ...roseBoxShadow,
+//     },
+//   },
+//   dropdownItemRTL: {
+//     textAlign: "right",
+//   },
+//   dropdownDividerItem: {
+//     margin: "5px 0",
+//     backgroundColor: "rgba(0, 0, 0, 0.12)",
+//     height: "1px",
+//     overflow: "hidden",
+//   },
+//   buttonIcon: {
+//     width: "20px",
+//     height: "20px",
+//   },
+//   caret: {
+//     transition: "all 150ms ease-in",
+//     display: "inline-block",
+//     width: "0",
+//     height: "0",
+//     marginLeft: "4px",
+//     verticalAlign: "middle",
+//     borderTop: "4px solid",
+//     borderRight: "4px solid transparent",
+//     borderLeft: "4px solid transparent",
+//   },
+//   caretActive: {
+//     transform: "rotate(180deg)",
+//   },
+//   caretRTL: {
+//     marginRight: "4px",
+//   },
+//   dropdownHeader: {
+//     display: "block",
+//     padding: "0.1875rem 1.25rem",
+//     fontSize: "0.75rem",
+//     lineHeight: "1.428571",
+//     color: "#777",
+//     whiteSpace: "nowrap",
+//     fontWeight: "inherit",
+//     marginTop: "10px",
+//     minHeight: "unset",
+//     "&:hover,&:focus": {
+//       backgroundColor: "transparent",
+//       cursor: "auto",
+//     },
+//   },
+//   noLiPadding: {
+//     padding: "0",
+//   },
+// });

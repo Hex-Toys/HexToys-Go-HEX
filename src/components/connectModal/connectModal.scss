@@ -1,0 +1,162 @@
+@import "../../global.scss";
+.connectModal{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left : 0;
+    margin: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.61);
+    z-index: 25;
+    display: none;
+    opacity: 1;
+    &.active{
+        display: flex;
+    }
+    .modelContent{
+      z-index: 5;
+      width: 350px;
+      
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex-direction: column;
+      position: relative;
+      opacity: 1;
+      border-radius: 10px;
+      overflow: hidden;
+      &.bg_dark{
+        background: #060714;
+      }
+      &.bg_light{
+        background: #fff;
+      }
+      @include mobile_potrait{
+          width: 20rem;
+      }
+
+      .connectWalletHeader{
+          width: 100%;
+          height: 5rem;
+          border-bottom: 1px solid #88888822;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          z-index: 1;
+          @include mobile_potrait{
+              border-top-left-radius: 1rem;
+              border-top-right-radius: 1rem;
+          }
+
+          .connectWalletTitle{
+              font-size: 22px;
+              padding-left: 20px;
+              white-space: nowrap;
+              letter-spacing: -1px;
+              @include mobile_potrait{
+                font-size: 18px;
+            }
+          }
+          .connectModalCloseButton{
+              font-size: 24px;
+              font-weight: 600;
+              border: none;
+              background-color: #00000000;
+              border-radius: 16px;
+              cursor: pointer;
+              margin-right: 20px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              transition: all 0.3s ease;
+              &:hover{
+                transform: rotate(90deg);
+              }
+          }
+      }
+      
+      .connectWalletWrapper{
+        width: 100%;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-direction: column;
+        position: relative;
+        z-index: 1;
+        padding: 24px;
+        grid-area: auto;
+        gap : 16px;
+        .btn_div {
+          display: flex;
+          cursor: pointer;
+          width: 100%;
+          display: flex;
+          position: relative;
+          grid-area: auto;
+          gap : 16px;
+          background-image: linear-gradient(108deg,#FF00FF 16%,#FE511B);
+          padding: 10px;
+          box-sizing: border-box;
+          border-radius: 12px;
+          color: #ffffff;
+          &:hover{
+              background-image: linear-gradient(#FF00FF 16%,#FE511B);
+      
+          }
+          .icon {
+            width: 54px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            @include mobile_potrait {
+              width: 3rem;
+              height: 3rem;
+            }
+            
+            img {
+              width: 100%;
+              transition: all 0.3s ease;
+            }
+          }
+          .text {
+            width: calc(100% - 70px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 1;
+  
+            h2 {
+              font-size: 16px;
+              width: 100%;
+              color: #fff;
+              transition: all 0.3s ease;
+              @include mobile_potrait {
+                font-size: 14px;
+              }
+              
+            }
+            p {
+              font-size: 12px;
+              width: 100%;
+              color: #777;
+              @include mobile_potrait {
+                font-size: 0.8rem;
+              }
+            }
+          }
+          &:hover {
+            .text {
+              h2 {
+                color: #ffffff;
+              }
+            }
+          }
+        }
+      }
+    }
+}

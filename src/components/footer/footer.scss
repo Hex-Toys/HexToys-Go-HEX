@@ -1,0 +1,177 @@
+@import "../../global.scss";
+.footer{
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 0 32px;
+    border-top: 1px #222222 solid;
+    .footerContent{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        box-sizing: border-box;
+        padding-top: 80px;
+        padding-bottom: 32px;
+        z-index: 1;
+        max-width: 1240px;
+        @include mobile_potrait{
+            margin-bottom: 2rem;
+            flex-direction: column;
+        }
+        @include mobile_landscape{
+            margin-bottom: 2rem;
+        }
+        .wrapper{
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            flex-direction: row;
+            width: 100%;
+            margin-bottom: 32px;
+            @include mobile_potrait{
+               flex-direction: column;
+            }
+            @include mobile_landscape{
+            }
+            .left{
+                flex: 0.5;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                @include mobile_potrait{
+                    margin-bottom: 2rem;
+                    width: 100%;
+                }
+                @include mobile_landscape{
+                }
+                .links{
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                    grid-area: auto;
+                    gap : 16px;
+                    @include mobile_potrait{
+                    }
+                    a{
+                        font-size: 16px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: #ffffff;
+                        position: relative;
+                        text-decoration: none;
+                        transition: all 0.3s ease;
+                        @include mobile_potrait{
+                            font-size: 1rem;
+                            margin-right: 0rem;
+                            height: 1.5rem;
+                        }
+                        
+                        .fab{
+                            z-index: 1;
+                        }
+                        
+                        &:hover{
+                            color: #FF0099;
+                        }
+                    }
+                }
+            }
+            .right{
+                flex: 0.5;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                @include mobile_potrait{
+                    margin-bottom: 0rem;
+                    width: 100%;
+                }
+                @include mobile_landscape{
+                }
+                a{
+                    margin-bottom: 32px;
+                    
+                    img{
+                        width: 200px;
+                        transition: all 0.3s ease;
+                    }
+                    &:hover{
+                        
+                        img{
+                            filter: drop-shadow(0px 0px 5px #FF009988);
+                        }
+                    }
+                }
+                .socialLinks{
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: row;
+                    grid-area: auto;
+                    gap : 24px;
+                    @include mobile_potrait{
+                    }
+                    a{
+                        font-size: 24px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: #FF0099;
+                        position: relative;
+                        text-decoration: none;
+                        transition: all 0.3s ease;
+                        @include mobile_potrait{
+                            font-size: 1rem;
+                            margin-right: 0rem;
+                            width: 1.5rem;
+                            height: 1.5rem;
+                            font-size: 1rem;
+                        }
+                        
+                        .fab{
+                            z-index: 1;
+                        }
+                        
+                        &:hover{
+                            color: #ff3db2;
+                        }
+                    }
+                }
+            }
+            
+        }
+        
+        span{
+            text-align: center;
+            color: #fff;
+            font-size: 8px;
+            width: 80%;
+            @include mobile_potrait{
+                font-size: 0.8rem;
+                text-align: center;
+            }
+            @include mobile_landscape{
+                font-size: 0.8rem;
+            }
+            a{
+                color: #FF0099;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                &:hover{
+                    color: #ff3db2;
+                }
+            }
+        }
+        
+    }
+    
+}

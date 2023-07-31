@@ -1,0 +1,99 @@
+@import "../../global.scss";
+.btntimer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    width: auto;
+    z-index: 1;
+    span{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: row;
+        color: #fff;
+        font-size: 1rem !important;
+        font-weight: normal;
+        padding: 0rem !important;
+        margin: 0rem !important;
+        width: auto !important;
+        height: auto !important;
+        box-shadow: none !important;
+        // text-shadow: 1px 1px 0px #000,-1px -1px 0px #000,-1px 1px 0px #000,1px -1px 0px #000,3px 3px 5px #000,2px 2px 3px #000;
+                            
+        @include mobile_potrait{
+            font-size: 0.6rem !important;
+        }
+        @include mobile_landscape{
+            font-size: 0.6rem !important;
+        }
+    }
+    
+}
+.hiddenTimer{
+    width: 0%;
+}
+.PreTimer{
+    width: 100%;
+    .PreTimerNums{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .number{
+            width: 90%;
+            height: 70%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: rgb(0, 0, 0);
+            font-size: 1rem;
+            margin: 1rem;
+            
+            @include mobile_potrait{
+                margin: 0.2rem;
+            }
+            @include mobile_landscape{
+                margin: 0.2rem;
+            }
+            .nums{
+                color: white;
+                font-size: 3.5rem;
+                line-height: 4rem;
+                font-family: 'Roboto', sans-serif;
+                width: 5rem;
+                height: 5rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 5px #50FCC2 solid;
+                border-radius: 50%;
+                margin-bottom: 1rem;
+                @include mobile_potrait{
+                    font-size: 1.5rem;
+                    line-height: 2rem;
+                    width: 3rem;
+                    height: 3rem;
+                }
+                @include mobile_landscape{
+                    font-size:1.5rem;
+                    line-height: 2rem;
+                    width: 3rem;
+                    height: 3rem;
+                }
+            }
+            span{
+                color: white;
+                font-size: 1.5rem;
+                font-family: 'Roboto', sans-serif;
+                @include mobile_potrait{
+                    font-size: 1rem;
+                }
+                @include mobile_landscape{
+                    font-size: 0.8rem;
+                }
+            }
+        }
+    }
+}
