@@ -2429,6 +2429,11 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
+"@pulsex/jsbi@^3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@pulsex/jsbi/-/jsbi-3.1.1.tgz#182344438ea607cae5e47ae3084d53c8bf402985"
+  integrity sha512-6Ld0HodMzYjzm9WSa/HDP62sdS38RnLtDQzqR/YW9b8WY6zbWDSwusoX5OFiY/1nol6H6XYMQG+Q9WMnmp9Ngg==
+
 "@rainbow-me/rainbowkit@^1.0.7":
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/@rainbow-me/rainbowkit/-/rainbowkit-1.0.7.tgz#07f946b037166a3a84e7384e06855a2926fac8ba"
@@ -9726,11 +9731,6 @@ js-yaml@^3.13.1:
   dependencies:
     argparse "^1.0.7"
     esprima "^4.0.0"
-
-jsbi@^4.3.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/jsbi/-/jsbi-4.3.0.tgz#b54ee074fb6fcbc00619559305c8f7e912b04741"
-  integrity sha512-SnZNcinB4RIcnEyZqFPdGPVgrg2AcnykiBy0sHVJQKHYeaLUvi3Exj+iaPpLnFVkDPZIV4U0yvgC9/R4uEAZ9g==
 
 jsdom@^16.4.0:
   version "16.7.0"
