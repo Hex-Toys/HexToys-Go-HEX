@@ -1,0 +1,48 @@
+.navbar-container {
+  header {
+    background: #424242;
+  }
+
+  .left-menu {
+    display: flex;
+    justify-content: center;
+    justify-content: left;
+    flex-grow: 1;
+
+    button {
+      svg {
+        font-size: 24px;
+      }
+    }
+  }
+
+  .day-info {
+    text-align: center;
+    margin-right: 10px;
+
+    p {
+      color: hsla(0,0%,100%,.6);
+      font-size: 18px;
+    }
+
+    label {
+      color: hsla(0,0%,100%,.6);
+      font-size: 12px;
+    }
+  }
+
+  .network-select {
+    &:before {
+      display: none;
+    }
+
+    div {
+      color: white;
+      font-size: 12px;
+    }
+
+    svg {
+      color: white;
+    }
+  }
+}
