@@ -1,11 +1,7 @@
-//
-
 import React, { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 import { useAccount, useConnect, useNetwork, useSwitchNetwork } from 'wagmi'
 import { useEthersProvider, useEthersSigner } from './wagmi-ethers'
 import { Signer } from 'ethers'
-import { Provider } from '@ethersproject/abstract-provider'
-import { currentNetwork } from 'utils'
 
 const ActiveWeb3Context = createContext<any[]>([null])
 
@@ -41,7 +37,7 @@ export default function ActiveWeb3Provider({ children }: { children: ReactNode }
   const [loginStatus, setLoginStatus] = useState(false);
 
   useEffect(() => {
-    const isLoggedin = address && isConnected && chain.id === parseInt(currentNetwork);
+    const isLoggedin = address && isConnected;
     setLoginStatus(isLoggedin);
 }, [address, chain, isConnected]);
 
