@@ -102,11 +102,9 @@ export const CONTRACTS_BY_NETWORK = {
   }
 }
 
-export const currentNetwork = process.env.REACT_APP_NETWORK_ID;
 
-export function getContractInfo(name, chainId = null) {
-  if (!chainId) chainId = currentNetwork;
-
+export function getContractInfo(name, chainId) {
+  
   const contracts = CONTRACTS_BY_NETWORK?.[chainId];
   if (contracts) {
     return contracts?.[name];
@@ -152,7 +150,6 @@ export function getCurrencyInfoFromAddress(address) {
 }
 
 export function getCurrencyInfoFromSymbol(symbol) {
-
   let filtered = Tokens.filter(token => token.symbol.toLowerCase() === symbol.toLowerCase())
   if (filtered && filtered.length > 0) {
     return filtered[0];

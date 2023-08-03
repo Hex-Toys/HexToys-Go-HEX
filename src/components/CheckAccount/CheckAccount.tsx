@@ -2,23 +2,22 @@ import { useAccount, useNetwork } from 'wagmi';
 import {useState, useEffect} from "react";
 import Alert from '@material-ui/lab/Alert';
 import Button from '@material-ui/core/Button';
-import useAuth from 'hooks/useAuth';
-import {currentNetwork} from "../../utils";
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 
 const CheckAccount = () => {
+    const {openConnectModal} = useConnectModal();
     const { isConnected, address } = useAccount();
     const [loginStatus, setLoginStatus] = useState(false);
     const { chain } = useNetwork();
-    const { login } = useAuth();
 
     useEffect(() => {
-        const isLoggedin = address && isConnected && chain.id === parseInt(currentNetwork);
+        const isLoggedin = address && isConnected;
         setLoginStatus(isLoggedin);
     }, [address, chain, isConnected]);
 
-    const connectMetaMask = () => {
-        login(1);
+    const connectWallet = () => {
+        openConnectModal();
     }
 
 
@@ -28,7 +27,7 @@ const CheckAccount = () => {
                 !loginStatus ? (
                     <Alert
                         action={
-                            <Button color="inherit" size="small" onClick={connectMetaMask}>
+                            <Button color="inherit" size="small" onClick={connectWallet}>
                                 CONNECT
                             </Button>
                         }

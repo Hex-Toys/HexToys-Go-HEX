@@ -1,5 +1,4 @@
 import './app.scss';
-import {useEagerConnect} from "hooks/useEagerConnect";
 import {BrowserRouter as Router, Switch, Route,} from "react-router-dom";
 import {Toaster} from 'react-hot-toast';
 import NavBar from "./components/Navbar/Navbar";
@@ -7,7 +6,6 @@ import CheckAccount from "./components/CheckAccount/CheckAccount";
 import Home from "./pages/Home/Home";
 
 function App() {
-    useEagerConnect();
     return (
         <>
             <Toaster
