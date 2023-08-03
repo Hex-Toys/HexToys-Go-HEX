@@ -35,3 +35,9 @@ button:disabled {
     width: 100% !important;
     margin: 0 !important;
 }
+
+.MuiDateRangeCalendar-root {
+    &>div:first-child {
+        display: none;
+    }
+}

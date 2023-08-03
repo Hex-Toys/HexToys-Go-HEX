@@ -5,6 +5,8 @@ import {Toaster} from 'react-hot-toast';
 import NavBar from "./components/Navbar/Navbar";
 import CheckAccount from "./components/CheckAccount/CheckAccount";
 import Home from "./pages/Home/Home";
+import Transfer from "./pages/Transfer/Transfer";
+import Stake from "./pages/Stake/Stake";
 
 function App() {
     useEagerConnect();
@@ -19,11 +21,13 @@ function App() {
                 }}
 
             />
-            <NavBar />
-            <CheckAccount/>
             <Router>
+                <NavBar />
+                <CheckAccount/>
                 <Switch>
                      <Route exact path="/" component={Home} />
+                     <Route exact path="/transfer" component={Transfer} />
+                     <Route exact path="/stake" component={Stake} />
                 </Switch>
             </Router>
         </>

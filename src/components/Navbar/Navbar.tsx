@@ -10,9 +10,9 @@ import {RiBankFill} from "react-icons/ri";
 import './styles.scss';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import {Link} from 'react-router-dom';
 
 const NavBar = () => {
-
     const startDate = 1575244816000;
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [currentDate, setCurrentDate] = useState(0);
@@ -53,21 +53,30 @@ const NavBar = () => {
         };
     }, [])
 
+    const goToTransfer = () => {
+
+    }
+
     return(
         <div className="navbar-container">
             <AppBar position="static">
                 <Toolbar>
                     <div className="left-menu">
-                        <Typography color="inherit">
-                            <img src={Logo} style={{height: '34px'}}/>
-                        </Typography>
-
-                        <Button color="inherit">
-                            <IoSwapHorizontalOutline /> &nbsp;Transfer
-                        </Button>
-                        <Button color="inherit">
-                            <RiBankFill /> &nbsp; Stake
-                        </Button>
+                        <Link to={'/'}>
+                            <Typography color="inherit">
+                                <img src={Logo} style={{height: '34px'}}/>
+                            </Typography>
+                        </Link>
+                        <Link to={'/transfer'}>
+                            <Button color="inherit" onClick={goToTransfer}>
+                                <IoSwapHorizontalOutline /> &nbsp;Transfer
+                            </Button>
+                        </Link>
+                        <Link to={'/stake'}>
+                            <Button color="inherit">
+                                <RiBankFill /> &nbsp; Stake
+                            </Button>
+                        </Link>
                     </div>
 
                     <div className="day-info">

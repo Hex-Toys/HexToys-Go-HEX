@@ -13,7 +13,7 @@ const CheckAccount = () => {
     const { login } = useAuth();
 
     useEffect(() => {
-        const isLoggedin = address && isConnected && chain.id === parseInt(currentNetwork);
+        const isLoggedin = address && isConnected;
         setLoginStatus(isLoggedin);
     }, [address, chain, isConnected]);
 

@@ -28,9 +28,22 @@ export const Qa = (a, e, t = La) => ["0", Ja(a, e, t)], ae = (a, e, t, i = La) =
 export const ee = (a, e, t = La) => za(a, e + 12, "T") || za(a, e + 9, "B") || za(a, e + 6, "M") || za(a, e, null, t) || Qa(a, e, t);
 export const ie = (a, e) => za(a, e, null, e) || Wa(a, e);
 export const re = (a, e) => ee(a, e);
+export const ne = (a, e, t) => te(a, e, t);
 
 
 export const Re = a => ie(Oa(a), 3);
 export const Me = a => ie(Oa(a), 2);
 export const ke = a => re(JSBI.toString10U(a), 8);
 export const De = a => re(JSBI.toString10U(a), 12);
+
+export const se = (a, e) => {
+    const t = a ? "− " : "+ ";
+    return e[0] = t + e[0], e
+};
+export const ce = a => a < 0 || Object.is(a, -0);
+export const de = (a, e, t, i) => a.length + 3 > e || "0" === a ? te(a, e, t) : te(a, 0, i);
+export const te = (a, e, t) => za(a, e + 12, "T" + t) || za(a, e + 9, "B" + t) || za(a, e + 6, "M" + t) || za(a, e, t) || ae(a, e, t, La);
+export const Ue = a => se(ce(a), re(Math.abs(a).toString(), 8));
+export const Ve = a => de(JSBI.toString10U(a), 8, " HEX", " Hearts");
+export const Ee = a => se(a.sign, de(JSBI.toString10U(a), 8, " HEX", " Hearts"))
+export const _e = (a, e) => ne(JSBI.toString10U(a), 8, e)
