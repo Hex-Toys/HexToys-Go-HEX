@@ -4,7 +4,7 @@ import { HashLink } from 'react-router-hash-link'
 import ConnectModal from '../connectModal/ConnectModal';
 import AccountModal from "components/accountModal/AccountModal";
 import './topbar.scss'
-import { useAccount } from 'wagmi';
+import { useAccount, useDisconnect } from 'wagmi';
 import ThemeContext from 'context/ThemeContext';
 import MySelect from 'components/Widgets/MySelect';
 import NavButton from 'components/Widgets/NavButton';
@@ -13,14 +13,16 @@ import { Dropdown } from "antd";
 import SearchDrop from 'components/Widgets/Search/SearchDrop';
 import { useMediaQuery, useTheme } from '@material-ui/core';
 import Button from 'components/Widgets/CustomButton';
-import useAuth from 'hooks/useAuth';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 interface MenuType {
     menuOpen?: boolean;
     setMenuOpen(flag: boolean): void;
 };
 export default function Topbar({ menuOpen, setMenuOpen }: MenuType) {
-
+    const {openConnectModal} = useConnectModal();
+    const {disconnect} = useDisconnect();
+    
     const usetheme = useTheme();
     const isMobileOrTablet = useMediaQuery(usetheme.breakpoints.down('xs'));
     
@@ -31,7 +33,6 @@ export default function Topbar({ menuOpen, setMenuOpen }: MenuType) {
 
 
     const { address } = useAccount();
-    const { logout } = useAuth();
 
 
     const [navId, setNavId] = useState('');
@@ -42,10 +43,10 @@ export default function Topbar({ menuOpen, setMenuOpen }: MenuType) {
     }, [search]);
 
     function connectWallet() {
-        setShowConnectModal(true);
+        openConnectModal();
     }
     function disConnectWallet() {
-        logout();
+        disconnect();
     }
 
     const [showSearch, setShowSearch] = useState(false);

@@ -1,5 +1,4 @@
 import './app.scss';
-import {useEagerConnect} from "hooks/useEagerConnect";
 import {BrowserRouter as Router, Switch, Route,} from "react-router-dom";
 import {Toaster} from 'react-hot-toast';
 import NavBar from "./components/Navbar/Navbar";
@@ -9,7 +8,6 @@ import Transfer from "./pages/Transfer/Transfer";
 import Stake from "./pages/Stake/Stake";
 
 function App() {
-    useEagerConnect();
     return (
         <>
             <Toaster

@@ -5,12 +5,12 @@ import { connectorsForWallets, darkTheme, RainbowKitProvider } from '@rainbow-me
 import '@rainbow-me/rainbowkit/styles.css'
 import { configureChains, createConfig, WagmiConfig } from 'wagmi'
 import { publicProvider } from 'wagmi/providers/public'
-import { pulsechain } from 'wagmi/chains'
+import { mainnet, pulsechain, pulsechainV4 } from 'wagmi/chains'
 
 import {
   // rainbowWallet,
   walletConnectWallet,
-  // trustWallet,
+  trustWallet,
   metaMaskWallet,
   // ledgerWallet,
   // phantomWallet,
@@ -19,7 +19,7 @@ import {
 } from '@rainbow-me/rainbowkit/wallets'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [pulsechain],
+  [mainnet, pulsechain, pulsechainV4],
   [publicProvider()]
 )
 
@@ -36,7 +36,7 @@ const connectors = connectorsForWallets([
     groupName: 'Recommended',
     wallets: [
       metaMaskWallet({ projectId, chains }),
-      // trustWallet({ projectId, chains }),
+      trustWallet({ projectId, chains }),
       walletConnectWallet({ projectId, chains }),
       // rainbowWallet({ projectId, chains }),
       // ledgerWallet({ projectId, chains }),
