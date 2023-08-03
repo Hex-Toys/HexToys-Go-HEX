@@ -3,26 +3,91 @@ import axios from "axios";
 import { useAccount, useNetwork } from 'wagmi';
 import JSBI from "@pulsex/jsbi";
 import {oldDailyData, oldHexData, oldGlobalData} from "../../utils/constants";
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+} from 'chart.js';
+import { Line, Scatter } from 'react-chartjs-2';
+import './style.scss';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TablePagination from '@mui/material/TablePagination';
+import TableRow from '@mui/material/TableRow';
+import TableSortLabel from '@mui/material/TableSortLabel';
+import EnhancedTable from "../EnhancedTable/EnhancedTable";
+
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+);
 
 const HomeChainInfo = (props) => {
 
     const urls = {
         'eth-main': {
             tokenDayDataUrl: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3',
-            globalInfoUrl: 'https://graph.ethereum.pulsechain.com/subgraphs/name/Codeakk/Hex'
+            globalInfoUrl: 'https://graph.ethereum.pulsechain.com/subgraphs/name/Codeakk/Hex',
+            title: 'Ethereum MainNet'
         },
         'pulse-main': {
             tokenDayDataUrl: 'https://graph.pulsechain.com/subgraphs/name/pulsechain/pulsex',
-            globalInfoUrl: 'https://graph.pulsechain.com/subgraphs/name/Codeakk/Hex'
+            globalInfoUrl: 'https://graph.pulsechain.com/subgraphs/name/Codeakk/Hex',
+            title: 'PulseChain MainNet'
+        },
+        'pulse-test': {
+            tokenDayDataUrl: 'https://graph.v4.testnet.pulsechain.com/subgraphs/name/pulsechain/pulsex',
+            globalInfoUrl: 'https://graph.v4.testnet.pulsechain.com/subgraphs/name/Codeakk/Hex',
+            title: 'PulseChain TestNet V4'
         }
     }
 
     const { isConnected, address } = useAccount();
+    const [title, setTitle] = useState('');
     const [currentChain, setCurrentChain] = useState('');
     const [tokenDayData, setTokenDayData] = useState([]);
     const [globalInfoData, setGlobalInfoData] = useState(oldGlobalData);
     const [dailyData, setDailyData] = useState(oldDailyData);
     const [stakeInfo, setStakeInfo] = useState({});
+    const [shareChartLabels, setShareChartLabels] = useState([]);
+    const [shareChartData, setShareChartData] = useState({labels: [], datasets: []});
+    const [dailyChartLabels, setDailyChartLabels] = useState([]);
+    const [dailyChartData, setDailyChartData] = useState({datasets: []});
+
+    const chartOptions = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom' as const,
+            },
+            title: {
+                display: false,
+            },
+        },
+    };
+
+    const dailyChartOptions = {
+        scales: {
+            y: {
+                beginAtZero: true,
+            },
+        },
+    };
 
     const [isLoadGlobalInfo, setIsLoadGlobalInfo] = useState(false);
     const [isLoadDailyData, setIsLoadDailyData] = useState(false);
@@ -40,11 +105,8 @@ const HomeChainInfo = (props) => {
     useEffect(() => {
         if (props.chain && props.chain != currentChain) {
             setCurrentChain(props.chain);
-            if (props.chain == 'eth-main') {
-                loadInfo(0, props.chain);
-            } else if (props.chain == 'pulse-main') {
-                loadInfo(0, props.chain);
-            }
+            loadInfo(0, props.chain);
+            setTitle(urls[props.chain].title);
         }
     }, [props]);
 
@@ -455,7 +517,7 @@ const HomeChainInfo = (props) => {
 
         const Z = (a, e) => {
             const {hexPrice: t, tsharePrice: i} = e || {};
-            if (t && i && N.currentDay > 0) {
+            if (N.currentDay > 0) {
                 s = i;
                 if (!p) p = [];
                 if (!h) h = [];
@@ -495,7 +557,7 @@ const HomeChainInfo = (props) => {
             Y(item);
         }
 
-        console.log('finished');
+        console.log('finished:', c);
 
         const t = [[0], [null]];
         const [i,l] = t;
@@ -508,12 +570,62 @@ const HomeChainInfo = (props) => {
             }
         }
 
-        
+        setShareChartData({
+            labels: i,
+            datasets: [{
+                label: 'T-Share Daily Close Price',
+                data: l,
+                borderColor: 'rgb(255, 32, 255)',
+                backgroundColor: 'rgb(192, 0, 192)'
+            }]
+        });
+        setShareChartLabels(i);
+
+        let labels = [];
+        let data = [];
+
+        for (let i = 0; i < c.length; i ++) {
+            labels.push(c[i].day);
+            data.push({
+                x: c[i].day,
+                y: c[i].hexPayoutPerTShare
+            });
+        }
+
+        setDailyChartData({
+            datasets: [{
+                label: 'Daily HEX Payout per T-Share',
+                data: data,
+                borderColor: 'rgb(255, 32, 255)',
+                backgroundColor: 'rgb(192, 0, 192)'
+            }]
+        });
+        setDailyChartLabels(labels);
     }
 
     return (
-        <div>
-            Home Chain Info
+        <div className="chain-info-container">
+            <Card variant="outlined">
+                <CardContent>
+                    <div className="page-title">
+                        {title}
+                    </div>
+                    <hr/>
+                    <div className="part-title">
+                        T-Share Daily Close Price in $USD
+                    </div>
+                    {shareChartLabels.length > 0 && <div className="chart-container"><Line options={chartOptions} data={shareChartData} /></div>}
+                    <div className="part-title">
+                        Daily HEX Payout per T-Share
+                    </div>
+                    {dailyChartLabels.length > 0 && <div className="chart-container"><Scatter options={dailyChartOptions} data={dailyChartData} /></div>}
+                    {/*<div className="part-title">*/}
+                    {/*    Daily Data*/}
+                    {/*</div>*/}
+
+                    {/*<EnhancedTable />*/}
+                </CardContent>
+            </Card>
         </div>
     )
 }

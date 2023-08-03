@@ -6,11 +6,14 @@ const Home = () => {
     return (
         <div className="home-container">
             <Grid container spacing={3}>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={4}>
                     <HomeChainInfo chain="eth-main"/>
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                    Part 2
+                <Grid item xs={12} sm={4}>
+                    <HomeChainInfo chain="pulse-main"/>
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                    <HomeChainInfo chain="pulse-test"/>
                 </Grid>
             </Grid>
         </div>
