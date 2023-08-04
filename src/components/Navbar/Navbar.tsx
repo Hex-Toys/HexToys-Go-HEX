@@ -14,51 +14,19 @@ import { Link } from 'react-router-dom';
 import { useBearStore } from "../../store";
 import { useAccount, useNetwork } from "wagmi";
 import { ConnectButton, useConnectModal } from '@rainbow-me/rainbowkit';
+import { useActiveWeb3 } from 'hooks/useActiveWeb3';
 
 const NavBar = () => {
-    const { isConnected, address } = useAccount();
-    const { openConnectModal } = useConnectModal();
-    const { chain } = useNetwork();
-    const [loginStatus, setLoginStatus] = useState(false);
     const startDate = 1575244816000;
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [currentDate, setCurrentDate] = useState(0);
     const [remainTime, setRemainTime] = useState('');
-
-    const [network, setNetwork] = React.useState('eth-main');
     // @ts-ignore
     const setCurrentDay = useBearStore((state) => state.setCurrentDay);
-
-    useEffect(() => {
-        const isLoggedin = address && isConnected;
-        setLoginStatus(isLoggedin);
-        if (isLoggedin) {
-            let chainName = '';
-            if (chain.id == 369) {
-                chainName = 'pulse-main';
-            } else if (chain.id == 1) {
-                chainName = 'eth-main';
-            } else {
-                chainName = 'pulse-test';
-            }
-            console.log(chainName);
-            setNetwork(chainName);
-        }
-    }, [address, chain, isConnected])
-
-
-    const handleChange = (event) => {
-        setNetwork(event.target.value);
-    };
-
 
     const toggleDrawer = () => {
         setIsDrawerOpen(!isDrawerOpen);
     };
-
-    const connectWallet = () => {
-        openConnectModal();
-    }
 
     useEffect(() => {
         const intervalId = setInterval(() => {
