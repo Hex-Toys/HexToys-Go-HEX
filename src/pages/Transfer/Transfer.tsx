@@ -25,6 +25,9 @@ const Transfer = () => {
     }
 
     const setMaxAmount = () => {
+        if (hexBalance) {
+            setAmount(hexBalance);
+        }
     }
 
     const onTransferHandler = async() => {
@@ -84,7 +87,10 @@ const Transfer = () => {
             <div className="input-container" style={{marginBottom: '8px'}}>
                 <label>Amount in HEX</label>
                 <div className="input-box">
-                    <input type="number" placeholder="0.000" value={amount} onChange={e => {setAmount(e.target.value)}}/>
+                    <input type="number" placeholder="0.000" value={amount} onChange={e => {
+                        // @ts-ignore
+                        setAmount(e.target.value);
+                    }}/>
 
                     <span className="span-unit">HEX</span>
                     <button className="btn-paste" onClick={setMaxAmount}><span>MAX</span></button>

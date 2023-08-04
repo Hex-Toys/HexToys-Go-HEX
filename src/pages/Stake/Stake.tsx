@@ -22,6 +22,7 @@ import {Ue, Ve, Ee, _e, De} from '../../utils/table-helper';
 import { useActiveWeb3 } from 'hooks/useActiveWeb3';
 import toast from 'react-hot-toast';
 import { scHEXStakeEnd, scHEXStakeStart } from 'utils/contracts';
+import {useContractRead} from "../../context/useContractRead";
 
 const Wl = (a, e) => {
     let t, i = 0;
@@ -81,6 +82,7 @@ const pe = (a, e) => {
 const Stake = () => {
     // @ts-ignore
     const moment = extendMoment(originalMoment);
+    const {hexBalance} = useContractRead();
     const [stakeAmount, setStakeAmount] = useState(0.00);
     const [stakeDays, setStakeDays] = useState(0);
     const [showCalendar, setShowCalendar] = useState(false);
@@ -92,7 +94,7 @@ const Stake = () => {
     const [bonusHeartsLpb, setBonusHeartsLpb] = useState('+ 0.000');
     const [bonusHeartsBpb, setBonusHeartsBpb] = useState('+ 0.000');
     const [effectiveHearts, setEffectiveHearts] = useState('0.000');
-    const [heartsPerTShare, setHeartsPerTShare] = useState('0.000 HEX / T-Share');
+    const [heartsPerTShare, setHeartsPerTShare] = useState('0.000');
     const [stakeShare, setStakeShare] = useState('0.000');
     const [isLoadStake, setIsLoadStake] = useState(false);
 
@@ -152,7 +154,7 @@ const Stake = () => {
         try {
             amount = pe(amount, 8);
         } catch (e) {
-            console.log(e);
+            // console.log(e);
         }
         let est = lr(shareRate, amount, days);
         console.log(est);
@@ -167,7 +169,7 @@ const Stake = () => {
         setEffectiveHearts(eh[0] + eh[1]);
 
         let ca = (JSBI.fromNumberNZ(1e13), JSBI.fromNumberNZ(1e7));
-        let hpts = _e(JSBI.multiply(shareRate, ca), " HEX / T-Share");
+        let hpts = _e(JSBI.multiply(shareRate, ca), "");
         setHeartsPerTShare(hpts.join(''));
 
         let ss = De(est.stakeShares);
@@ -236,6 +238,12 @@ const Stake = () => {
         toast.dismiss(load_toast_id);
     }
 
+    const setMaxAmount = () => {
+        if (hexBalance) {
+            setStakeAmount(hexBalance);
+        }
+    }
+
     return (
         <Container className="stake-page-container">
             <div className="page-title">
@@ -253,9 +261,9 @@ const Stake = () => {
                                 value={stakeAmount}
                                 endAdornment={
                                     <InputAdornment position="end">
-                                        <div>
+                                        <div className="adornment-box">
                                             HEX &nbsp;
-                                            <button>MAX</button>
+                                            <button className="btn-max" onClick={setMaxAmount}><span>MAX</span></button>
                                         </div>
                                     </InputAdornment>
                                 }
@@ -267,7 +275,12 @@ const Stake = () => {
                         </FormControl>
                     </div>
 
-                    <div className="text-group" style={{marginTop: '30px'}}>
+                    <div className="balance-info">
+                        <label>Balance: </label>
+                        <span>{hexBalance?.toFixed(3)} HEX</span>
+                    </div>
+
+                    <div className="text-group" style={{marginTop: '32px'}}>
                         <FormControl variant="standard">
                             <InputLabel htmlFor="input-with-icon-adornment">
                                 Stake Length in Days
@@ -277,7 +290,7 @@ const Stake = () => {
                                 value={stakeDays}
                                 endAdornment={
                                     <InputAdornment position="end">
-                                        <div>
+                                        <div className="adornment-box">
                                             Days
 
                                             <IconButton
@@ -310,7 +323,7 @@ const Stake = () => {
                         />}
                     </div>
 
-                    <Button variant="contained" style={{marginTop: '20px'}} onClick={onStakeHandler}>Stake</Button>
+                    <Button variant="contained" style={{marginTop: '56px'}} onClick={onStakeHandler} className="btn-send">Stake</Button>
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
@@ -318,28 +331,28 @@ const Stake = () => {
                         <p className="title">Stake Bonuses:</p>
                         <div className="info-item">
                             <span>Longer Pays Better:</span>
-                            <span>{bonusHeartsLpb} HEX</span>
+                            <span><label>{bonusHeartsLpb}</label> HEX</span>
                         </div>
                         <div className="info-item">
                             <span>Bigger Pays Better:</span>
-                            <span>{bonusHeartsBpb} Hearts</span>
+                            <span><label>{bonusHeartsBpb}</label> Hearts</span>
                         </div>
                         <div className="info-item">
-                            <span className="title">Total:</span>
-                            <span>{bonusHearts} HEX</span>
+                            <span>Total:</span>
+                            <span><label>{bonusHearts}</label> HEX</span>
                         </div>
-                        <div className="info-item" style={{padding: 0}}>
-                            <span className="title">Effective HEX:</span>
-                            <span>{effectiveHearts}</span>
+                        <div className="info-item" style={{marginTop: '40px'}}>
+                            <span>Effective HEX:</span>
+                            <span><label>{effectiveHearts}</label> HEX</span>
                         </div>
 
-                        <div className="info-item" style={{padding: 0, marginTop: '20px'}}>
-                            <span className="title">Share Price:</span>
-                            <span className="title">{heartsPerTShare}</span>
+                        <div className="info-item" style={{marginTop: '40px'}}>
+                            <span>Share Price:</span>
+                            <span><label>{heartsPerTShare}</label> HEX <label> / T-Share</label></span>
                         </div>
-                        <div className="info-item" style={{padding: 0}}>
-                            <span className="title">Stake T-Shares:</span>
-                            <span>{stakeShare}</span>
+                        <div className="info-item">
+                            <span>Stake T-Shares:</span>
+                            <span><label>{stakeShare}</label> HEX</span>
                         </div>
                     </div>
                 </Grid>
