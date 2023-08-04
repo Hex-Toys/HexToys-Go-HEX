@@ -2,6 +2,7 @@ import React, { createContext, ReactNode, useContext, useEffect, useMemo, useSta
 import { useAccount, useConnect, useNetwork, useSwitchNetwork } from 'wagmi'
 import { useEthersProvider, useEthersSigner } from './wagmi-ethers'
 import { Signer } from 'ethers'
+import { mainnet, pulsechain, pulsechainV4 } from 'wagmi/chains'
 
 const ActiveWeb3Context = createContext<any[]>([null])
 
@@ -37,7 +38,7 @@ export default function ActiveWeb3Provider({ children }: { children: ReactNode }
   const [loginStatus, setLoginStatus] = useState(false);
 
   useEffect(() => {
-    const isLoggedin = address && isConnected;
+    const isLoggedin = address && isConnected && (chain?.id === mainnet.id || chain?.id === pulsechain.id || chain?.id === pulsechainV4.id);
     setLoginStatus(isLoggedin);
 }, [address, chain, isConnected]);
 
@@ -50,13 +51,14 @@ export default function ActiveWeb3Provider({ children }: { children: ReactNode }
         isConnecting,
         isConnected,
         library: signer,
+        provider,
         error,
         switchNetwork,
         loginStatus,
       },
       isConnecting,
     ],
-    [address, chain?.id, connector, error, isConnected, isConnecting, provider, signer, switchNetwork]
+    [address, chain?.id, connector, error, isConnected, isConnecting, loginStatus, provider, signer, switchNetwork]
   )
 
   return <ActiveWeb3Context.Provider value={value}>{children}</ActiveWeb3Context.Provider>

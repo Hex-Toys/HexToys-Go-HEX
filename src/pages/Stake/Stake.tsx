@@ -16,9 +16,11 @@ import {loadStakeInfo} from "../../utils/helper";
 
 import "react-daterange-picker/dist/css/react-calendar.css";
 import './style.scss'
-import {useAccount, useNetwork} from "wagmi";
 import JSBI from "@pulsex/jsbi";
 import {Ue, Ve, Ee, _e, De} from '../../utils/table-helper';
+import { useActiveWeb3 } from 'hooks/useActiveWeb3';
+import toast from 'react-hot-toast';
+import { scHEXStakeEnd, scHEXStakeStart } from 'utils/contracts';
 
 const Wl = (a, e) => {
     let t, i = 0;
@@ -76,17 +78,12 @@ const pe = (a, e) => {
 }
 
 const Stake = () => {
-
-    const { isConnected, address } = useAccount();
-    const { chain } = useNetwork();
-
     // @ts-ignore
     const moment = extendMoment(originalMoment);
-    const [stakeAmount, setStakeAmount] = useState('');
-    const [stakeDays, setStakeDays] = useState('');
+    const [stakeAmount, setStakeAmount] = useState(0.00);
+    const [stakeDays, setStakeDays] = useState(0);
     const [showCalendar, setShowCalendar] = useState(false);
     const [days, setDays] = useState(null);
-    const [loginStatus, setLoginStatus] = useState(false);
     const [currentChain, setCurrentChain] = useState('');
     const [shareRate, setShareRate] = useState(JSBI.fromUint32NZ(1e5));
     const [isLoading, setIsLoading] = useState(false);
@@ -105,21 +102,23 @@ const Stake = () => {
     // @ts-ignore
     const fetchInfo = useBearStore((state) => state.fetchInfo);
 
+    const web3Data = useActiveWeb3();
+
     useEffect(() => {
-        const isLoggedin = address && isConnected;
-        setLoginStatus(isLoggedin);
-        if (isLoggedin) {
-            console.log('chain-id:', chain.id);
+        if (web3Data?.loginStatus) {
+            console.log('chain-id:', web3Data?.chainId);
             let chainName = '';
-            if (chain.id == 369) {
+            if (web3Data?.chainId === 369) {
                 chainName = 'pulse-main';
                 setCurrentChain('pulse-main');
-            } else if (chain.id == 1) {
+            } else if (web3Data?.chainId === 1) {
                 chainName = 'eth-main';
                 setCurrentChain('eth-main');
-            } else {
+            } else if (web3Data?.chainId === 943){
                 chainName = 'pulse-test';
                 setCurrentChain('pulse-test');
+            } else {
+                return;
             }
 
             if (!isLoadStake) {
@@ -127,7 +126,7 @@ const Stake = () => {
                 fetchStakeInfo(chainName, '0xBf8fF255aD1f369929715a3290d1ef71d79f8954');
             }
         }
-    }, [address, chain, isConnected]);
+    }, [isLoadStake, web3Data?.chainId, web3Data?.loginStatus]);
 
     useEffect(() => {
         if (currentChain) {
@@ -138,7 +137,7 @@ const Stake = () => {
                 }
             }
         }
-    }, [hh, currentChain]);
+    }, [hh, currentChain, isLoading, fetchInfo]);
 
     useEffect(() => {
         if (currentChain) {
@@ -172,13 +171,13 @@ const Stake = () => {
 
         let ss = De(est.stakeShares);
         console.log(ss);
-        if (ss[0] == '0' && ss[1] == ".000") {
+        if (ss[0] === '0' && ss[1] === ".000") {
             setStakeShare("<0.001");
         } else {
             setStakeDays(ss[0] + ss[1]);
         }
 
-    }, [stakeDays, stakeAmount])
+    }, [stakeDays, stakeAmount, shareRate])
 
 
     const handleClickShowCalendar = () => {
@@ -202,6 +201,38 @@ const Stake = () => {
     const fetchStakeInfo = async(chain, address) => {
         let data = await loadStakeInfo(chain, address);
         console.log(data);
+    }
+
+    const onStakeHandler = async() => {
+        if (!web3Data?.loginStatus) {
+            toast.error("Please connect wallet correctly!");
+            return;
+        }
+
+        if (parseFloat(stakeAmount) <= 0) {
+            toast.error("Stake amount should be higher than 0");
+            return;
+        }
+
+        if (parseFloat(stakeDays) <= 0) {
+            toast.error("Stake days should be longer than 0");
+            return;
+        }
+
+        const load_toast_id = toast.loading("Please wait for Staking...");
+        try {
+            let bSuccess = await scHEXStakeStart(web3Data?.chainId, web3Data?.library, stakeAmount, stakeDays);
+
+            if (bSuccess) {
+                toast.success("Staking Success!");
+            } else {
+                toast.error("Staking Failed!");
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error("Staking Failed!");
+        }
+        toast.dismiss(load_toast_id);
     }
 
     return (
@@ -276,7 +307,7 @@ const Stake = () => {
                         />}
                     </div>
 
-                    <Button variant="contained" style={{marginTop: '20px'}}>Stake</Button>
+                    <Button variant="contained" style={{marginTop: '20px'}} onClick={onStakeHandler}>Stake</Button>
                 </Grid>
 
                 <Grid item xs={12} sm={4}>
@@ -311,7 +342,7 @@ const Stake = () => {
                 </Grid>
             </Grid>
 
-            {!loginStatus && <div className="disabled-container"></div>}
+            {!web3Data?.loginStatus && <div className="disabled-container"></div>}
         </div>
     )
 }
