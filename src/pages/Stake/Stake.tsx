@@ -13,6 +13,7 @@ import { extendMoment } from "moment-range";
 import Button from '@mui/material/Button';
 import {useBearStore} from "../../store";
 import {loadStakeInfo} from "../../utils/helper";
+import Container from '@mui/material/Container';
 
 import "react-daterange-picker/dist/css/react-calendar.css";
 import './style.scss'
@@ -209,12 +210,12 @@ const Stake = () => {
             return;
         }
 
-        if (parseFloat(stakeAmount) <= 0) {
+        if (parseFloat(String(stakeAmount)) <= 0) {
             toast.error("Stake amount should be higher than 0");
             return;
         }
 
-        if (parseFloat(stakeDays) <= 0) {
+        if (parseFloat(String(stakeDays)) <= 0) {
             toast.error("Stake days should be longer than 0");
             return;
         }
@@ -236,12 +237,12 @@ const Stake = () => {
     }
 
     return (
-        <div className="stake-page-container">
+        <Container className="stake-page-container">
             <div className="page-title">
                 Stake
             </div>
             <Grid container spacing={3}>
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={6}>
                     <div className="text-group">
                         <FormControl variant="standard">
                             <InputLabel htmlFor="input-with-icon-adornment">
@@ -259,6 +260,7 @@ const Stake = () => {
                                     </InputAdornment>
                                 }
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                    // @ts-ignore
                                     setStakeAmount(event.target.value);
                                 }}
                             />
@@ -288,7 +290,8 @@ const Stake = () => {
                                     </InputAdornment>
                                 }
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                    setStakeDays(event.target.value);
+                                    // @ts-ignore
+                                    setStakeDays( event.target.value);
                                     let today = moment();
                                     let range = moment.range(today.clone(), today.clone().add(event.target.value, 'days'));
                                     setDays(range);
@@ -310,7 +313,7 @@ const Stake = () => {
                     <Button variant="contained" style={{marginTop: '20px'}} onClick={onStakeHandler}>Stake</Button>
                 </Grid>
 
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={6}>
                     <div className="stake-info-container">
                         <p className="title">Stake Bonuses:</p>
                         <div className="info-item">
@@ -343,7 +346,7 @@ const Stake = () => {
             </Grid>
 
             {!web3Data?.loginStatus && <div className="disabled-container"></div>}
-        </div>
+        </Container>
     )
 }
 
