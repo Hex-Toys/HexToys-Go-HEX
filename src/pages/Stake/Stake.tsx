@@ -209,12 +209,12 @@ const Stake = () => {
             return;
         }
 
-        if (parseFloat(stakeAmount) <= 0) {
+        if (stakeAmount <= 0) {
             toast.error("Stake amount should be higher than 0");
             return;
         }
 
-        if (parseFloat(stakeDays) <= 0) {
+        if (stakeDays <= 0) {
             toast.error("Stake days should be longer than 0");
             return;
         }
