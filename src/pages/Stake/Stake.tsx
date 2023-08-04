@@ -174,7 +174,7 @@ const Stake = () => {
         if (ss[0] === '0' && ss[1] === ".000") {
             setStakeShare("<0.001");
         } else {
-            setStakeDays(ss[0] + ss[1]);
+            setStakeShare(ss[0] + ss[1]);
         }
 
     }, [stakeDays, stakeAmount, shareRate])
