@@ -1,0 +1,222 @@
+.stake-page-container {
+  position: relative;
+  padding-top: 56px;
+
+  .disabled-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+  }
+  .page-title {
+    color: #FFF;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 22px; /* 91.667% */
+    margin-bottom: 16px;
+  }
+
+  .text-group {
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.20);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 16px 32px;
+
+    .adornment-box {
+      width: 105px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      color: #FFF;
+      text-align: right;
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+
+      .btn-max {
+        background: none;
+        border: none;
+        outline: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 3px;
+
+        span {
+          background: linear-gradient(to right, #FF00FF, #FE511B);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          text-align: right;
+          font-size: 18px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+        }
+      }
+    }
+
+    .MuiFormControl-root {
+      width: 100%;
+    }
+
+    .MuiInputBase-root {
+      border: none;
+      margin-top: 25px;
+      &:after {
+        display: none;
+      }
+
+      &:before {
+        display: none;
+      }
+
+      input {
+        color: #fff;
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+      }
+    }
+
+    .MuiFormLabel-root {
+      color: #FFF;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      opacity: 0.6;
+      margin-bottom: 17px;
+    }
+
+    .MuiInputAdornment-root {
+      color: white;
+    }
+
+    input {
+      color: white;
+    }
+
+    svg {
+      color: white;
+    }
+  }
+
+  .balance-info {
+    margin-top: 8px;
+
+    label {
+      color: rgba(255, 255, 255, 0.60);
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+    }
+
+    span {
+      color: #FFF;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+    }
+  }
+
+  .DateRangePicker__MonthHeader {
+    color: white;
+  }
+
+  .DateRangePicker__MonthDates {
+    thead {
+      th {
+        abbr {
+          color: white;
+        }
+      }
+    }
+
+    .DateRangePicker__Date {
+      border: none;
+
+      span {
+        color: white;
+      }
+
+      &.DateRangePicker__Date--is-highlighted {
+        span {
+          color: black;
+        }
+      }
+    }
+
+    .DateRangePicker__Date--weekend {
+      background: none;
+    }
+
+  }
+
+  .stake-info-container {
+    display: inline-flex;
+    padding: 32px 24px 60px 24px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.20);
+    width: calc(100% - 48px);
+
+    .title {
+      color: #FFF;
+      font-size: 24px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      margin-bottom: 24px;
+    }
+
+    .info-item {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+
+      span {
+        color: rgba(255, 255, 255, 0.6);
+        text-align: right;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+
+        label {
+          color: white;
+        }
+      }
+    }
+  }
+
+  .btn-send {
+    outline: none;
+    border-radius: 144px;
+    background: linear-gradient(126deg, #F0F 0%, #FE511B 100%);
+    border: none;
+
+    display: flex;
+    width: 100%;
+    padding: 24px;
+    justify-content: center;
+    align-items: center;
+
+    color: #FFF;
+    text-align: center;
+    leading-trim: both;
+    text-edge: cap;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 20px; /* 142.857% */
+    letter-spacing: 0.49px;
+  }
+}

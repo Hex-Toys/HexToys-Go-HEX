@@ -1,0 +1,38 @@
+.chain-info-container {
+  .MuiCard-root {
+    background: none;
+    //border: 1px solid rgb(0 0 0 / 55%);
+    border: none;
+  }
+
+  .page-title {
+    color: white;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    text-align: center;
+  }
+
+  hr {
+    border: none;
+    background: linear-gradient(to right, #FF00FF, #FE511B);
+    height: 4px;
+    margin-top: 12px;
+  }
+
+  .part-title {
+    margin-top: 56px;
+    color: white;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin-bottom: 10px;
+  }
+
+  .chart-container {
+    border-radius: 5.342px;
+    border: 1px solid rgba(255, 255, 255, 0.20);
+  }
+}

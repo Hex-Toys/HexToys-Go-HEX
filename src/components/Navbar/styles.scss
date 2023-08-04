@@ -1,0 +1,84 @@
+.navbar-container {
+  header {
+    background: rgba(25, 28, 31, 0.85);
+    padding: 13px 0px;
+    box-shadow: none;
+
+    @media (min-width: 600px) {
+      padding: 13px 55px;
+    }
+  }
+
+  .left-menu {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+
+
+    img {
+      width: 56px;
+      height: 56px;
+    }
+
+    a {
+      color: #FFF;
+      font-size: 15px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 22px;
+      margin-right: 24px;
+
+      &.active {
+        background: linear-gradient(to right, #FF00FF, #FE511B);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
+  }
+
+  .day-info {
+    text-align: center;
+    margin-right: 10px;
+
+    label {
+      color: #FFF;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+    }
+  }
+
+  .network-select {
+    &:before {
+      display: none;
+    }
+
+    div {
+      color: white;
+      font-size: 12px;
+    }
+
+    svg {
+      color: white;
+    }
+  }
+
+  button {
+    border-radius: 144px !important;
+    background: linear-gradient(126deg, #F0F 0%, #FE511B 100%) !important;
+    display: inline-flex;
+    padding: 18px 24px !important;
+    align-items: flex-start;
+    height: 46px !important;
+    color: #FFF;
+    text-align: center;
+    leading-trim: both;
+    text-edge: cap;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 10px !important;
+    letter-spacing: 0.49px;
+  }
+}

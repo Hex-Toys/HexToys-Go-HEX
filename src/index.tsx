@@ -5,13 +5,16 @@ import ActiveWeb3Provider from 'hooks/useActiveWeb3';
 import { ThemeProvider } from 'context/ThemeContext';
 import { LoadingProvider } from 'context/useLoader';
 import reportWebVitals from "./reportWebVitals";
+import ContractReadProvider from 'context/useContractRead';
 
 ReactDOM.render(
   <Web3RainbowKitProvider>
     <ThemeProvider>
       <LoadingProvider>
         <ActiveWeb3Provider>
-          <App />
+          <ContractReadProvider>
+            <App />
+          </ContractReadProvider>
         </ActiveWeb3Provider>
       </LoadingProvider>
     </ThemeProvider>
