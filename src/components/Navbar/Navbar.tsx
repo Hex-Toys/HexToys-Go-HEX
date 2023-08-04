@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import Logo from '../../assets/imgs/logo.png';
+import Logo from '../../assets/imgs/logo.svg';
 import Button from '@material-ui/core/Button';
 import { Drawer, IconButton } from '@material-ui/core';
 import { IoMenuOutline, IoSwapHorizontalOutline } from "react-icons/io5";
@@ -10,7 +10,7 @@ import { RiBankFill } from "react-icons/ri";
 import './styles.scss';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useBearStore } from "../../store";
 import { useAccount, useNetwork } from "wagmi";
 import { ConnectButton, useConnectModal } from '@rainbow-me/rainbowkit';
@@ -23,6 +23,15 @@ const NavBar = () => {
     const [remainTime, setRemainTime] = useState('');
     // @ts-ignore
     const setCurrentDay = useBearStore((state) => state.setCurrentDay);
+
+    const [navId, setNavId] = useState('');
+    const search = useLocation();
+
+    useEffect(() => {
+        const path = search.pathname.replace('/', '');
+        setNavId(path);
+        console.log(path);
+    }, [search]);
 
     const toggleDrawer = () => {
         setIsDrawerOpen(!isDrawerOpen);
@@ -43,7 +52,7 @@ const NavBar = () => {
             hour = hour < 10 ? '0' + hour : hour;
             min = min < 10 ? '0' + min : min;
             sec = sec < 10 ? '0' + sec : sec;
-            setRemainTime(hour + 'h:' + min + 'm:' + sec + 's');
+            setRemainTime(hour + 'h ' + min + 'm ' + sec + 's');
             setCurrentDate(dateDiff);
             setCurrentDay(dateDiff);
         }, 1000);
@@ -53,35 +62,28 @@ const NavBar = () => {
         };
     }, [])
 
-    const goToTransfer = () => {
-
-    }
 
     return (
         <div className="navbar-container">
             <AppBar position="static">
                 <Toolbar>
                     <div className="left-menu">
-                        <Link to={'/'}>
-                            <Typography color="inherit">
-                                <img src={Logo} style={{ height: '34px' }} />
-                            </Typography>
+                        <Link to={'/'} style={{height: '56px'}}>
+                            <img src={Logo} />
                         </Link>
-                        <Link to={'/transfer'}>
-                            <Button color="inherit" onClick={goToTransfer}>
-                                <IoSwapHorizontalOutline /> &nbsp;Transfer
-                            </Button>
+                        <Link to={'/'} className={!navId ? 'active': ''}>
+                            HEX
                         </Link>
-                        <Link to={'/stake'}>
-                            <Button color="inherit">
-                                <RiBankFill /> &nbsp; Stake
-                            </Button>
+                        <Link to={'/transfer'} className={navId == 'transfer' ? 'active' : ''}>
+                            Transfer
+                        </Link>
+                        <Link to={'/stake'} className={navId == 'stake' ? 'active':''}>
+                            Stake
                         </Link>
                     </div>
 
                     <div className="day-info">
-                        <p><b>Day {currentDate}</b></p>
-                        <label>{remainTime}</label>
+                        <label>{currentDate}d {remainTime}</label>
                     </div>
                     {/* {loginStatus && (
                         <Select

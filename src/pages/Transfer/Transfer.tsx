@@ -71,7 +71,7 @@ const Transfer = () => {
             <div className="input-container">
                 <label>From your wallet address</label>
                 <div className="input-box">
-                    <input type="text" value={account}/>
+                    <input type="text" defaultValue={account}/>
                 </div>
             </div>
 

@@ -68,7 +68,7 @@ const HomeChainInfo = (props) => {
         responsive: true,
         plugins: {
             legend: {
-                position: 'bottom' as const,
+                display: false,
             },
             title: {
                 display: false,
@@ -81,6 +81,11 @@ const HomeChainInfo = (props) => {
             y: {
                 beginAtZero: true,
             },
+        },
+        plugins: {
+            legend: {
+                display: false,
+            }
         },
     };
 
@@ -124,8 +129,8 @@ const HomeChainInfo = (props) => {
             datasets: [{
                 label: 'T-Share Daily Close Price',
                 data: l,
-                borderColor: 'rgb(255, 32, 255)',
-                backgroundColor: 'rgb(192, 0, 192)'
+                borderColor: '#5356FB',
+                backgroundColor: '#5356FB'
             }]
         });
         setShareChartLabels(i);

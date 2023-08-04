@@ -1,4 +1,9 @@
 .home-container {
   flex-grow: 1;
   overflow: hidden;
+  padding: 40px 16px;
+
+  @media (min-width: 600px) {
+    padding: 40px 80px;
+  }
 }
