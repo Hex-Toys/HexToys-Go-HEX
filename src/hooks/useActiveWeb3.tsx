@@ -50,13 +50,14 @@ export default function ActiveWeb3Provider({ children }: { children: ReactNode }
         isConnecting,
         isConnected,
         library: signer,
+        provider,
         error,
         switchNetwork,
         loginStatus,
       },
       isConnecting,
     ],
-    [address, chain?.id, connector, error, isConnected, isConnecting, provider, signer, switchNetwork]
+    [address, chain?.id, connector, error, isConnected, isConnecting, loginStatus, provider, signer, switchNetwork]
   )
 
   return <ActiveWeb3Context.Provider value={value}>{children}</ActiveWeb3Context.Provider>

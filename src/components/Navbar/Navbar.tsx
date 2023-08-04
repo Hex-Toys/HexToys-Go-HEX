@@ -1,23 +1,23 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Logo from '../../assets/imgs/logo.png';
 import Button from '@material-ui/core/Button';
 import { Drawer, IconButton } from '@material-ui/core';
-import {IoMenuOutline, IoSwapHorizontalOutline} from "react-icons/io5";
-import {RiBankFill} from "react-icons/ri";
+import { IoMenuOutline, IoSwapHorizontalOutline } from "react-icons/io5";
+import { RiBankFill } from "react-icons/ri";
 import './styles.scss';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import {Link} from 'react-router-dom';
-import {useBearStore} from "../../store";
-import {useAccount, useNetwork} from "wagmi";
-import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { Link } from 'react-router-dom';
+import { useBearStore } from "../../store";
+import { useAccount, useNetwork } from "wagmi";
+import { ConnectButton, useConnectModal } from '@rainbow-me/rainbowkit';
 
 const NavBar = () => {
     const { isConnected, address } = useAccount();
-    const {openConnectModal} = useConnectModal();
+    const { openConnectModal } = useConnectModal();
     const { chain } = useNetwork();
     const [loginStatus, setLoginStatus] = useState(false);
     const startDate = 1575244816000;
@@ -89,14 +89,14 @@ const NavBar = () => {
 
     }
 
-    return(
+    return (
         <div className="navbar-container">
             <AppBar position="static">
                 <Toolbar>
                     <div className="left-menu">
                         <Link to={'/'}>
                             <Typography color="inherit">
-                                <img src={Logo} style={{height: '34px'}}/>
+                                <img src={Logo} style={{ height: '34px' }} />
                             </Typography>
                         </Link>
                         <Link to={'/transfer'}>
@@ -115,7 +115,7 @@ const NavBar = () => {
                         <p><b>Day {currentDate}</b></p>
                         <label>{remainTime}</label>
                     </div>
-                    {loginStatus && (
+                    {/* {loginStatus && (
                         <Select
                             value={network}
                             onChange={handleChange}
@@ -127,7 +127,9 @@ const NavBar = () => {
                         </Select>
                     )}
 
-                    {!loginStatus && <Button className="btn-connect" onClick={connectWallet}>Connect Wallet</Button>}
+                    {!loginStatus && <Button className="btn-connect" onClick={connectWallet}>Connect Wallet</Button>} */}
+
+                    <ConnectButton />
 
                     {/*<IconButton onClick={toggleDrawer} edge="end">*/}
                     {/*    <IoMenuOutline />*/}
