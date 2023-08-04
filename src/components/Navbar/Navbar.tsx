@@ -41,7 +41,7 @@ const NavBar = () => {
             } else {
                 chainName = 'pulse-test';
             }
-
+            console.log(chainName);
             setNetwork(chainName);
         }
     }, [address, chain, isConnected])
@@ -121,9 +121,9 @@ const NavBar = () => {
                             onChange={handleChange}
                             className="network-select"
                         >
-                            <MenuItem value={'eth-main'}>PulseChain MainNet</MenuItem>
-                            <MenuItem value={'pls-main'}>Ethereum MainNet</MenuItem>
-                            <MenuItem value={'pls-test'}>PulseChain TestNet V4</MenuItem>
+                            <MenuItem value={'pulse-main'}>PulseChain MainNet</MenuItem>
+                            <MenuItem value={'eth-main'}>Ethereum MainNet</MenuItem>
+                            <MenuItem value={'pulse-test'}>PulseChain TestNet V4</MenuItem>
                         </Select>
                     )}
 
