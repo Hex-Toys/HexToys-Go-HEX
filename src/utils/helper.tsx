@@ -468,3 +468,7 @@ export const processData = (globalInfoData, dailyData, tokenDayData) => {
 
     return {h, c, N};
 }
+
+export const processStakeData = (tokenDayData, globalData, dailyData, stakeData, N) => {
+
+}

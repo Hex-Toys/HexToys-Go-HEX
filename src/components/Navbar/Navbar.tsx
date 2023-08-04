@@ -11,6 +11,7 @@ import './styles.scss';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import {Link} from 'react-router-dom';
+import {useBearStore} from "../../store";
 
 const NavBar = () => {
     const startDate = 1575244816000;
@@ -19,6 +20,9 @@ const NavBar = () => {
     const [remainTime, setRemainTime] = useState('');
 
     const [network, setNetwork] = React.useState('eth-main');
+    // @ts-ignore
+    const setCurrentDay = useBearStore((state) => state.setCurrentDay);
+
 
     const handleChange = (event) => {
         setNetwork(event.target.value);
@@ -36,16 +40,17 @@ const NavBar = () => {
             let dateDiff = Math.floor((nowTime - startDate) / 1000 / 3600 / 24);
             let nextDate = startDate + (dateDiff + 1) * 1000 * 3600 * 24;
             let timeDiff = nextDate - nowTime;
-            let hour = Math.floor(timeDiff / 1000 / 3600);
+            let hour: string | number = Math.floor(timeDiff / 1000 / 3600);
             timeDiff = timeDiff - hour * 1000 * 3600;
-            let min = Math.floor(timeDiff / 1000 / 60);
+            let min: string | number = Math.floor(timeDiff / 1000 / 60);
             timeDiff = timeDiff - min * 1000 * 60;
-            let sec = Math.floor(timeDiff / 1000);
+            let sec: string | number = Math.floor(timeDiff / 1000);
             hour = hour < 10 ? '0' + hour : hour;
             min = min < 10 ? '0' + min : min;
             sec = sec < 10 ? '0' + sec : sec;
             setRemainTime(hour + 'h:' + min + 'm:' + sec + 's');
             setCurrentDate(dateDiff);
+            setCurrentDay(dateDiff);
         }, 1000);
 
         return () => {

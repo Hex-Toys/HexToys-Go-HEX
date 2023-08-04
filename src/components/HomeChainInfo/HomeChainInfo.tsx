@@ -16,6 +16,7 @@ import './style.scss';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import {useBearStore} from "../../store";
+import {add} from "@pulsex/jsbi";
 
 ChartJS.register(
     CategoryScale,
@@ -56,6 +57,7 @@ const HomeChainInfo = (props) => {
 
     const { isConnected, address } = useAccount();
     const [title, setTitle] = useState('');
+    const [currentChain, setCurrentChain] = useState('');
     const [shareChartLabels, setShareChartLabels] = useState([]);
     const [shareChartData, setShareChartData] = useState({labels: [], datasets: []});
     const [dailyChartLabels, setDailyChartLabels] = useState([]);
@@ -95,6 +97,14 @@ const HomeChainInfo = (props) => {
             }
         }
     }, [props, hh, cc]);
+
+    useEffect(() => {
+        if (currentChain && isConnected) {
+            if (hh[currentChain]) {
+
+            }
+        }
+    }, [hh, cc, isConnected, address, currentChain])
 
     const processGraphData = (h, c) => {
 
