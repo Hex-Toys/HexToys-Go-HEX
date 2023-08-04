@@ -26,11 +26,11 @@ const CheckAccount = () => {
             {
                 !loginStatus ? (
                     <Alert
-                        action={
-                            <Button color="inherit" size="small" onClick={connectWallet}>
-                                CONNECT
-                            </Button>
-                        }
+                        // action={
+                        //     <Button color="inherit" size="small" onClick={connectWallet}>
+                        //         CONNECT
+                        //     </Button>
+                        // }
                         severity="warning"
                     >
                         Please allow the HEX website to view your current account address in MetaMask.

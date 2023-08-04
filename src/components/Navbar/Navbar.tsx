@@ -12,8 +12,14 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import {Link} from 'react-router-dom';
 import {useBearStore} from "../../store";
+import {useAccount, useNetwork} from "wagmi";
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 const NavBar = () => {
+    const { isConnected, address } = useAccount();
+    const {openConnectModal} = useConnectModal();
+    const { chain } = useNetwork();
+    const [loginStatus, setLoginStatus] = useState(false);
     const startDate = 1575244816000;
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [currentDate, setCurrentDate] = useState(0);
@@ -22,6 +28,23 @@ const NavBar = () => {
     const [network, setNetwork] = React.useState('eth-main');
     // @ts-ignore
     const setCurrentDay = useBearStore((state) => state.setCurrentDay);
+
+    useEffect(() => {
+        const isLoggedin = address && isConnected;
+        setLoginStatus(isLoggedin);
+        if (isLoggedin) {
+            let chainName = '';
+            if (chain.id == 369) {
+                chainName = 'pulse-main';
+            } else if (chain.id == 1) {
+                chainName = 'eth-main';
+            } else {
+                chainName = 'pulse-test';
+            }
+
+            setNetwork(chainName);
+        }
+    }, [address, chain, isConnected])
 
 
     const handleChange = (event) => {
@@ -32,6 +55,10 @@ const NavBar = () => {
     const toggleDrawer = () => {
         setIsDrawerOpen(!isDrawerOpen);
     };
+
+    const connectWallet = () => {
+        openConnectModal();
+    }
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -88,18 +115,23 @@ const NavBar = () => {
                         <p><b>Day {currentDate}</b></p>
                         <label>{remainTime}</label>
                     </div>
-                    <Select
-                        value={network}
-                        onChange={handleChange}
-                        className="network-select"
-                    >
-                        <MenuItem value={'eth-main'}>PulseChain MainNet</MenuItem>
-                        <MenuItem value={'pls-main'}>Ethereum MainNet</MenuItem>
-                        <MenuItem value={'pls-test'}>PulseChain TestNet V4</MenuItem>
-                    </Select>
-                    <IconButton onClick={toggleDrawer} edge="end">
-                        <IoMenuOutline />
-                    </IconButton>
+                    {loginStatus && (
+                        <Select
+                            value={network}
+                            onChange={handleChange}
+                            className="network-select"
+                        >
+                            <MenuItem value={'eth-main'}>PulseChain MainNet</MenuItem>
+                            <MenuItem value={'pls-main'}>Ethereum MainNet</MenuItem>
+                            <MenuItem value={'pls-test'}>PulseChain TestNet V4</MenuItem>
+                        </Select>
+                    )}
+
+                    {!loginStatus && <Button className="btn-connect" onClick={connectWallet}>Connect Wallet</Button>}
+
+                    {/*<IconButton onClick={toggleDrawer} edge="end">*/}
+                    {/*    <IoMenuOutline />*/}
+                    {/*</IconButton>*/}
                 </Toolbar>
             </AppBar>
 

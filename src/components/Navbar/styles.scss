@@ -48,4 +48,23 @@
       color: white;
     }
   }
+
+  .btn-connect {
+    border-radius: 144px;
+    background: linear-gradient(126deg, #F0F 0%, #FE511B 100%);
+    display: inline-flex;
+    padding: 18px 24px;
+    align-items: flex-start;
+
+    color: #FFF;
+    text-align: center;
+    leading-trim: both;
+    text-edge: cap;
+    font-family: Sora;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 20px; /* 142.857% */
+    letter-spacing: 0.49px;
+  }
 }
