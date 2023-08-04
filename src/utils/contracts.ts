@@ -3,21 +3,26 @@ import { StakingEngineDetail } from "./typs";
 import { BigNumber, ethers } from "ethers";
 import toast from "react-hot-toast";
 
-export async function scGetStakingEngineInfo(chainId, provider) {
+export async function scGetStakingEngineInfo(chainId, provider, account) {
     const HEXContract = getContractObj('HEX', chainId, provider);
 
     try {
         const [
-            startDay,
+            currentDay,
             globalInfo,
+            hexDecimals,
+            hexBalance,
         ] = await Promise.all([
             HEXContract.currentDay(),
             HEXContract.globalInfo(),
+            HEXContract.decimals(),
+            account? HEXContract.balanceOf(account) : BigNumber.from(0),
         ]);
-
+        
         const stakingDetail: StakingEngineDetail = {
-            startDay: startDay.toNumber(),
+            currentDay: currentDay.toNumber(),
             sharePrice: globalInfo[2].toNumber(),
+            hexBalance: parseFloat(ethers.utils.formatUnits(hexBalance, hexDecimals))
         }
 
         return stakingDetail;

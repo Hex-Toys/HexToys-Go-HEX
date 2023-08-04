@@ -102,19 +102,19 @@ const Stake = () => {
     // @ts-ignore
     const fetchInfo = useBearStore((state) => state.fetchInfo);
 
-    const web3Data = useActiveWeb3();
+    const {loginStatus, chainId, library} = useActiveWeb3();
 
     useEffect(() => {
-        if (web3Data?.loginStatus) {
-            console.log('chain-id:', web3Data?.chainId);
+        if (loginStatus) {
+            console.log('chain-id:', chainId);
             let chainName = '';
-            if (web3Data?.chainId === 369) {
+            if (chainId === 369) {
                 chainName = 'pulse-main';
                 setCurrentChain('pulse-main');
-            } else if (web3Data?.chainId === 1) {
+            } else if (chainId === 1) {
                 chainName = 'eth-main';
                 setCurrentChain('eth-main');
-            } else if (web3Data?.chainId === 943){
+            } else if (chainId === 943){
                 chainName = 'pulse-test';
                 setCurrentChain('pulse-test');
             } else {
@@ -126,7 +126,7 @@ const Stake = () => {
                 fetchStakeInfo(chainName, '0xBf8fF255aD1f369929715a3290d1ef71d79f8954');
             }
         }
-    }, [isLoadStake, web3Data?.chainId, web3Data?.loginStatus]);
+    }, [isLoadStake, chainId, loginStatus]);
 
     useEffect(() => {
         if (currentChain) {
@@ -204,7 +204,7 @@ const Stake = () => {
     }
 
     const onStakeHandler = async() => {
-        if (!web3Data?.loginStatus) {
+        if (!loginStatus) {
             toast.error("Please connect wallet correctly!");
             return;
         }
@@ -221,7 +221,7 @@ const Stake = () => {
 
         const load_toast_id = toast.loading("Please wait for Staking...");
         try {
-            let bSuccess = await scHEXStakeStart(web3Data?.chainId, web3Data?.library, stakeAmount, stakeDays);
+            let bSuccess = await scHEXStakeStart(chainId, library, stakeAmount, stakeDays);
 
             if (bSuccess) {
                 toast.success("Staking Success!");
@@ -342,7 +342,7 @@ const Stake = () => {
                 </Grid>
             </Grid>
 
-            {!web3Data?.loginStatus && <div className="disabled-container"></div>}
+            {!loginStatus && <div className="disabled-container"></div>}
         </div>
     )
 }

@@ -1,4 +1,5 @@
 export interface StakingEngineDetail {
-    startDay: number;
+    currentDay: number;
     sharePrice: number;
+    hexBalance: number;
 }

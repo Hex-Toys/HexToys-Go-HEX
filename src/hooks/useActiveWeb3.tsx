@@ -3,6 +3,7 @@ import { useAccount, useConnect, useNetwork, useSwitchNetwork } from 'wagmi'
 import { useEthersProvider, useEthersSigner } from './wagmi-ethers'
 import { Signer } from 'ethers'
 import { mainnet, pulsechain, pulsechainV4 } from 'wagmi/chains'
+import { Provider } from '@ethersproject/providers'
 
 const ActiveWeb3Context = createContext<any[]>([null])
 
@@ -18,6 +19,7 @@ export function useActiveWeb3(): {
   isConnecting?: boolean
   isConnected?: boolean
   library?: Signer
+  provider?: Provider
   error?: any
   switchNetwork?: any,
   loginStatus?: boolean
@@ -35,30 +37,27 @@ export default function ActiveWeb3Provider({ children }: { children: ReactNode }
   const signer = useEthersSigner()
   const { switchNetwork } = useSwitchNetwork()
 
-  const [loginStatus, setLoginStatus] = useState(false);
-
-  useEffect(() => {
-    const isLoggedin = address && isConnected && (chain?.id === mainnet.id || chain?.id === pulsechain.id || chain?.id === pulsechainV4.id);
-    setLoginStatus(isLoggedin);
-}, [address, chain, isConnected]);
 
   const value = useMemo(
-    () => [
-      {
-        account: address,
-        chainId: chain?.id,
-        connector,
+    () => {
+      const loginStatus = address && isConnected && (chain?.id === mainnet.id || chain?.id === pulsechain.id || chain?.id === pulsechainV4.id);
+      return [
+        {
+          account: address,
+          chainId: chain?.id,
+          connector,
+          isConnecting,
+          isConnected,
+          library: signer,
+          provider,
+          error,
+          switchNetwork,
+          loginStatus,
+        },
         isConnecting,
-        isConnected,
-        library: signer,
-        provider,
-        error,
-        switchNetwork,
-        loginStatus,
-      },
-      isConnecting,
-    ],
-    [address, chain?.id, connector, error, isConnected, isConnecting, loginStatus, provider, signer, switchNetwork]
+      ]
+    },
+    [address, chain?.id, connector, error, isConnected, isConnecting, provider, signer, switchNetwork]
   )
 
   return <ActiveWeb3Context.Provider value={value}>{children}</ActiveWeb3Context.Provider>
