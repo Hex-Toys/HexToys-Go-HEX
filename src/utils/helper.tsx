@@ -470,5 +470,103 @@ export const processData = (globalInfoData, dailyData, tokenDayData) => {
 }
 
 export const processStakeData = (tokenDayData, globalData, dailyData, stakeData, N) => {
+    const {currentDay: e} = N;
+    let C = [];
+    let g = JSBI.zero;
+    const O = 354;
+    const L = 350;
+    const z = 14;
+    const j = 700;
+    let f = g;
+    const oa = JSBI.fromUint32NZ(j);
+    const NN = "50499604051191931184";
+    const Z = JSBI.fromUint32NZ(27997742);
+    const F = JSBI.fromNumberNZ(910087996911001);
+    const Ha = 1e4;
 
+    const jl = (JSBI.fromUint32NZ(5 * (L - 1)), (a, e) => {
+        const t = JSBI.divide(JSBI.multiply(e, JSBI.fromUint32(a.claimedBtcAddrCount)), Z),
+            i = JSBI.divide(JSBI.multiply(e, JSBI.fromNumber(a.claimedSatoshisTotal)), F);
+        return JSBI.add(t, i)
+    });
+
+    function Kl(a, e, t) {
+        let i = JSBI.divide(JSBI.multiply(a.bigPayDayTotal, e), t);
+        // @ts-ignore
+        return i = JSBI.add(i, jl(a, i)), i
+    }
+
+    function ea(a, e) {
+        a.bigPaySlice = e
+    }
+
+    function Jl(a, e) {
+        return Kl(a, e, JSBI.fromString(NN))
+    }
+
+    let stakeStarts = stakeData.stakeStarts;
+    for (let ii = 0; ii < stakeStarts.length; ii ++) {
+        let a = stakeStarts[ii];
+        const {stakeId: t, stakedHearts: i, startDay: l, endDay: r, stakedDays: n, stakeShares: d, isAutoStake: o} = a
+        const s = parseInt(l, 10), c = parseInt(r, 10), p = parseInt(n, 10), y = s + p;
+        const H = {
+            stakeId: t,
+            stakeInd: C.length,
+            amount: JSBI.fromString(i),
+            shares: JSBI.fromString(d),
+            duration: p,
+            isAutoStake: o,
+            startDay: s,
+            completesOnDay: y,
+            lockedDay: e >= s ? s - 1 : void 0,
+            unlockedDay: void 0,
+            endDay: c,
+            progress: -1,
+            interest: g,
+            interestLive: g,
+            equity: JSBI.fromString(i),
+            equityLive: JSBI.fromString(i),
+            equityLiveUsd: g,
+            equityDaily: [JSBI.fromString(i)],
+            apy1: null,
+            apyN: null,
+            apyDaily: [],
+            hasBpd: !1,
+            bigPaySlice: g,
+            stakeReturn: g,
+            payout: g,
+            cappedPenalty: g,
+            penalty: g,
+            servedDays: e >= s ? e - s : void 0,
+            txnInProgress: !1
+        };
+        // H.hasBpd = s < O && y > O, H.hasBpd && (N.showBpdColumn = !0);
+
+        /*for (let h = s; h < (e > c ? c : e); h++) {
+            const a = h + 1, e = a - (y + z);
+            if (e > 0 && e <= j) {
+                let {cappedPenalty: a, equityLive: t} = H;
+                JSBI.nonZero(a) && (t = JSBI.add(t, a), f = JSBI.subtract(f, a));
+                const i = JSBI.divide(JSBI.multiply(t, JSBI.fromUint32NZ(e)), oa);
+                JSBI.greaterThanOrEqual(i, t) ? (a = t, t = g) : (a = i, t = JSBI.subtract(t, i)), f = JSBI.add(f, a), H.cappedPenalty = a, H.penalty = i, H.equityLive = t, H.equity = t
+            }
+            const t = dailyData[h];
+            if (h <= y && t) {
+                let {stakeSharesTotal: e} = globalData[h];
+                const {payout: t} = dailyData[h];
+                "0" === e && ({stakeSharesTotal: e} = globalData[h + 1]);
+                let i = JSBI.divide(JSBI.multiply(JSBI.fromString(t), H.shares), JSBI.fromString(e));
+                if (H.shares && H.amount && H.hasBpd && h === O) {
+                    const a = Jl(N, H.shares);
+                    i = JSBI.add(i, a), ea(H, a)
+                }
+                H.interestLive = JSBI.add(H.interest, i), H.equityLive = JSBI.add(H.equity, i), H.interest = H.interestLive, H.equity = H.equityLive, H.progress = Math.trunc(Math.min((a - H.startDay) / H.duration * Ha, Ha))
+            }
+            // u && (H.equityLiveUsd = JSBI.divide(JSBI.multiply(H.equityLive, u), Ca));
+            // const i = H.equityDaily[H.equityDaily.length - 1], l = E.a.subtract(H.equity, i);
+            // H.apy1 = tr(H.amount, l, 1);
+            // const r = E.a.subtract(H.equity, H.amount);
+            // H.apyN = tr(H.amount, r, a - H.lockedDay), h > y ? H.apyDaily.push(0) : 1257 === h || 1258 === h ? H.apyDaily.push(32) : H.apyDaily.push(E.a.toNumber(H.apy1) / 100), H.equityDaily.push(H.equity)
+        }*/
+    }
 }
