@@ -140,6 +140,16 @@ export const useBearStore = create((set, get) => ({
             xfLobbiesReady: 0,
         }
     },
+    SD: {
+        'eth-main': null,
+        'pulse-main': null,
+        'pulse-test': null
+    },
+    SL: {
+        'eth-main': null,
+        'pulse-main': null,
+        'pulse-test': null
+    },
 
     fetchInfo: async (chain) => {
         let hexData = await loadHexInfo(0, chain, []);
@@ -177,13 +187,16 @@ export const useBearStore = create((set, get) => ({
         // @ts-ignore
         let uu = get().uu[chain];
 
-        const {C, S} = processStakeData(tokenDayData, globalData, dailyData, stakeData, NN, uu);
+        const {C, S, L} = processStakeData(tokenDayData, globalData, dailyData, stakeData, NN, uu);
 
         // @ts-ignore
-        set({CC: {...get().CC, [chain]: C}});
+        set({SD: {...get().SD, [chain]: C}});
 
         // @ts-ignore
         set({SS: {...get().SS, [chain]: S}});
+
+        // @ts-ignore
+        set({SL: {...get().SL, [chain]: L}});
     },
 
     setCurrentDay: (day) => {

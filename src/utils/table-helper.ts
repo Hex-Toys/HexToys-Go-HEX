@@ -36,6 +36,7 @@ export const Re = a => ie(Oa(a), 3);
 export const Me = a => ie(Oa(a), 2);
 export const ke = a => re(JSBI.toString10U(a), 8);
 export const De = a => re(JSBI.toString10U(a), 12);
+export const Pe = a => ee(JSBI.toString10U(a), 2, 2)
 export const Ei = (a, e) => {return a - e};
 export const Ot = a => "" + (a + 1);
 

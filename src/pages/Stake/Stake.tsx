@@ -18,11 +18,14 @@ import Container from '@mui/material/Container';
 import "react-daterange-picker/dist/css/react-calendar.css";
 import './style.scss'
 import JSBI from "@pulsex/jsbi";
-import {Ue, Ve, Ee, _e, De} from '../../utils/table-helper';
+import {Ue, Ve, Ee, _e, De, Ei, Xa, Le, Te, ke, Me, Pe} from '../../utils/table-helper';
 import { useActiveWeb3 } from 'hooks/useActiveWeb3';
 import toast from 'react-hot-toast';
 import { scHEXStakeEnd, scHEXStakeStart } from 'utils/contracts';
 import {useContractRead} from "../../context/useContractRead";
+import {Line, Scatter} from "react-chartjs-2";
+import CardContent from "@mui/material/CardContent";
+import EnhancedTable, {HeadCell} from "../../components/EnhancedTable/EnhancedTable";
 
 const Wl = (a, e) => {
     let t, i = 0;
@@ -97,13 +100,33 @@ const Stake = () => {
     const [heartsPerTShare, setHeartsPerTShare] = useState('0.000');
     const [stakeShare, setStakeShare] = useState('0.000');
     const [isLoadStake, setIsLoadStake] = useState(false);
+    const [shareChartLabels, setShareChartLabels] = useState([]);
+    const [shareChartData, setShareChartData] = useState({labels: [], datasets: []});
+    const [tableData, setTableData] = useState([]);
+    const [htableData, setHTableData] = useState([]);
+
+    const chartOptions = {
+        responsive: true,
+        plugins: {
+            legend: {
+                display: false,
+            },
+            title: {
+                display: false,
+            },
+        },
+    };
 
     // @ts-ignore
     const NN = useBearStore((state) => state.NN);
     // @ts-ignore
     const hh = useBearStore((state) => state.hh);
     // @ts-ignore
-    const CC = useBearStore((state) => state.CC);
+    const cc = useBearStore((state) => state.cc);
+    // @ts-ignore
+    const SD = useBearStore((state) => state.SD);
+    // @ts-ignore
+    const SL = useBearStore((state) => state.SL);
     // @ts-ignore
     const SS = useBearStore((state) => state.SS);
     // @ts-ignore
@@ -112,6 +135,90 @@ const Stake = () => {
     const fetchStakeInfo = useBearStore((state) => state.fetchStakeInfo);
 
     const {loginStatus, chainId, library} = useActiveWeb3();
+
+    const headCells: readonly HeadCell[] = [
+        {
+            id: 'lockedDay',
+            label: 'Start',
+            compareValFn: Ei,
+            renderValFn: a => {
+                let val = a.lockedDay || a.startDay - 1;
+                if (!val) return "";
+                return "" + (val + 1);
+            },
+            className: 'is-spec'
+        },
+        {
+            id: 'completesOnDay',
+            label: 'End',
+            compareValFn: Ei,
+            renderValFn: (a) => {
+                return "" + a;
+            },
+            className: ''
+        },
+        {
+            id: 'progress',
+            label: 'Progress',
+            compareValFn: Ei,
+            renderValFn: (a) => {
+                if (a < 0) {
+                    return 'Pending';
+                }
+                return (a / 100).toFixed(2)
+            },
+            className: 'is-percent'
+        },
+        {
+            id: 'apy1',
+            label: 'APY Yesterday',
+            compareValFn: JSBI.compareExtended,
+            renderValFn: Me,
+            className: 'is-green'
+        },
+        {
+            id: 'apyN',
+            label: 'APY All',
+            compareValFn: JSBI.compareExtended,
+            renderValFn: Me,
+            className: ''
+        },
+        {
+            id: 'amount',
+            label: 'Principal',
+            compareValFn: JSBI.compare,
+            renderValFn: ke,
+            className: ''
+        },
+        {
+            id: 'shares',
+            label: 'T-Shares',
+            compareValFn: JSBI.compare,
+            renderValFn: De,
+            className: ''
+        },
+        {
+            id: 'interestLive',
+            label: 'Yield',
+            compareValFn: JSBI.compare,
+            renderValFn: ke,
+            className: ''
+        },
+        {
+            id: 'equityLive',
+            label: 'HEX',
+            compareValFn: JSBI.compare,
+            renderValFn: ke,
+            className: ''
+        },
+        {
+            id: 'equityLiveUsd',
+            label: 'USD',
+            compareValFn: JSBI.compare,
+            renderValFn: Pe,
+            className: ''
+        },
+    ];
 
     useEffect(() => {
         if (loginStatus) {
@@ -129,11 +236,6 @@ const Stake = () => {
             } else {
                 return;
             }
-
-            if (!isLoadStake) {
-                setIsLoadStake(true);
-                fetchStakeInfo(chainName, '0xBf8fF255aD1f369929715a3290d1ef71d79f8954');
-            }
         }
     }, [isLoadStake, chainId, loginStatus]);
 
@@ -144,15 +246,24 @@ const Stake = () => {
                     setIsLoading(true);
                     fetchInfo(currentChain);
                 }
+            } else {
+                processGraphData(hh[currentChain], cc[currentChain]);
+                if (!isLoadStake) {
+                    setIsLoadStake(true);
+                    fetchStakeInfo(currentChain, '0xBf8fF255aD1f369929715a3290d1ef71d79f8954');
+                }
             }
         }
     }, [hh, currentChain, isLoading, fetchInfo]);
 
     useEffect(() => {
-        if (currentChain && CC[currentChain]) {
-
+        if (currentChain && SD[currentChain]) {
+            setTableData(SD[currentChain])
         }
-    }, [currentChain, CC, SS])
+        if (currentChain && SL[currentChain]) {
+            setHTableData(SL[currentChain])
+        }
+    }, [currentChain, SD, SS, SL])
 
     useEffect(() => {
         if (currentChain) {
@@ -193,6 +304,30 @@ const Stake = () => {
         }
 
     }, [stakeDays, stakeAmount, shareRate])
+
+    const processGraphData = (h, c) => {
+        const t = [[0], [null]];
+        const [i,l] = t;
+        for (let r = 1; r <= h.length; r++) {
+            const e = r - 1
+                , t = h[e];
+            if (t) {
+                i.push(r);
+                l.push(t);
+            }
+        }
+
+        setShareChartData({
+            labels: i,
+            datasets: [{
+                label: 'T-Share Daily Close Price',
+                data: l,
+                borderColor: '#5356FB',
+                backgroundColor: '#5356FB'
+            }]
+        });
+        setShareChartLabels(i);
+    }
 
 
     const handleClickShowCalendar = () => {
@@ -364,6 +499,23 @@ const Stake = () => {
                     </div>
                 </Grid>
             </Grid>
+
+            <div className="page-title" style={{marginTop: '56px'}}>
+                T-Share Daily Close Price in $USD
+            </div>
+            {shareChartLabels.length > 0 && <div className="chart-container"><Line options={chartOptions} data={shareChartData} /></div>}
+
+            <div className="page-title" style={{marginTop: '56px'}}>
+                Active Stakes
+            </div>
+
+            {tableData.length > 0 && <EnhancedTable headCells={headCells} rows={tableData} orderBy={'lockedDay'}/>}
+
+            <div className="page-title" style={{marginTop: '56px'}}>
+                Stake History
+            </div>
+
+            {htableData.length > 0 && <EnhancedTable headCells={headCells} rows={htableData} orderBy={'lockedDay'}/>}
 
             {!loginStatus && <div className="disabled-container"></div>}
         </Container>

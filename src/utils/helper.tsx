@@ -440,7 +440,7 @@ export const processData = (globalInfoData, dailyData, tokenDayData) => {
         let item = tokenDayData[ii];
         const t = parseFloat(item.priceUSD);
         const i = item.date / 86400 - aa;
-        const u = JSBI.fromNumber(t * Ua);
+        u = JSBI.fromNumber(t * Ua);
         F(i, {
             hexPrice: t
         });
@@ -470,13 +470,15 @@ export const processData = (globalInfoData, dailyData, tokenDayData) => {
 }
 
 export const processStakeData = (tokenDayData, globalData, dailyData, stakeData, N, u) => {
+    console.log('process-stake-data:', u);
     const {currentDay: e} = N;
     let C = [];
+    let L = [];
     let g = JSBI.zero;
     const O = 354;
-    const L = 350;
     const z = 14;
     const j = 700;
+    let V;
     let f = g;
     const oa = JSBI.fromUint32NZ(j);
     const NN = "50499604051191931184";
@@ -486,6 +488,8 @@ export const processStakeData = (tokenDayData, globalData, dailyData, stakeData,
     const ba = 1e21;
     const Ca = JSBI.BigInt(ba);
     const er = JSBI.fromUint32NZ(365e4);
+    const X = JSBI.fromUint32NZ(1);
+    let b = [];
     const S = {
         totalStaked: g,
         totalInterest: g,
@@ -499,7 +503,7 @@ export const processStakeData = (tokenDayData, globalData, dailyData, stakeData,
 
 
 
-    const jl = (JSBI.fromUint32NZ(5 * (L - 1)), (a, e) => {
+    const jl = (JSBI.fromUint32NZ(5 * (350 - 1)), (a, e) => {
         const t = JSBI.divide(JSBI.multiply(e, JSBI.fromUint32(a.claimedBtcAddrCount)), Z),
             i = JSBI.divide(JSBI.multiply(e, JSBI.fromNumber(a.claimedSatoshisTotal)), F);
         return JSBI.add(t, i)
@@ -524,15 +528,23 @@ export const processStakeData = (tokenDayData, globalData, dailyData, stakeData,
     }
 
     let stakeStarts = stakeData.stakeStarts;
-    for (let ii = 0; ii < stakeStarts.length; ii ++) {
-        let a = stakeStarts[ii];
+    let stakeEnds = stakeData.stakeEnds;
+    let data = [].concat(stakeStarts);
+    data.sort((a, e) => parseInt(a.timestamp, 10) - parseInt(e.timestamp, 10));
+    for (let ii = 0; ii < data.length; ii ++) {
+        let a = data[ii];
         const {stakeId: t, stakedHearts: i, startDay: l, endDay: r, stakedDays: n, stakeShares: d, isAutoStake: o} = a
-        N.nextStakeSharesTotal = JSBI.add(N.nextStakeSharesTotal, JSBI.fromString(d));
-        N.lockedHeartsTotal = JSBI.add(N.lockedHeartsTotal, JSBI.fromString(i));
-        N.latestStakeId = t;
-        N.stakesActiveCount += 1;
-        N.stakeSharesTotal = JSBI.add(N.stakeSharesTotal, N.nextStakeSharesTotal);
-        N.nextStakeSharesTotal = g;
+        try {
+            N.nextStakeSharesTotal = JSBI.add(N.nextStakeSharesTotal, JSBI.fromString(d));
+            N.lockedHeartsTotal = JSBI.add(N.lockedHeartsTotal, JSBI.fromString(i));
+            N.latestStakeId = t;
+            N.stakesActiveCount += 1;
+            N.stakeSharesTotal = JSBI.add(N.stakeSharesTotal, N.nextStakeSharesTotal);
+            N.nextStakeSharesTotal = g;
+        } catch (e) {
+            console.log(a, e);
+        }
+
 
         const s = parseInt(l, 10), c = parseInt(r, 10), p = parseInt(n, 10), y = s + p;
         const H = {
@@ -609,7 +621,10 @@ export const processStakeData = (tokenDayData, globalData, dailyData, stakeData,
                 H.equity = H.equityLive;
                 H.progress = Math.trunc(Math.min((a - H.startDay) / H.duration * Ha, Ha));
             }
-            u && (H.equityLiveUsd = JSBI.divide(JSBI.multiply(H.equityLive, u), Ca));
+            if (u) {
+                console.log('calc-usd:', u);
+                H.equityLiveUsd = JSBI.divide(JSBI.multiply(H.equityLive, u), Ca);
+            }
             const i = H.equityDaily[H.equityDaily.length - 1], l = JSBI.subtract(H.equity, i);
             H.apy1 = tr(H.amount, l, 1);
             const r = JSBI.subtract(H.equity, H.amount);
@@ -625,7 +640,7 @@ export const processStakeData = (tokenDayData, globalData, dailyData, stakeData,
                 }
             }
         }
-
+        b[t] = H;
         C.push(H);
         S.totalStaked = JSBI.add(S.totalStaked, H.amount);
         S.totalEquity = JSBI.add(S.totalEquity, H.equity);
@@ -634,5 +649,82 @@ export const processStakeData = (tokenDayData, globalData, dailyData, stakeData,
         S.totalInterestLive = JSBI.add(S.totalInterestLive, H.interestLive);
     }
 
-    return {C, S}
+    const Ra = a => {
+        let e, t, i = JSBI.add(JSBI.fromString(a.stakedHearts), JSBI.fromString(a.payout)), l = g;
+        if (JSBI.nonZero(JSBI.fromString(a.penalty))) {
+            if (JSBI.greaterThanOrEqual(JSBI.fromString(a.penalty), i)) {
+                l = i;
+                i = g;
+            } else {
+                l = JSBI.fromString(a.penalty);
+                i = JSBI.subtract(i, JSBI.fromString(a.penalty));
+            }
+            const r = JSBI.signedRightShift(l, X);
+            if (JSBI.nonZero(r)) {
+                t = r;
+                e = JSBI.subtract(l, t);
+            }
+        }
+        const r = Object.assign(Object.assign({}, a), {
+            splitPenaltyOrigin: t,
+            splitPenalty: e,
+            stakeReturn: i,
+            cappedPenalty: l
+        });
+        return r
+    }
+
+    function ua(a, e) {
+        const {currentDay: t} = N, {__typename: i, stakeId: l, servedDays: r, payout: n, penalty: d, prevUnlocked: o} = a,
+            s = parseInt(r, 10), c = Object.assign({}, b[l]);
+        if (null === c || void 0 === c ? void 0 : c.amount) {
+            if (e) {
+                c.endDay = c.startDay - 1 + s;
+                S.totalInterest = JSBI.subtract(S.totalInterest, c.interest);
+                S.totalInterestLive = JSBI.subtract(S.totalInterestLive, c.interestLive);
+                S.totalEquity = JSBI.subtract(S.totalEquity, c.equity);
+                S.totalEquityLive = JSBI.subtract(S.totalEquityLive, c.equityLive);
+                if (u) {
+                    S.totalEquityLiveUsd = JSBI.divide(JSBI.multiply(S.totalEquityLive, u), Ca)
+                }
+                if (c.cappedPenalty && JSBI.nonZero(c.cappedPenalty)) {
+                    f = JSBI.subtract(f, c.cappedPenalty)
+                }
+                const a = C.length - 1;
+                if (c.stakeInd !== a) {
+                    const e = C[a];
+                    e.stakeInd = c.stakeInd;
+                    C[c.stakeInd] = e;
+                }
+                C.pop();
+                delete c.stakeInd;
+                L.push(c)
+            }
+        }
+    }
+
+    data = [].concat(stakeEnds);
+    data.sort((a, e) => parseInt(a.timestamp, 10) - parseInt(e.timestamp, 10));
+    for (let ii = 0; ii < data.length; ii ++) {
+        let e = data[ii];
+        let a = data[ii];
+        if (!a.prevUnlocked) {
+            a.stakeReturn || (e = Ra(a));
+            const {servedDays: t, penalty: i, stakedShares: l, splitPenalty: r} = e, n = parseInt(t, 10);
+            if (0 !== n || JSBI.nonZero(JSBI.fromString(i))) {
+                N.stakeSharesTotal = JSBI.subtract(N.stakeSharesTotal, JSBI.fromString(l));
+                if (JSBI.nonZeroDefined(r)) {
+                    N.stakePenaltyTotal = JSBI.add(N.stakePenaltyTotal, JSBI.fromString(i));
+                }
+            } else {
+                N.nextStakeSharesTotal = JSBI.subtract(N.nextStakeSharesTotal, JSBI.fromString(l));
+                N.stakesPendingCount--;
+            }
+        }
+        N.lockedHeartsTotal = JSBI.subtract(N.lockedHeartsTotal, JSBI.fromString(e.stakedHearts));
+        V = !0;
+        ua(e, !0);
+    }
+
+    return {C, S, L}
 }

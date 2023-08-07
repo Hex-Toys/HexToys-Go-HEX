@@ -84,7 +84,8 @@ const Transfer = () => {
 
             if (!isLoadStake) {
                 setIsLoadStake(true);
-                fetchStakeInfo(chainName, '0xBf8fF255aD1f369929715a3290d1ef71d79f8954'.toLowerCase());
+                // fetchStakeInfo(chainName, '0xBf8fF255aD1f369929715a3290d1ef71d79f8954'.toLowerCase());
+                fetchStakeInfo(chainName, account.toLowerCase());
             }
         }
     }, [loginStatus, chainId, account]);

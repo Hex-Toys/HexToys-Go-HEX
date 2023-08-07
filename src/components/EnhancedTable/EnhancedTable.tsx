@@ -136,7 +136,15 @@ export default function EnhancedTable(props) {
 
     const renderData = (header, row) => {
         let data = row[header.id];
-        data = header.renderValFn(data);
+        if (!data) {
+            return '';
+        }
+        if (header.className.indexOf('is-spec') >= 0) {
+            data = header.renderValFn(row);
+        } else {
+            data = header.renderValFn(data);
+        }
+
         let result = '';
         if (typeof data == 'object') {
             result = data.join('');
@@ -144,7 +152,10 @@ export default function EnhancedTable(props) {
             result = data;
         }
         if (header.className.indexOf('is-percent') >= 0) {
-            result += '%';
+            // @ts-ignore
+            if (Number(result) == result) {
+                result += '%';
+            }
         }
         return result;
     }
@@ -177,7 +188,7 @@ export default function EnhancedTable(props) {
                                         hover
                                         role="checkbox"
                                         tabIndex={-1}
-                                        key={row.name}
+                                        key={index}
                                         sx={{ cursor: 'pointer' }}
                                     >
                                         {headCells.map((item, hindex) => (
