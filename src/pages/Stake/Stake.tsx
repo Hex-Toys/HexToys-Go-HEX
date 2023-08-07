@@ -103,7 +103,13 @@ const Stake = () => {
     // @ts-ignore
     const hh = useBearStore((state) => state.hh);
     // @ts-ignore
+    const CC = useBearStore((state) => state.CC);
+    // @ts-ignore
+    const SS = useBearStore((state) => state.SS);
+    // @ts-ignore
     const fetchInfo = useBearStore((state) => state.fetchInfo);
+    // @ts-ignore
+    const fetchStakeInfo = useBearStore((state) => state.fetchStakeInfo);
 
     const {loginStatus, chainId, library} = useActiveWeb3();
 
@@ -141,6 +147,12 @@ const Stake = () => {
             }
         }
     }, [hh, currentChain, isLoading, fetchInfo]);
+
+    useEffect(() => {
+        if (currentChain && CC[currentChain]) {
+
+        }
+    }, [currentChain, CC, SS])
 
     useEffect(() => {
         if (currentChain) {
@@ -199,11 +211,6 @@ const Stake = () => {
         console.log(range);
         setDays(range);
         setStakeDays(value.diff(today, 'days'));
-    }
-
-    const fetchStakeInfo = async(chain, address) => {
-        let data = await loadStakeInfo(chain, address);
-        console.log(data);
     }
 
     const onStakeHandler = async() => {

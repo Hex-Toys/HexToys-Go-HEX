@@ -16,7 +16,11 @@ import './style.scss';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import {useBearStore} from "../../store";
-import {add} from "@pulsex/jsbi";
+import {Ei, Ot, ke, De, Re, Me, Ve} from '../../utils/table-helper';
+import EnhancedTable, {HeadCell} from "../EnhancedTable/EnhancedTable";
+import JSBI from "@pulsex/jsbi";
+import Grid from "@material-ui/core/Grid";
+import {useContractRead} from "../../context/useContractRead";
 
 ChartJS.register(
     CategoryScale,
@@ -53,6 +57,10 @@ const HomeChainInfo = (props) => {
     // @ts-ignore
     const cc = useBearStore((state) => state.cc);
     // @ts-ignore
+    const N = useBearStore((state) => state.NN);
+    // @ts-ignore
+    const S = useBearStore((state) => state.SS);
+    // @ts-ignore
     const fetchInfo = useBearStore((state) => state.fetchInfo);
 
     const { isConnected, address } = useAccount();
@@ -63,6 +71,68 @@ const HomeChainInfo = (props) => {
     const [dailyChartLabels, setDailyChartLabels] = useState([]);
     const [dailyChartData, setDailyChartData] = useState({datasets: []});
     const [isLoading, setIsLoading] = useState(false);
+    const [tableData, setTableData] = useState([]);
+    const [hexInfoData, setHexInfoData] = useState({
+        currentDay: 3,
+        totalSupply: JSBI.zero
+    });
+    const [stakeInfoData, setStakeInfoData] = useState({
+        totalStaked: JSBI.zero,
+        totalInterest: JSBI.zero,
+        totalInterestLive:JSBI.zero,
+        totalEquity: JSBI.zero,
+        totalEquityLive: JSBI.zero,
+        totalEquityLiveUsd: JSBI.zero,
+        hasEnteredXfLobbies: !1,
+        xfLobbiesReady: 0,
+    });
+    const [balance, setBalance] = useState(JSBI.zero);
+    const {hexBalance} = useContractRead();
+
+    const headCells: readonly HeadCell[] = [
+        {
+            id: 'day',
+            label: 'Day',
+            compareValFn: Ei,
+            renderValFn: Ot,
+            className: ''
+        },
+        {
+            id: 'payoutTotal',
+            label: 'Day Payout Total',
+            compareValFn: JSBI.compare,
+            renderValFn: ke,
+            className: ''
+        },
+        {
+            id: 'stakeSharesTotal',
+            label: 'T-Shares Total',
+            compareValFn: JSBI.compare,
+            renderValFn: De,
+            className: ''
+        },
+        {
+            id: 'payoutPerTShare',
+            label: 'Payout Per T-Share',
+            compareValFn: JSBI.compareExtended,
+            renderValFn: ke,
+            className: ''
+        },
+        {
+            id: 'gain1Average',
+            label: '% Gain',
+            compareValFn: JSBI.compareExtended,
+            renderValFn: Re,
+            className: 'is-green is-percent'
+        },
+        {
+            id: 'apy1Average',
+            label: '% APY',
+            compareValFn: JSBI.compareExtended,
+            renderValFn: Me,
+            className: 'is-percent'
+        }
+    ];
 
     const chartOptions = {
         responsive: true,
@@ -92,6 +162,7 @@ const HomeChainInfo = (props) => {
     useEffect(() => {
         if (props.chain) {
             setTitle(urls[props.chain].title);
+            setCurrentChain(props.chain);
             if (!hh[props.chain] || !cc[props.chain]) {
                 if (!isLoading) {
                     setIsLoading(true);
@@ -99,17 +170,16 @@ const HomeChainInfo = (props) => {
                 }
             } else {
                 processGraphData(hh[props.chain], cc[props.chain]);
+                setTableData(cc[props.chain]);
+                setHexInfoData(N[props.chain]);
+                setStakeInfoData(S[props.chain]);
             }
         }
     }, [props, hh, cc]);
 
     useEffect(() => {
-        if (currentChain && isConnected) {
-            if (hh[currentChain]) {
-
-            }
-        }
-    }, [hh, cc, isConnected, address, currentChain])
+        setBalance(JSBI.fromNumber(hexBalance));
+    }, [hexBalance])
 
     const processGraphData = (h, c) => {
 
@@ -157,6 +227,12 @@ const HomeChainInfo = (props) => {
         setDailyChartLabels(labels);
     }
 
+    const FormatMixedHex = (a) => {
+        let data = Ve(a);
+        console.log('format-mixed-hex:', data);
+        return data.join('');
+    }
+
     return (
         <div className="chain-info-container">
             <Card variant="outlined">
@@ -166,6 +242,53 @@ const HomeChainInfo = (props) => {
                     </div>
                     <hr/>
                     <div className="part-title">
+                        HEX
+                    </div>
+                    <div className="card-box">
+                        <Grid container>
+                            <Grid item xs={7}>
+                                <span>Current Day:</span>
+                            </Grid>
+                            <Grid item xs={5}>
+                                <label className={"is-green"}>{hexInfoData.currentDay}</label>
+                            </Grid>
+                        </Grid>
+                        <Grid container style={{marginTop: '12px'}}>
+                            <Grid item xs={7}>
+                                <span>Total Supply of HEX:</span>
+                            </Grid>
+                            <Grid item xs={5}>
+                                <label>{FormatMixedHex(hexInfoData.totalSupply)}</label>
+                            </Grid>
+                        </Grid>
+                    </div>
+                    <div className="card-box" style={{marginTop: '16px'}}>
+                        <Grid container>
+                            <Grid item xs={7}>
+                                <span>Total Staked:</span>
+                            </Grid>
+                            <Grid item xs={5}>
+                                <label>{FormatMixedHex(stakeInfoData.totalStaked)}</label>
+                            </Grid>
+                        </Grid>
+                        <Grid container>
+                            <Grid item xs={7}>
+                                <span>Yield Due:</span>
+                            </Grid>
+                            <Grid item xs={5}>
+                                <label>{FormatMixedHex(stakeInfoData.totalInterestLive)}</label>
+                            </Grid>
+                        </Grid>
+                        <Grid container>
+                            <Grid item xs={7}>
+                                <span>Not Staked:</span>
+                            </Grid>
+                            <Grid item xs={5}>
+                                <label>{FormatMixedHex(balance)}</label>
+                            </Grid>
+                        </Grid>
+                    </div>
+                    <div className="part-title">
                         T-Share Daily Close Price in $USD
                     </div>
                     {shareChartLabels.length > 0 && <div className="chart-container"><Line options={chartOptions} data={shareChartData} /></div>}
@@ -173,11 +296,11 @@ const HomeChainInfo = (props) => {
                         Daily HEX Payout per T-Share
                     </div>
                     {dailyChartLabels.length > 0 && <div className="chart-container"><Scatter options={dailyChartOptions} data={dailyChartData} /></div>}
-                    {/*<div className="part-title">*/}
-                    {/*    Daily Data*/}
-                    {/*</div>*/}
+                    <div className="part-title">
+                        Daily Data
+                    </div>
 
-                    {/*<EnhancedTable />*/}
+                    {tableData.length > 0 && <EnhancedTable headCells={headCells} rows={tableData} orderBy={'day'}/>}
                 </CardContent>
             </Card>
         </div>

@@ -1,5 +1,12 @@
 import { create } from 'zustand';
-import {loadStakeInfo, loadHexInfo, loadDailyData, loadGlobalInfos, processData} from "../utils/helper";
+import {
+    loadStakeInfo,
+    loadHexInfo,
+    loadDailyData,
+    loadGlobalInfos,
+    processData,
+    processStakeData
+} from "../utils/helper";
 import {oldDailyData, oldGlobalData} from "../utils/constants";
 import JSBI from "@pulsex/jsbi";
 
@@ -27,6 +34,11 @@ export const useBearStore = create((set, get) => ({
         'pulse-test': null
     },
     cc: {
+        'eth-main': null,
+        'pulse-main': null,
+        'pulse-test': null
+    },
+    uu: {
         'eth-main': null,
         'pulse-main': null,
         'pulse-test': null
@@ -96,12 +108,44 @@ export const useBearStore = create((set, get) => ({
             showBpdColumn: !1
         }
     },
+    SS: {
+        'eth-main': {
+            totalStaked: JSBI.zero,
+            totalInterest: JSBI.zero,
+            totalInterestLive:JSBI.zero,
+            totalEquity: JSBI.zero,
+            totalEquityLive: JSBI.zero,
+            totalEquityLiveUsd: JSBI.zero,
+            hasEnteredXfLobbies: !1,
+            xfLobbiesReady: 0,
+        },
+        'pulse-main': {
+            totalStaked: JSBI.zero,
+            totalInterest: JSBI.zero,
+            totalInterestLive:JSBI.zero,
+            totalEquity: JSBI.zero,
+            totalEquityLive: JSBI.zero,
+            totalEquityLiveUsd: JSBI.zero,
+            hasEnteredXfLobbies: !1,
+            xfLobbiesReady: 0,
+        },
+        'pulse-test': {
+            totalStaked: JSBI.zero,
+            totalInterest: JSBI.zero,
+            totalInterestLive:JSBI.zero,
+            totalEquity: JSBI.zero,
+            totalEquityLive: JSBI.zero,
+            totalEquityLiveUsd: JSBI.zero,
+            hasEnteredXfLobbies: !1,
+            xfLobbiesReady: 0,
+        }
+    },
 
     fetchInfo: async (chain) => {
         let hexData = await loadHexInfo(0, chain, []);
         let globalDatas = await loadGlobalInfos(0, chain, oldGlobalData);
         let dailyDatas = await loadDailyData(0, chain, oldDailyData);
-        const {h, c, N} = processData(globalDatas, dailyDatas, hexData);
+        const {h, c, N, u} = processData(globalDatas, dailyDatas, hexData);
 
         // @ts-ignore
         set({tokenDayData: {...get().tokenDayData, [chain]: hexData}});
@@ -116,6 +160,8 @@ export const useBearStore = create((set, get) => ({
         set({cc: {...get().cc, [chain]: c}});
         // @ts-ignore
         set({NN: {...get().NN, [chain]: N}});
+        // @ts-ignore
+        set({uu: {...get().uu, [chain]: u}});
     },
 
     fetchStakeInfo: async (chain, address) => {
@@ -128,8 +174,16 @@ export const useBearStore = create((set, get) => ({
         let dailyData = get().dailyData[chain];
         // @ts-ignore
         let NN = get().NN[chain];
+        // @ts-ignore
+        let uu = get().uu[chain];
 
+        const {C, S} = processStakeData(tokenDayData, globalData, dailyData, stakeData, NN, uu);
 
+        // @ts-ignore
+        set({CC: {...get().CC, [chain]: C}});
+
+        // @ts-ignore
+        set({SS: {...get().SS, [chain]: S}});
     },
 
     setCurrentDay: (day) => {
