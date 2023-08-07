@@ -1,25 +1,64 @@
+@import "../../global.scss";
 .transfer-page-container {
   padding-top: 56px;
-
+  width: 100% !important;
+  max-width: 100% !important;
+  display: flex;
+  padding-bottom: 80px;
+  min-height: calc(100vh - 80px);
+  box-sizing: border-box;
+  &.dark{
+    background: #060714;
+  }
+  &.light{
+    background: #fff;
+  }
+  .content{
+    width: 100%;
+    display: flex;
+    max-width: 1220px;
+    margin: auto;
+    grid-area: auto;
+    gap : 24px;
+    @include mobile_potrait{
+      flex-direction: column;
+    }
+  }
+  .col_div{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    @include mobile_potrait{
+      width: 100%;
+    }
+  }
+  
+  
   .page-title {
-    color: #FFF;
     font-size: 24px;
     font-style: normal;
     font-weight: 600;
     line-height: 22px; /* 91.667% */
     margin-bottom: 16px;
+    text-align: center;
   }
 
   .input-container {
     border-radius: 12px;
     width: calc(100% - 64px);
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.20);
     padding: 16px 32px;
     margin-bottom: 32px;
-
+    &.dark{
+      background: #ffffff0d;
+      border: 1px solid #ffffff33;
+    
+    }
+    &.light{
+      background: #0000000d;
+      border: 1px solid #00000033;
+    
+    }
     label {
-      color: #FFF;
       font-size: 16px;
       font-style: normal;
       font-weight: 400;
@@ -39,7 +78,6 @@
         border: none;
         outline: none;
 
-        color: #FFF;
         font-size: 18px;
         font-style: normal;
         font-weight: 500;
@@ -68,7 +106,6 @@
       }
 
       .span-unit {
-        color: #FFF;
         text-align: right;
         font-size: 18px;
         font-style: normal;
@@ -121,5 +158,8 @@
     font-weight: 700;
     line-height: 20px; /* 142.857% */
     letter-spacing: 0.49px;
+    @include mobile_potrait{
+      margin-top: 46px;
+    }
   }
 }

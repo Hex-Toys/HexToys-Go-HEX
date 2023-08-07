@@ -1,5 +1,5 @@
 import Grid from '@material-ui/core/Grid';
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import * as React from 'react';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
@@ -12,20 +12,20 @@ import originalMoment from "moment";
 import { extendMoment } from "moment-range";
 import Button from '@mui/material/Button';
 import {useBearStore} from "../../store";
-import {loadStakeInfo} from "../../utils/helper";
 import Container from '@mui/material/Container';
 
 import "react-daterange-picker/dist/css/react-calendar.css";
 import './style.scss'
 import JSBI from "@pulsex/jsbi";
-import {Ue, Ve, Ee, _e, De, Ei, Xa, Le, Te, ke, Me, Pe} from '../../utils/table-helper';
+import {Ue, Ve, Ee, _e, De, Ei, ke, Me, Pe} from '../../utils/table-helper';
 import { useActiveWeb3 } from 'hooks/useActiveWeb3';
 import toast from 'react-hot-toast';
 import { scHEXStakeEnd, scHEXStakeStart } from 'utils/contracts';
 import {useContractRead} from "../../context/useContractRead";
 import {Line, Scatter} from "react-chartjs-2";
-import CardContent from "@mui/material/CardContent";
 import EnhancedTable, {HeadCell} from "../../components/EnhancedTable/EnhancedTable";
+import ThemeContext from 'context/ThemeContext';
+import { useLoader } from 'context/LoadingContext';
 
 const Wl = (a, e) => {
     let t, i = 0;
@@ -83,6 +83,8 @@ const pe = (a, e) => {
 }
 
 const Stake = () => {
+    const { theme } = useContext(ThemeContext)
+    const [setLoading] = useLoader();
     // @ts-ignore
     const moment = extendMoment(originalMoment);
     const {hexBalance} = useContractRead();
@@ -253,6 +255,7 @@ const Stake = () => {
                     fetchStakeInfo(currentChain, '0xBf8fF255aD1f369929715a3290d1ef71d79f8954');
                 }
             }
+            setLoading(false)
         }
     }, [hh, currentChain, isLoading, fetchInfo]);
 
@@ -387,137 +390,140 @@ const Stake = () => {
     }
 
     return (
-        <Container className="stake-page-container">
-            <div className="page-title">
-                Stake
-            </div>
-            <Grid container spacing={3}>
-                <Grid item xs={12} sm={6}>
-                    <div className="text-group">
-                        <FormControl variant="standard">
-                            <InputLabel htmlFor="input-with-icon-adornment">
-                                Stake Amount in Hex
-                            </InputLabel>
-                            <Input
-                                id="input-with-icon-adornment"
-                                value={stakeAmount}
-                                endAdornment={
-                                    <InputAdornment position="end">
-                                        <div className="adornment-box">
-                                            HEX &nbsp;
-                                            <button className="btn-max" onClick={setMaxAmount}><span>MAX</span></button>
-                                        </div>
-                                    </InputAdornment>
-                                }
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                    // @ts-ignore
-                                    setStakeAmount(event.target.value);
-                                }}
-                            />
-                        </FormControl>
-                    </div>
+        <Container className={`stake-page-container ${theme}`}>
+            <div className="content">
+                <div className={`page-title text_color_1_${theme}`}>
+                    Stake
+                </div>
+                <Grid container spacing={3}>
+                    <Grid item xs={12} sm={6}>
+                        <div className={`text-group ${theme}`}>
+                            <FormControl variant="standard">
+                                <InputLabel  className={`text_color_1_${theme}`}htmlFor="input-with-icon-adornment">
+                                    Stake Amount in Hex
+                                </InputLabel>
+                                <Input
+                                    id="input-with-icon-adornment"
+                                    value={stakeAmount}
+                                    endAdornment={
+                                        <InputAdornment position="end">
+                                            <div className="adornment-box">
+                                                HEX &nbsp;
+                                                <button className="btn-max" onClick={setMaxAmount}><span>MAX</span></button>
+                                            </div>
+                                        </InputAdornment>
+                                    }
+                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                        // @ts-ignore
+                                        setStakeAmount(event.target.value);
+                                    }}
+                                />
+                            </FormControl>
+                        </div>
 
-                    <div className="balance-info">
-                        <label>Balance: </label>
-                        <span>{hexBalance?.toFixed(3)} HEX</span>
-                    </div>
+                        <div className="balance-info">
+                            <label>Balance: </label>
+                            <span>{hexBalance?.toFixed(3)} HEX</span>
+                        </div>
 
-                    <div className="text-group" style={{marginTop: '32px'}}>
-                        <FormControl variant="standard">
-                            <InputLabel htmlFor="input-with-icon-adornment">
-                                Stake Length in Days
-                            </InputLabel>
-                            <Input
-                                id="input-with-icon-adornment"
-                                value={stakeDays}
-                                endAdornment={
-                                    <InputAdornment position="end">
-                                        <div className="adornment-box">
-                                            Days
+                        <div className={`text-group ${theme}`} style={{marginTop: '32px'}}>
+                            <FormControl variant="standard">
+                                <InputLabel htmlFor="input-with-icon-adornment">
+                                    Stake Length in Days
+                                </InputLabel>
+                                <Input
+                                    id="input-with-icon-adornment"
+                                    value={stakeDays}
+                                    endAdornment={
+                                        <InputAdornment position="end">
+                                            <div className="adornment-box">
+                                                Days
 
-                                            <IconButton
-                                                aria-label="toggle password visibility"
-                                                onClick={handleClickShowCalendar}
-                                            >
-                                                <FaCalendarAlt/>
-                                            </IconButton>
-                                        </div>
-                                    </InputAdornment>
-                                }
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                    // @ts-ignore
-                                    setStakeDays( event.target.value);
-                                    let today = moment();
-                                    let range = moment.range(today.clone(), today.clone().add(event.target.value, 'days'));
-                                    setDays(range);
-                                }}
-                            />
-                        </FormControl>
-                    </div>
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={handleClickShowCalendar}
+                                                >
+                                                    <FaCalendarAlt/>
+                                                </IconButton>
+                                            </div>
+                                        </InputAdornment>
+                                    }
+                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                        // @ts-ignore
+                                        setStakeDays( event.target.value);
+                                        let today = moment();
+                                        let range = moment.range(today.clone(), today.clone().add(event.target.value, 'days'));
+                                        setDays(range);
+                                    }}
+                                />
+                            </FormControl>
+                        </div>
 
-                    <div>
-                        {showCalendar && <DateRangePicker
-                            onSelect={onSelectDays}
-                            onSelectStart={onSelectDaysStart}
-                            singleDateRange={true}
-                            value={days}
-                            minimumDate={new Date()}
-                        />}
-                    </div>
+                        <div>
+                            {showCalendar && <DateRangePicker
+                                onSelect={onSelectDays}
+                                onSelectStart={onSelectDaysStart}
+                                singleDateRange={true}
+                                value={days}
+                                minimumDate={new Date()}
+                            />}
+                        </div>
 
-                    <Button variant="contained" style={{marginTop: '56px'}} onClick={onStakeHandler} className="btn-send">Stake</Button>
+                        <Button variant="contained" style={{marginTop: '56px'}} onClick={onStakeHandler} className="btn-send">Stake</Button>
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                        <div className={`stake-info-container ${theme}`}>
+                            <p className={`title text_color_1_${theme}`}>Stake Bonuses:</p>
+                            <div className="info-item">
+                                <span className={`text_color_4_${theme}`}>Longer Pays Better:</span>
+                                <span><label className={`text_color_1_${theme}`}>{bonusHeartsLpb}</label> HEX</span>
+                            </div>
+                            <div className="info-item">
+                                <span className={`text_color_4_${theme}`}>Bigger Pays Better:</span>
+                                <span><label className={`text_color_1_${theme}`}>{bonusHeartsBpb}</label> Hearts</span>
+                            </div>
+                            <div className="info-item">
+                                <span className={`text_color_4_${theme}`}>Total:</span>
+                                <span><label className={`text_color_1_${theme}`}>{bonusHearts}</label> HEX</span>
+                            </div>
+                            <div className="info-item" style={{marginTop: '40px'}}>
+                                <span className={`text_color_4_${theme}`}>Effective HEX:</span>
+                                <span><label className={`text_color_1_${theme}`}>{effectiveHearts}</label> HEX</span>
+                            </div>
+
+                            <div className="info-item" style={{marginTop: '40px'}}>
+                                <span className={`text_color_4_${theme}`}>Share Price:</span>
+                                <span><label className={`text_color_1_${theme}`}>{heartsPerTShare}</label> HEX <label> / T-Share</label></span>
+                            </div>
+                            <div className="info-item">
+                                <span className={`text_color_4_${theme}`}>Stake T-Shares:</span>
+                                <span><label className={`text_color_1_${theme}`}>{stakeShare}</label> HEX</span>
+                            </div>
+                        </div>
+                    </Grid>
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
-                    <div className="stake-info-container">
-                        <p className="title">Stake Bonuses:</p>
-                        <div className="info-item">
-                            <span>Longer Pays Better:</span>
-                            <span><label>{bonusHeartsLpb}</label> HEX</span>
-                        </div>
-                        <div className="info-item">
-                            <span>Bigger Pays Better:</span>
-                            <span><label>{bonusHeartsBpb}</label> Hearts</span>
-                        </div>
-                        <div className="info-item">
-                            <span>Total:</span>
-                            <span><label>{bonusHearts}</label> HEX</span>
-                        </div>
-                        <div className="info-item" style={{marginTop: '40px'}}>
-                            <span>Effective HEX:</span>
-                            <span><label>{effectiveHearts}</label> HEX</span>
-                        </div>
+                <div className={`page-title text_color_1_${theme}`} style={{marginTop: '56px'}}>
+                    T-Share Daily Close Price in $USD
+                </div>
+                {shareChartLabels.length > 0 && <div className={`chart-container ${theme}`}><Line options={chartOptions} data={shareChartData} /></div>}
 
-                        <div className="info-item" style={{marginTop: '40px'}}>
-                            <span>Share Price:</span>
-                            <span><label>{heartsPerTShare}</label> HEX <label> / T-Share</label></span>
-                        </div>
-                        <div className="info-item">
-                            <span>Stake T-Shares:</span>
-                            <span><label>{stakeShare}</label> HEX</span>
-                        </div>
-                    </div>
-                </Grid>
-            </Grid>
+                <div className={`page-title text_color_1_${theme}`} style={{marginTop: '56px'}}>
+                    Active Stakes
+                </div>
 
-            <div className="page-title" style={{marginTop: '56px'}}>
-                T-Share Daily Close Price in $USD
+                {tableData.length > 0 && <EnhancedTable headCells={headCells} rows={tableData} orderBy={'lockedDay'}/>}
+
+                <div className={`page-title text_color_1_${theme}`} style={{marginTop: '56px'}}>
+                    Stake History
+                </div>
+
+                {htableData.length > 0 && <EnhancedTable headCells={headCells} rows={htableData} orderBy={'lockedDay'}/>}
+
+                {!loginStatus && <div className="disabled-container"></div>}
             </div>
-            {shareChartLabels.length > 0 && <div className="chart-container"><Line options={chartOptions} data={shareChartData} /></div>}
-
-            <div className="page-title" style={{marginTop: '56px'}}>
-                Active Stakes
-            </div>
-
-            {tableData.length > 0 && <EnhancedTable headCells={headCells} rows={tableData} orderBy={'lockedDay'}/>}
-
-            <div className="page-title" style={{marginTop: '56px'}}>
-                Stake History
-            </div>
-
-            {htableData.length > 0 && <EnhancedTable headCells={headCells} rows={htableData} orderBy={'lockedDay'}/>}
-
-            {!loginStatus && <div className="disabled-container"></div>}
+            
         </Container>
     )
 }

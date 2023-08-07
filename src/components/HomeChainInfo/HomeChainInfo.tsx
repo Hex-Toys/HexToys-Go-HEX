@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import { useAccount, useNetwork } from 'wagmi';
 import {oldDailyData, oldHexData, oldGlobalData} from "../../utils/constants";
 import {
@@ -21,6 +21,7 @@ import EnhancedTable, {HeadCell} from "../EnhancedTable/EnhancedTable";
 import JSBI from "@pulsex/jsbi";
 import Grid from "@material-ui/core/Grid";
 import {useContractRead} from "../../context/useContractRead";
+import ThemeContext from "context/ThemeContext";
 
 ChartJS.register(
     CategoryScale,
@@ -33,6 +34,8 @@ ChartJS.register(
 );
 
 const HomeChainInfo = (props) => {
+
+    const { theme } = useContext(ThemeContext)
 
     const urls = {
         'eth-main': {
@@ -167,15 +170,23 @@ const HomeChainInfo = (props) => {
                 if (!isLoading) {
                     setIsLoading(true);
                     fetchInfo(props.chain);
+                    
                 }
             } else {
                 processGraphData(hh[props.chain], cc[props.chain]);
                 setTableData(cc[props.chain]);
                 setHexInfoData(N[props.chain]);
-                setStakeInfoData(S[props.chain]);
+                setStakeInfoData(S[props.chain]); 
             }
         }
-    }, [props, hh, cc]);
+        
+    }, [props, hh, cc, N]);
+
+    useEffect(() => {
+        if(tableData.length !== 0 && hexInfoData.currentDay !== 3){
+            props.setIsLoading(false)
+        }
+    }, [tableData, hexInfoData.currentDay])
 
     useEffect(() => {
         setBalance(JSBI.fromNumber(hexBalance));
@@ -229,7 +240,7 @@ const HomeChainInfo = (props) => {
 
     const FormatMixedHex = (a) => {
         let data = Ve(a);
-        console.log('format-mixed-hex:', data);
+        // console.log('format-mixed-hex:', data);
         return data.join('');
     }
 
@@ -237,66 +248,66 @@ const HomeChainInfo = (props) => {
         <div className="chain-info-container">
             <Card variant="outlined">
                 <CardContent>
-                    <div className="page-title">
+                    <div className={`page-title text_color_1_${theme}`}>
                         {title}
                     </div>
                     <hr/>
-                    <div className="part-title">
+                    <div className={`part-title text_color_1_${theme}`}>
                         HEX
                     </div>
-                    <div className="card-box">
+                    <div className={`card-box border_${theme}`}>
                         <Grid container>
                             <Grid item xs={7}>
-                                <span>Current Day:</span>
+                                <span className={`text_color_4_${theme}`}>Current Day:</span>
                             </Grid>
                             <Grid item xs={5}>
-                                <label className={"is-green"}>{hexInfoData.currentDay}</label>
+                                <label className={`is-green text_color_1_${theme}`}>{hexInfoData.currentDay}</label>
                             </Grid>
                         </Grid>
                         <Grid container style={{marginTop: '12px'}}>
                             <Grid item xs={7}>
-                                <span>Total Supply of HEX:</span>
+                                <span className={`text_color_4_${theme}`}>Total Supply of HEX:</span>
                             </Grid>
                             <Grid item xs={5}>
-                                <label>{FormatMixedHex(hexInfoData.totalSupply)}</label>
+                                <label className={`text_color_1_${theme}`}>{FormatMixedHex(hexInfoData.totalSupply)}</label>
                             </Grid>
                         </Grid>
                     </div>
-                    <div className="card-box" style={{marginTop: '16px'}}>
+                    <div className={`card-box border_${theme}`} style={{marginTop: '16px'}}>
                         <Grid container>
                             <Grid item xs={7}>
-                                <span>Total Staked:</span>
+                                <span className={`text_color_4_${theme}`}>Total Staked:</span>
                             </Grid>
                             <Grid item xs={5}>
-                                <label>{FormatMixedHex(stakeInfoData.totalStaked)}</label>
+                                <label className={`text_color_1_${theme}`}>{FormatMixedHex(stakeInfoData.totalStaked)}</label>
                             </Grid>
                         </Grid>
                         <Grid container>
                             <Grid item xs={7}>
-                                <span>Yield Due:</span>
+                                <span className={`text_color_4_${theme}`}>Yield Due:</span>
                             </Grid>
                             <Grid item xs={5}>
-                                <label>{FormatMixedHex(stakeInfoData.totalInterestLive)}</label>
+                                <label className={`text_color_1_${theme}`}>{FormatMixedHex(stakeInfoData.totalInterestLive)}</label>
                             </Grid>
                         </Grid>
                         <Grid container>
                             <Grid item xs={7}>
-                                <span>Not Staked:</span>
+                                <span className={`text_color_4_${theme}`}>Not Staked:</span>
                             </Grid>
                             <Grid item xs={5}>
-                                <label>{FormatMixedHex(balance)}</label>
+                                <label className={`text_color_1_${theme}`}>{FormatMixedHex(balance)}</label>
                             </Grid>
                         </Grid>
                     </div>
-                    <div className="part-title">
+                    <div className={`part-title text_color_1_${theme}`}>
                         T-Share Daily Close Price in $USD
                     </div>
-                    {shareChartLabels.length > 0 && <div className="chart-container"><Line options={chartOptions} data={shareChartData} /></div>}
-                    <div className="part-title">
+                    {shareChartLabels.length > 0 && <div className={`chart-container border_${theme}`}><Line options={chartOptions} data={shareChartData} /></div>}
+                    <div className={`part-title text_color_1_${theme}`}>
                         Daily HEX Payout per T-Share
                     </div>
-                    {dailyChartLabels.length > 0 && <div className="chart-container"><Scatter options={dailyChartOptions} data={dailyChartData} /></div>}
-                    <div className="part-title">
+                    {dailyChartLabels.length > 0 && <div className={`chart-container border_${theme}`}><Scatter options={dailyChartOptions} data={dailyChartData} /></div>}
+                    <div className={`part-title text_color_1_${theme}`}>
                         Daily Data
                     </div>
 

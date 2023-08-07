@@ -3,35 +3,63 @@
     background: none;
     border-radius: 10.684px;
     border: 1px solid rgba(255, 255, 255, 0.20);
-
+    &.border_dark{
+      border: 1px solid #ffffff33;
+    }
+    &.border_light{
+      border: 1px solid #00000033;
+    }
+    
     th {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.20);
-      color: rgba(255, 255, 255, 0.60);
+      
+      // color: rgba(255, 255, 255, 0.60);
       text-align: center;
       font-size: 12px;
       font-style: normal;
       font-weight: 500;
       line-height: normal;
-
-      .Mui-active {
-        color: rgba(255, 255, 255, 0.60);
-
-        svg {
-          color: rgba(255, 255, 255, 0.60);
+      &.text_color_3_dark{
+        color: #ffffff99 !important;
+        border-bottom: 1px solid #ffffff33;
+        .Mui-active {
+          color: #ffffff99;
+  
+          svg {
+            color: #ffffff99;
+          }
         }
       }
+      &.text_color_3_light{
+        color: #00000099 !important;
+        border-bottom: 1px solid #00000033;
+        .Mui-active {
+          color: #00000099;
+  
+          svg {
+            color: #00000099;
+          }
+        }
+      }
+      
     }
 
     td {
-      color: #FFF;
       font-size: 12.6px;
       font-style: normal;
       font-weight: 500;
       line-height: normal;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.20);
+      
 
       &.is-green {
         color: #27AE60;
+      }
+      &.text_color_1_dark{
+        color: #fff !important;
+        border-bottom: 1px solid #ffffff33;
+      }
+      &.text_color_1_light{
+        color: #000 !important;
+        border-bottom: 1px solid #00000033;
       }
     }
   }

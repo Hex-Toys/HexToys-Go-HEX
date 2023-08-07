@@ -1,23 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
 import Logo from '../../assets/imgs/logo.svg';
-import Button from '@material-ui/core/Button';
-import { Drawer, IconButton } from '@material-ui/core';
-import { IoMenuOutline, IoSwapHorizontalOutline } from "react-icons/io5";
-import { RiBankFill } from "react-icons/ri";
+import { Drawer } from '@material-ui/core';
 import './styles.scss';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
 import { Link, useLocation } from 'react-router-dom';
 import { useBearStore } from "../../store";
-import { useAccount, useNetwork } from "wagmi";
-import { ConnectButton, useConnectModal } from '@rainbow-me/rainbowkit';
-import { useActiveWeb3 } from 'hooks/useActiveWeb3';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import MySelect from 'components/Widgets/MySelect';
+import ThemeContext from 'context/ThemeContext';
+import Menu from 'components/menu/Menu';
 
 const NavBar = () => {
     const startDate = 1575244816000;
+    const [showMenu, setShowMenu] = useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [currentDate, setCurrentDate] = useState(0);
     const [remainTime, setRemainTime] = useState('');
@@ -61,56 +57,60 @@ const NavBar = () => {
             clearInterval(intervalId);
         };
     }, [])
+    const { theme, setTheme } = useContext(ThemeContext)
+    const color_option = [
+        {label : <><i className="fas fa-moon"/> Dark</>, value : 'dark'},
+        {label : <><i className="fas fa-sun"/> Light</>, value : 'light'}
+    ]
 
 
     return (
-        <div className="navbar-container">
+        <>
+        <div className={`navbar-container ${theme}`} >
             <AppBar position="static">
                 <Toolbar>
+
                     <div className="left-menu">
                         <Link to={'/'} style={{height: '56px'}}>
                             <img src={Logo} />
                         </Link>
-                        <Link to={'/'} className={!navId ? 'active': ''}>
-                            HEX
-                        </Link>
-                        <Link to={'/transfer'} className={navId == 'transfer' ? 'active' : ''}>
-                            Transfer
-                        </Link>
-                        <Link to={'/stake'} className={navId == 'stake' ? 'active':''}>
-                            Stake
-                        </Link>
+                        <div className="menu_list">
+                            <Link to={'/'} className={`text_color_1_${theme} ${!navId ? 'active': ''}`}>
+                                HEX
+                            </Link>
+                            <Link to={'/transfer'} className={`text_color_1_${theme} ${navId == 'transfer' ? 'active' : ''}`}>
+                                Transfer
+                            </Link>
+                            <Link to={'/stake'} className={`text_color_1_${theme} ${navId == 'stake' ? 'active':''}`}>
+                                Stake
+                            </Link>
+                        </div>
+                        
                     </div>
-
+                    <MySelect options={color_option} value={theme} onChange={setTheme} className={'my_theme_slelct'}/>
                     <div className="day-info">
-                        <label>{currentDate}d {remainTime}</label>
+                        <label className={`text_color_1_${theme}`}>{currentDate}d {remainTime}</label>
                     </div>
-                    {/* {loginStatus && (
-                        <Select
-                            value={network}
-                            onChange={handleChange}
-                            className="network-select"
-                        >
-                            <MenuItem value={'pulse-main'}>PulseChain MainNet</MenuItem>
-                            <MenuItem value={'eth-main'}>Ethereum MainNet</MenuItem>
-                            <MenuItem value={'pulse-test'}>PulseChain TestNet V4</MenuItem>
-                        </Select>
-                    )}
-
-                    {!loginStatus && <Button className="btn-connect" onClick={connectWallet}>Connect Wallet</Button>} */}
-
-                    <ConnectButton />
-
-                    {/*<IconButton onClick={toggleDrawer} edge="end">*/}
-                    {/*    <IoMenuOutline />*/}
-                    {/*</IconButton>*/}
+                    <div className="btn_div">
+                        <ConnectButton />
+                    </div>
+                    <button className={`showMenuBtn text_color_1_${theme}`} onClick={()=>setShowMenu(!showMenu)}>
+                        {!showMenu ? 
+                            <i className="fas fa-bars"></i>:
+                            <i className="fas fa-times"></i>
+                        }
+                    </button>
+                    
                 </Toolbar>
             </AppBar>
 
             <Drawer anchor="left" open={isDrawerOpen} onClose={toggleDrawer}>
                 Test
             </Drawer>
+            
         </div>
+        <Menu setMenuOpen={setShowMenu} menuOpen={showMenu}/>
+        </>
     )
 }
 export default NavBar;
