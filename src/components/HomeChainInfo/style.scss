@@ -35,4 +35,32 @@
     border-radius: 5.342px;
     border: 1px solid rgba(255, 255, 255, 0.20);
   }
+
+  .card-box {
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.20);
+    padding: 44px 24px;
+
+    span {
+      text-align: right;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    label {
+      color: #FFF;
+      text-align: right;
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+
+      &.is-green {
+        color: #27AE60;
+      }
+    }
+  }
 }

@@ -1,0 +1,61 @@
+.enhance-table-container {
+  .MuiPaper-root {
+    background: none;
+    border-radius: 10.684px;
+    border: 1px solid rgba(255, 255, 255, 0.20);
+
+    th {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.20);
+      color: rgba(255, 255, 255, 0.60);
+      text-align: center;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+
+      .Mui-active {
+        color: rgba(255, 255, 255, 0.60);
+
+        svg {
+          color: rgba(255, 255, 255, 0.60);
+        }
+      }
+    }
+
+    td {
+      color: #FFF;
+      font-size: 12.6px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.20);
+
+      &.is-green {
+        color: #27AE60;
+      }
+    }
+  }
+
+  .show-btn-box {
+    display: flex;
+    justify-content: center;
+    height: 50px;
+
+    .btn-show {
+      background: none;
+      border: none;
+      outline: none;
+
+      span {
+        background: linear-gradient(to right, #FF00FF, #FE511B);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-align: right;
+        font-size: 11px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+      }
+    }
+  }
+}

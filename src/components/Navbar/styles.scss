@@ -64,7 +64,7 @@
     }
   }
 
-  button {
+  button[data-testid="rk-connect-button"] {
     border-radius: 144px !important;
     background: linear-gradient(126deg, #F0F 0%, #FE511B 100%) !important;
     display: inline-flex;
