@@ -13,8 +13,11 @@ import EnhancedTable, {HeadCell} from "../../components/EnhancedTable/EnhancedTa
 import {Ei, ke, Xa, Le, Te} from "../../utils/table-helper";
 import ThemeContext from 'context/ThemeContext';
 import { useLoader } from 'context/LoadingContext';
+import useDocumentTitle from "../../utils/useDocumentTitle";
 
 const Transfer = () => {
+    useDocumentTitle('HEX: Transfer');
+
     const { theme } = useContext(ThemeContext)
     const [setLoading] = useLoader();
     
@@ -25,6 +28,7 @@ const Transfer = () => {
     const [amount, setAmount] = useState(0.00);
     const [isLoadStake, setIsLoadStake] = useState(false);
     const [tableData, setTableData] = useState([]);
+    const [currentChain, setCurrentChain] = useState('');
 
     const headCells: readonly HeadCell[] = [
         {
@@ -87,13 +91,25 @@ const Transfer = () => {
                 return;
             }
 
-            if (!isLoadStake) {
-                setIsLoadStake(true);
-                fetchStakeInfo(chainName, '0xBf8fF255aD1f369929715a3290d1ef71d79f8954'.toLowerCase());
-                // fetchStakeInfo(chainName, account.toLowerCase());
+            if (chainName != currentChain) {
+                setCurrentChain(chainName);
+                if (!isLoadStake) {
+                    setIsLoadStake(true);
+                    fetchStakeInfo(chainName, '0xBf8fF255aD1f369929715a3290d1ef71d79f8954'.toLowerCase());
+                    // fetchStakeInfo(chainName, account.toLowerCase());
+                }
             }
         }
     }, [loginStatus, chainId, account]);
+
+    useEffect(() => {
+        if (tableData && tableData.length > 0) {
+            for (let i = 0; i < tableData.length; i ++) {
+                tableData[i].balance = JSBI.fromNumber(hexBalance);
+            }
+            setTableData(tableData);
+        }
+    }, [hexBalance, tableData])
 
     const fetchStakeInfo = async(chain, address) => {
         let stakeData = await loadStakeInfo(chain, address);
@@ -136,6 +152,7 @@ const Transfer = () => {
             }
         }
 
+        setIsLoadStake(false);
         setTableData(D);
         setLoading(false)
     }
