@@ -1,11 +1,11 @@
 import Loader from 'components/loader/Loader';
-import { createContext, useState } from 'react'
+import { createContext, useState, useContext } from 'react'
 
 
 
 
 const LoadingCtx = createContext({
-  loading : false,
+  loading : true,
   setLoading: (val : boolean) => {}
   // message : '',
   // setMessage: (val : string) => {},
@@ -16,7 +16,7 @@ export default LoadingCtx;
 
 
 export function LoadingProvider(props) {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const value = { loading , setLoading }
 
   return (
@@ -25,4 +25,8 @@ export function LoadingProvider(props) {
       <Loader isLoading = {value.loading}  />
     </LoadingCtx.Provider>
   )
+}
+export const useLoader = () => {
+  const { setLoading } = useContext(LoadingCtx)
+  return [setLoading]
 }

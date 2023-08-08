@@ -1,5 +1,5 @@
 import Container from '@mui/material/Container';
-import React, {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import './style.scss';
 import {} from "wagmi";
 import {useActiveWeb3} from "../../hooks/useActiveWeb3";
@@ -10,9 +10,14 @@ import { useContractRead } from 'context/useContractRead';
 import {loadStakeInfo} from "../../utils/helper";
 import JSBI from "@pulsex/jsbi";
 import EnhancedTable, {HeadCell} from "../../components/EnhancedTable/EnhancedTable";
-import {De, Ei, ke, Me, Ot, Re, Xa, Le, Te} from "../../utils/table-helper";
+import {Ei, ke, Xa, Le, Te} from "../../utils/table-helper";
+import ThemeContext from 'context/ThemeContext';
+import { useLoader } from 'context/LoadingContext';
 
 const Transfer = () => {
+    const { theme } = useContext(ThemeContext)
+    const [setLoading] = useLoader();
+    
     const {loginStatus, chainId, library, account} = useActiveWeb3();
     const {hexBalance} = useContractRead();
 
@@ -84,8 +89,8 @@ const Transfer = () => {
 
             if (!isLoadStake) {
                 setIsLoadStake(true);
-                // fetchStakeInfo(chainName, '0xBf8fF255aD1f369929715a3290d1ef71d79f8954'.toLowerCase());
-                fetchStakeInfo(chainName, account.toLowerCase());
+                fetchStakeInfo(chainName, '0xBf8fF255aD1f369929715a3290d1ef71d79f8954'.toLowerCase());
+                // fetchStakeInfo(chainName, account.toLowerCase());
             }
         }
     }, [loginStatus, chainId, account]);
@@ -115,14 +120,14 @@ const Transfer = () => {
             const o = parseInt(d, 10);
             const u = JSBI.fromString(n);
 
-            if (item.to == address) {
+            if (item.to === address) {
                 if (item.from && item.from !== Ol) {
                     sa(o, 1, u, 2, l)
                 } else {
                     sa(o, 1, u, 0, null);
                 }
             }
-            if (item.from == address) {
+            if (item.from === address) {
                 if (item.to && item.to !== Ol) {
                     sa(o, 1, u, 3, l);
                 } else {
@@ -132,8 +137,8 @@ const Transfer = () => {
         }
 
         setTableData(D);
+        setLoading(false)
     }
-    
     const pasteClipBoard = async () => {
         try {
             let text = await navigator.clipboard.readText();
@@ -182,52 +187,61 @@ const Transfer = () => {
     }
 
     return (
-        <Container className="transfer-page-container">
-            <div className="page-title">
-                Tansfer
-            </div>
-
-            <div className="input-container">
-                <label>From your wallet address</label>
-                <div className="input-box">
-                    <input type="text" defaultValue={account}/>
+        <Container className={`transfer-page-container ${theme}`}>
+            <div className="content">
+            <div className="col_div">
+                <div className={`page-title text_color_1_${theme}`}>
+                    Tansfer
                 </div>
-            </div>
 
-            <div className="input-container" style={{marginBottom: '64px'}}>
-                <label>To recipient wallet address</label>
-                <div className="input-box">
-                    <input type="text" placeholder="Type wallet address here" onChange={e => {setReceiver(e.target.value)}}/>
-
-                    <button className="btn-paste" onClick={pasteClipBoard}><span>Paste</span></button>
+                <div className={`input-container ${theme}`}>
+                    <label  className={`text_color_1_${theme}`}>From your wallet address</label>
+                    <div className="input-box">
+                        <input type="text" defaultValue={account} className={`text_color_1_${theme}`}/>
+                    </div>
                 </div>
-            </div>
 
-            <div className="input-container" style={{marginBottom: '8px'}}>
-                <label>Amount in HEX</label>
-                <div className="input-box">
-                    <input type="number" placeholder="0.000" value={amount} onChange={e => {
-                        // @ts-ignore
-                        setAmount(e.target.value);
-                    }}/>
+                <div className={`input-container ${theme}`} style={{marginBottom: '64px'}}>
+                    <label className={`text_color_1_${theme}`}>To recipient wallet address</label>
+                    <div className="input-box">
+                        <input type="text" placeholder="Type wallet address here"  className={`text_color_1_${theme}`}onChange={e => {setReceiver(e.target.value)}}/>
 
-                    <span className="span-unit">HEX</span>
-                    <button className="btn-paste" onClick={setMaxAmount}><span>MAX</span></button>
+                        <button className="btn-paste" onClick={pasteClipBoard}><span>Paste</span></button>
+                    </div>
                 </div>
+
+                <div className={`input-container ${theme}`} style={{marginBottom: '8px'}}>
+                    <label className={`text_color_1_${theme}`}>Amount in HEX</label>
+                    <div className="input-box">
+                        <input type="number" placeholder="0.000"  className={`text_color_1_${theme}`}value={amount} onChange={e => {
+                            // @ts-ignore
+                            setAmount(e.target.value);
+                        }}/>
+
+                        <span className={`span-unit text_color_1_${theme}`}>HEX</span>
+                        <button className="btn-paste" onClick={setMaxAmount}><span>MAX</span></button>
+                    </div>
+                </div>
+
+                <div className="balance-info">
+                    <label className={`text_color_1_${theme}`}>Balance: </label>
+                    <span className={`text_color_1_${theme}`}>{hexBalance?.toFixed(3)} HEX</span>
+                </div>
+
+                <button className="btn-send" onClick={onTransferHandler}>Send HEX</button>
             </div>
+            <div className="col_div">
+                <div className={`page-title text_color_1_${theme}`}>
+                    Transfer History
+                </div>
 
-            <div className="balance-info">
-                <label>Balance: </label>
-                <span>{hexBalance?.toFixed(3)} HEX</span>
+                {tableData.length > 0 && <EnhancedTable headCells={headCells} rows={tableData} orderBy={'timestamp'}/>}
             </div>
-
-            <button className="btn-send" onClick={onTransferHandler}>Send HEX</button>
-
-            <div className="page-title" style={{marginTop: '96px'}}>
-                Transfer History
             </div>
+            
+            
 
-            {tableData.length > 0 && <EnhancedTable headCells={headCells} rows={tableData} orderBy={'timestamp'}/>}
+            
         </Container>
     )
 }

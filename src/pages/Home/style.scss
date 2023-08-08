@@ -2,7 +2,13 @@
   flex-grow: 1;
   overflow: hidden;
   padding: 40px 16px;
-
+  
+  &.dark{
+    background: #060714;
+  }
+  &.light{
+    background: #fff;
+  }
   @media (min-width: 600px) {
     padding: 40px 80px;
   }

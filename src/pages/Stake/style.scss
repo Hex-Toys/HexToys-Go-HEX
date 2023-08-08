@@ -1,6 +1,79 @@
 .stake-page-container {
   position: relative;
   padding-top: 56px;
+  max-width: 100% !important;
+  display: flex;
+  box-sizing: border-box;
+  &.dark{
+    background: #060714;
+
+    .MuiFormLabel-root {
+      color: white;
+    }
+
+    .MuiInputAdornment-root {
+      color: white;
+    }
+
+    input {
+      color: white;
+    }
+    svg {
+      color: white;
+    }
+    .balance-info {
+  
+      label {
+        color: #ffffff99;
+      }
+  
+      span {
+        color: #FFF;
+      }
+    }
+    .adornment-box {
+      color: #FFF;
+    }
+  }
+  &.light{
+    background: #fff;
+    .MuiFormLabel-root {
+      color: #000 !important;
+    }
+
+    .MuiInputAdornment-root {
+      color: #000 !important;
+    }
+
+    input {
+      color: #000 !important;
+    }
+    svg {
+      color: #000 !important;
+    }
+    .balance-info {
+  
+      label {
+        color: #00000099;
+      }
+  
+      span {
+        color: #000;
+      }
+    }
+    .adornment-box {
+      color: #000;
+    }
+  }
+  .content{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    max-width: 1220px;
+    margin: auto;
+    grid-area: auto;
+    gap : 24px;
+  }
 
   .disabled-container {
     width: 100%;
@@ -9,7 +82,6 @@
     top: 0;
   }
   .page-title {
-    color: #FFF;
     font-size: 24px;
     font-style: normal;
     font-weight: 600;
@@ -19,9 +91,19 @@
 
   .text-group {
     border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.20);
-    background: rgba(255, 255, 255, 0.05);
+    // border: 1px solid rgba(255, 255, 255, 0.20);
+    // background: rgba(255, 255, 255, 0.05);
     padding: 16px 32px;
+    &.dark{
+      background: #ffffff0d;
+      border: 1px solid #ffffff33;
+    
+    }
+    &.light{
+      background: #0000000d;
+      border: 1px solid #00000033;
+    
+    }
 
     .adornment-box {
       width: 105px;
@@ -29,7 +111,6 @@
       justify-content: space-between;
       align-items: center;
 
-      color: #FFF;
       text-align: right;
       font-size: 18px;
       font-style: normal;
@@ -83,13 +164,13 @@
     }
 
     .MuiFormLabel-root {
-      color: #FFF;
       font-size: 16px;
       font-style: normal;
       font-weight: 400;
       line-height: normal;
       opacity: 0.6;
       margin-bottom: 17px;
+      
     }
 
     .MuiInputAdornment-root {
@@ -109,7 +190,6 @@
     margin-top: 8px;
 
     label {
-      color: rgba(255, 255, 255, 0.60);
       font-size: 16px;
       font-style: normal;
       font-weight: 500;
@@ -117,7 +197,6 @@
     }
 
     span {
-      color: #FFF;
       font-size: 16px;
       font-style: normal;
       font-weight: 500;
@@ -165,11 +244,14 @@
     align-items: flex-start;
     gap: 8px;
     border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.20);
     width: calc(100% - 48px);
-
+    &.dark{
+      border: 1px solid #ffffff33;
+    }
+    &.light{
+      border: 1px solid #00000033;
+    }
     .title {
-      color: #FFF;
       font-size: 24px;
       font-style: normal;
       font-weight: 500;
@@ -183,7 +265,7 @@
       justify-content: space-between;
 
       span {
-        color: rgba(255, 255, 255, 0.6);
+        // color: rgba(255, 255, 255, 0.6);
         text-align: right;
         font-size: 16px;
         font-style: normal;
@@ -191,7 +273,6 @@
         line-height: normal;
 
         label {
-          color: white;
         }
       }
     }
@@ -223,7 +304,13 @@
     margin-top: 24px;
     padding: 15px;
     border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.20);
+    &.dark{
+      border: 1px solid #ffffff33;
+    
+    }
+    &.light{
+      border: 1px solid #00000033;
+    }
   }
 
 

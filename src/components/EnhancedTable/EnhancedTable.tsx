@@ -11,6 +11,7 @@ import Paper from '@mui/material/Paper';
 import { visuallyHidden } from '@mui/utils';
 import './style.scss';
 import {useEffect, useState} from "react";
+import ThemeContext from 'context/ThemeContext';
 
 type Order = 'asc' | 'desc';
 
@@ -23,8 +24,8 @@ function getComparator<Key extends keyof any>(
     b: { [key in Key]: any },
 ) => number {
     return order === 'desc'
-        ? (a, b) => compareValFn(a[orderBy], b[orderBy])
-        : (a, b) => -compareValFn(a[orderBy], b[orderBy]);
+        ? (a, b) => -compareValFn(a[orderBy], b[orderBy])
+        : (a, b) => compareValFn(a[orderBy], b[orderBy]);
 }
 
 // Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
@@ -35,7 +36,7 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
     const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
     stabilizedThis.sort((a, b) => {
         const order = comparator(a[0], b[0]);
-        console.log('sort-order:', order);
+        // console.log('sort-order:', order);
         if (order !== 0) {
             return order;
         }
@@ -66,7 +67,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         (property: any) => (event: React.MouseEvent<unknown>) => {
             onRequestSort(event, property);
         };
-
+        const { theme } = React.useContext(ThemeContext)
     return (
         <TableHead>
             <TableRow>
@@ -76,6 +77,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                         align={'center'}
                         padding={'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
+                        className={`text_color_3_${theme}`}
                     >
                         <TableSortLabel
                             active={orderBy === headCell.id}
@@ -97,9 +99,11 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 export default function EnhancedTable(props) {
+    const { theme } = React.useContext(ThemeContext)
+
     const [order, setOrder] = React.useState<Order>('desc');
     const [orderBy, setOrderBy] = useState(props.orderBy);
-    const {headCells, rows} = props;
+    const {headCells, rows, onEndStake} = props;
     const [visibleRows, setVisibleRows] = useState([]);
     const [hasMore, setHasMore] = useState(true);
     const [isShowAll, setIsShowAll] = useState(false);
@@ -165,8 +169,8 @@ export default function EnhancedTable(props) {
     }
 
     return (
-        <Box sx={{ width: '100%' }} className={"enhance-table-container"}>
-            <Paper sx={{ width: '100%', mb: 2 }}>
+        <Box sx={{ width: '100%' }} className={`enhance-table-container`}>
+            <Paper sx={{ width: '100%', mb: 2 }}  className={`border_${theme}`}>
                 <TableContainer>
                     <Table
                         // sx={{ minWidth: 750 }}
@@ -192,10 +196,17 @@ export default function EnhancedTable(props) {
                                         sx={{ cursor: 'pointer' }}
                                     >
                                         {headCells.map((item, hindex) => (
-                                            <TableCell key={index + '-' + hindex} className={item.className} align={'center'}>
+                                            <TableCell key={index + '-' + hindex} className={`${item.className} text_color_1_${theme}`} align={'center'}>
                                                 {renderData(item, row)}
+                                                
+                                                {onEndStake && hindex === headCells.length - 1 &&
+                                                    <>
+                                                        <button className={`bg_${theme} ${renderData(headCells[2], row)} text_color_1_${theme}`} onClick={()=>onEndStake(index)}>End Stake</button>
+                                                    </>
+                                                }
                                             </TableCell>
                                         ))}
+
                                     </TableRow>
                                 );
                             })}
