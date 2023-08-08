@@ -1,5 +1,5 @@
 import Grid from '@material-ui/core/Grid';
-import {useContext, useEffect, useState} from "react";
+import { useContext, useEffect, useState } from "react";
 import * as React from 'react';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
@@ -11,19 +11,19 @@ import DateRangePicker from "react-daterange-picker";
 import originalMoment from "moment";
 import { extendMoment } from "moment-range";
 import Button from '@mui/material/Button';
-import {useBearStore} from "../../store";
+import { useBearStore } from "../../store";
 import Container from '@mui/material/Container';
 
 import "react-daterange-picker/dist/css/react-calendar.css";
 import './style.scss'
 import JSBI from "@pulsex/jsbi";
-import {Ue, Ve, Ee, _e, De, Ei, ke, Me, Pe} from '../../utils/table-helper';
+import { Ue, Ve, Ee, _e, De, Ei, ke, Me, Pe } from '../../utils/table-helper';
 import { useActiveWeb3 } from 'hooks/useActiveWeb3';
 import toast from 'react-hot-toast';
-import { scHEXStakeEnd, scHEXStakeStart } from 'utils/contracts';
-import {useContractRead} from "../../context/useContractRead";
-import {Line, Scatter} from "react-chartjs-2";
-import EnhancedTable, {HeadCell} from "../../components/EnhancedTable/EnhancedTable";
+import { scHEXStakeEnd, scHEXStakeGoodAccounting, scHEXStakeStart } from 'utils/contracts';
+import { useContractRead } from "../../context/useContractRead";
+import { Line, Scatter } from "react-chartjs-2";
+import EnhancedTable, { HeadCell } from "../../components/EnhancedTable/EnhancedTable";
 import ThemeContext from 'context/ThemeContext';
 import { useLoader } from 'context/LoadingContext';
 
@@ -60,13 +60,13 @@ const Ga = a => null === a || void 0 === a;
 
 function ir(a, e, t) {
     const i = Wl(e, t), l = JSBI.divide(JSBI.multiply(JSBI.add(e, i), JSBI.fromUint32NZ(1e5)), a);
-    console.log('bonus-hearts', a,e,t, i,l);
-    return {bonusHearts: i, stakeShares: l}
+    console.log('bonus-hearts', a, e, t, i, l);
+    return { bonusHearts: i, stakeShares: l }
 }
 
 function lr(a, e, t) {
-    const {bonusHearts: i, stakeShares: l} = ir(a, e, t), r = Pa(e, t), n = Aa(e);
-    return {bonusHearts: i, stakeShares: l, bonusHeartsLpb: r, bonusHeartsBpb: n}
+    const { bonusHearts: i, stakeShares: l } = ir(a, e, t), r = Pa(e, t), n = Aa(e);
+    return { bonusHearts: i, stakeShares: l, bonusHeartsLpb: r, bonusHeartsBpb: n }
 }
 
 const pe = (a, e) => {
@@ -87,7 +87,7 @@ const Stake = () => {
     const [setLoading] = useLoader();
     // @ts-ignore
     const moment = extendMoment(originalMoment);
-    const {hexBalance} = useContractRead();
+    const { hexBalance } = useContractRead();
     const [stakeAmount, setStakeAmount] = useState(0.00);
     const [stakeDays, setStakeDays] = useState(0);
     const [showCalendar, setShowCalendar] = useState(false);
@@ -103,7 +103,7 @@ const Stake = () => {
     const [stakeShare, setStakeShare] = useState('0.000');
     const [isLoadStake, setIsLoadStake] = useState(false);
     const [shareChartLabels, setShareChartLabels] = useState([]);
-    const [shareChartData, setShareChartData] = useState({labels: [], datasets: []});
+    const [shareChartData, setShareChartData] = useState({ labels: [], datasets: [] });
     const [tableData, setTableData] = useState([]);
     const [htableData, setHTableData] = useState([]);
 
@@ -136,7 +136,7 @@ const Stake = () => {
     // @ts-ignore
     const fetchStakeInfo = useBearStore((state) => state.fetchStakeInfo);
 
-    const {loginStatus, chainId, library} = useActiveWeb3();
+    const { loginStatus, chainId, library, account } = useActiveWeb3();
 
     const headCells: readonly HeadCell[] = [
         {
@@ -239,7 +239,7 @@ const Stake = () => {
             } else if (chainId === 1) {
                 chainName = 'eth-main';
                 setCurrentChain('eth-main');
-            } else if (chainId === 943){
+            } else if (chainId === 943) {
                 chainName = 'pulse-test';
                 setCurrentChain('pulse-test');
             } else {
@@ -317,7 +317,7 @@ const Stake = () => {
 
     const processGraphData = (h, c) => {
         const t = [[0], [null]];
-        const [i,l] = t;
+        const [i, l] = t;
         for (let r = 1; r <= h.length; r++) {
             const e = r - 1
                 , t = h[e];
@@ -358,7 +358,7 @@ const Stake = () => {
         setStakeDays(value.diff(today, 'days'));
     }
 
-    const onStakeHandler = async() => {
+    const onStakeHandler = async () => {
         if (!loginStatus) {
             toast.error("Please connect wallet correctly!");
             return;
@@ -390,7 +390,7 @@ const Stake = () => {
         toast.dismiss(load_toast_id);
     }
 
-    const onEndStake = async(id : Number) => {
+    const onEndStakeHandler = async (stakeIndex: number, stakeIdParam: number) => {
         if (!loginStatus) {
             toast.error("Please connect wallet correctly!");
             return;
@@ -398,10 +398,38 @@ const Stake = () => {
 
         const load_toast_id = toast.loading("Please wait for End Staking...");
         try {
-            
+            let bSuccess = await scHEXStakeEnd(chainId, library, stakeIndex, stakeIdParam);
+
+            if (bSuccess) {
+                toast.success("End Staking Success!");
+            } else {
+                toast.error("End Staking Failed!");
+            }
         } catch (error) {
             console.error(error);
             toast.error("End Staking Failed!");
+        }
+        toast.dismiss(load_toast_id);
+    }
+
+    const onStakeGoodAccountinigHandler = async (stakeIndex: number, stakeIdParam: number) => {
+        if (!loginStatus) {
+            toast.error("Please connect wallet correctly!");
+            return;
+        }
+
+        const load_toast_id = toast.loading("Please wait for Stake Good Accounting...");
+        try {
+            let bSuccess = await scHEXStakeGoodAccounting(chainId, library, account, stakeIndex, stakeIdParam);
+
+            if (bSuccess) {
+                toast.success("Stake Good Accounting Success!");
+            } else {
+                toast.error("Stake Good Accounting Failed!");
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error("Stake Good Accounting Failed!");
         }
         toast.dismiss(load_toast_id);
     }
@@ -422,7 +450,7 @@ const Stake = () => {
                     <Grid item xs={12} sm={6}>
                         <div className={`text-group ${theme}`}>
                             <FormControl variant="standard">
-                                <InputLabel  className={`text_color_1_${theme}`}htmlFor="input-with-icon-adornment">
+                                <InputLabel className={`text_color_1_${theme}`} htmlFor="input-with-icon-adornment">
                                     Stake Amount in Hex
                                 </InputLabel>
                                 <Input
@@ -449,7 +477,7 @@ const Stake = () => {
                             <span>{hexBalance?.toFixed(3)} HEX</span>
                         </div>
 
-                        <div className={`text-group ${theme}`} style={{marginTop: '32px'}}>
+                        <div className={`text-group ${theme}`} style={{ marginTop: '32px' }}>
                             <FormControl variant="standard">
                                 <InputLabel htmlFor="input-with-icon-adornment">
                                     Stake Length in Days
@@ -466,14 +494,14 @@ const Stake = () => {
                                                     aria-label="toggle password visibility"
                                                     onClick={handleClickShowCalendar}
                                                 >
-                                                    <FaCalendarAlt/>
+                                                    <FaCalendarAlt />
                                                 </IconButton>
                                             </div>
                                         </InputAdornment>
                                     }
                                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                         // @ts-ignore
-                                        setStakeDays( event.target.value);
+                                        setStakeDays(event.target.value);
                                         let today = moment();
                                         let range = moment.range(today.clone(), today.clone().add(event.target.value, 'days'));
                                         setDays(range);
@@ -492,7 +520,7 @@ const Stake = () => {
                             />}
                         </div>
 
-                        <Button variant="contained" style={{marginTop: '56px'}} onClick={onStakeHandler} className="btn-send">Stake</Button>
+                        <Button variant="contained" style={{ marginTop: '56px' }} onClick={onStakeHandler} className="btn-send">Stake</Button>
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
@@ -510,12 +538,12 @@ const Stake = () => {
                                 <span className={`text_color_4_${theme}`}>Total:</span>
                                 <span className={`text_color_4_${theme}`}><label className={`text_color_1_${theme}`}>{bonusHearts}</label> HEX</span>
                             </div>
-                            <div className="info-item" style={{marginTop: '40px'}}>
+                            <div className="info-item" style={{ marginTop: '40px' }}>
                                 <span className={`text_color_4_${theme}`}>Effective HEX:</span>
                                 <span className={`text_color_4_${theme}`}><label className={`text_color_1_${theme}`}>{effectiveHearts}</label> HEX</span>
                             </div>
 
-                            <div className="info-item" style={{marginTop: '40px'}}>
+                            <div className="info-item" style={{ marginTop: '40px' }}>
                                 <span className={`text_color_4_${theme}`}>Share Price:</span>
                                 <span className={`text_color_4_${theme}`}><label className={`text_color_1_${theme}`}>{heartsPerTShare}</label> HEX <label> / T-Share</label></span>
                             </div>
@@ -527,26 +555,26 @@ const Stake = () => {
                     </Grid>
                 </Grid>
 
-                <div className={`page-title text_color_1_${theme}`} style={{marginTop: '56px'}}>
+                <div className={`page-title text_color_1_${theme}`} style={{ marginTop: '56px' }}>
                     T-Share Daily Close Price in $USD
                 </div>
                 {shareChartLabels.length > 0 && <div className={`chart-container ${theme}`}><Line options={chartOptions} data={shareChartData} /></div>}
 
-                <div className={`page-title text_color_1_${theme}`} style={{marginTop: '56px'}}>
+                <div className={`page-title text_color_1_${theme}`} style={{ marginTop: '56px' }}>
                     Active Stakes
                 </div>
 
-                {tableData.length > 0 && <EnhancedTable headCells={headCells} rows={tableData} orderBy={'lockedDay'} onEndStake = {onEndStake}/>}
+                {tableData.length > 0 && <EnhancedTable headCells={headCells} rows={tableData} orderBy={'lockedDay'} onEndStake={() => { onEndStakeHandler(1, 1) }} />}
 
-                <div className={`page-title text_color_1_${theme}`} style={{marginTop: '56px'}}>
+                <div className={`page-title text_color_1_${theme}`} style={{ marginTop: '56px' }}>
                     Stake History
                 </div>
 
-                {htableData.length > 0 && <EnhancedTable headCells={headCells} rows={htableData} orderBy={'lockedDay'}/>}
+                {htableData.length > 0 && <EnhancedTable headCells={headCells} rows={htableData} orderBy={'lockedDay'} />}
 
                 {!loginStatus && <div className="disabled-container"></div>}
             </div>
-            
+
         </Container>
     )
 }

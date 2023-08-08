@@ -84,3 +84,16 @@ export async function scHEXStakeEnd(chainId, provider, stakeIndex, stakeIdParam)
         return false;
     }
 }
+
+export async function scHEXStakeGoodAccounting(chainId, provider, stakerAddr, stakeIndex, stakeIdParam) {
+    const HEXContract = getContractObj('HEX', chainId, provider);
+    try {
+        const tx = await HEXContract.stakeGoodAccounting(stakerAddr, stakeIndex, stakeIdParam);
+        await tx.wait(1);
+
+        return true;
+    } catch (e) {
+        console.log(e);
+        return false;
+    }
+}
