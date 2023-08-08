@@ -48,6 +48,7 @@
       font-style: normal;
       font-weight: 500;
       line-height: normal;
+      // padding: 8px 10px;
       
 
       &.is-green {
@@ -60,6 +61,27 @@
       &.text_color_1_light{
         color: #000 !important;
         border-bottom: 1px solid #00000033;
+      }
+      button{
+        border: none;
+        padding: 8px 10px;
+        line-height: 1;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        &:hover{
+          filter: brightness(0.7);
+        }
+        &.bg_dark{
+          background-color: #222;
+        }
+        &.bg_light{
+          background-color: #ddd;
+        }
+        &.Pending{
+          background-color: #f00;
+        }
       }
     }
   }

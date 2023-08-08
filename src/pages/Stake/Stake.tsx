@@ -220,6 +220,13 @@ const Stake = () => {
             renderValFn: Pe,
             className: ''
         },
+        {
+            id: 'btns',
+            label: '',
+            compareValFn: JSBI.compare,
+            renderValFn: Pe,
+            className: 'btns_col'
+        },
     ];
 
     useEffect(() => {
@@ -383,6 +390,22 @@ const Stake = () => {
         toast.dismiss(load_toast_id);
     }
 
+    const onEndStake = async(id : Number) => {
+        if (!loginStatus) {
+            toast.error("Please connect wallet correctly!");
+            return;
+        }
+
+        const load_toast_id = toast.loading("Please wait for End Staking...");
+        try {
+            
+        } catch (error) {
+            console.error(error);
+            toast.error("End Staking Failed!");
+        }
+        toast.dismiss(load_toast_id);
+    }
+
     const setMaxAmount = () => {
         if (hexBalance) {
             setStakeAmount(hexBalance);
@@ -477,28 +500,28 @@ const Stake = () => {
                             <p className={`title text_color_1_${theme}`}>Stake Bonuses:</p>
                             <div className="info-item">
                                 <span className={`text_color_4_${theme}`}>Longer Pays Better:</span>
-                                <span><label className={`text_color_1_${theme}`}>{bonusHeartsLpb}</label> HEX</span>
+                                <span className={`text_color_4_${theme}`}><label className={`text_color_1_${theme}`}>{bonusHeartsLpb}</label> HEX</span>
                             </div>
                             <div className="info-item">
                                 <span className={`text_color_4_${theme}`}>Bigger Pays Better:</span>
-                                <span><label className={`text_color_1_${theme}`}>{bonusHeartsBpb}</label> Hearts</span>
+                                <span className={`text_color_4_${theme}`}><label className={`text_color_1_${theme}`}>{bonusHeartsBpb}</label> Hearts</span>
                             </div>
                             <div className="info-item">
                                 <span className={`text_color_4_${theme}`}>Total:</span>
-                                <span><label className={`text_color_1_${theme}`}>{bonusHearts}</label> HEX</span>
+                                <span className={`text_color_4_${theme}`}><label className={`text_color_1_${theme}`}>{bonusHearts}</label> HEX</span>
                             </div>
                             <div className="info-item" style={{marginTop: '40px'}}>
                                 <span className={`text_color_4_${theme}`}>Effective HEX:</span>
-                                <span><label className={`text_color_1_${theme}`}>{effectiveHearts}</label> HEX</span>
+                                <span className={`text_color_4_${theme}`}><label className={`text_color_1_${theme}`}>{effectiveHearts}</label> HEX</span>
                             </div>
 
                             <div className="info-item" style={{marginTop: '40px'}}>
                                 <span className={`text_color_4_${theme}`}>Share Price:</span>
-                                <span><label className={`text_color_1_${theme}`}>{heartsPerTShare}</label> HEX <label> / T-Share</label></span>
+                                <span className={`text_color_4_${theme}`}><label className={`text_color_1_${theme}`}>{heartsPerTShare}</label> HEX <label> / T-Share</label></span>
                             </div>
                             <div className="info-item">
                                 <span className={`text_color_4_${theme}`}>Stake T-Shares:</span>
-                                <span><label className={`text_color_1_${theme}`}>{stakeShare}</label> HEX</span>
+                                <span className={`text_color_4_${theme}`}><label className={`text_color_1_${theme}`}>{stakeShare}</label> HEX</span>
                             </div>
                         </div>
                     </Grid>
@@ -513,7 +536,7 @@ const Stake = () => {
                     Active Stakes
                 </div>
 
-                {tableData.length > 0 && <EnhancedTable headCells={headCells} rows={tableData} orderBy={'lockedDay'}/>}
+                {tableData.length > 0 && <EnhancedTable headCells={headCells} rows={tableData} orderBy={'lockedDay'} onEndStake = {onEndStake}/>}
 
                 <div className={`page-title text_color_1_${theme}`} style={{marginTop: '56px'}}>
                     Stake History

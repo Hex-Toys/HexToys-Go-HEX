@@ -103,7 +103,7 @@ export default function EnhancedTable(props) {
 
     const [order, setOrder] = React.useState<Order>('desc');
     const [orderBy, setOrderBy] = useState(props.orderBy);
-    const {headCells, rows} = props;
+    const {headCells, rows, onEndStake} = props;
     const [visibleRows, setVisibleRows] = useState([]);
     const [hasMore, setHasMore] = useState(true);
     const [isShowAll, setIsShowAll] = useState(false);
@@ -198,8 +198,15 @@ export default function EnhancedTable(props) {
                                         {headCells.map((item, hindex) => (
                                             <TableCell key={index + '-' + hindex} className={`${item.className} text_color_1_${theme}`} align={'center'}>
                                                 {renderData(item, row)}
+                                                
+                                                {onEndStake && hindex === headCells.length - 1 &&
+                                                    <>
+                                                        <button className={`bg_${theme} ${renderData(headCells[2], row)} text_color_1_${theme}`} onClick={()=>onEndStake(index)}>End Stake</button>
+                                                    </>
+                                                }
                                             </TableCell>
                                         ))}
+
                                     </TableRow>
                                 );
                             })}
