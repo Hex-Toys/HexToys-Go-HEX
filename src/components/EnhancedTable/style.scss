@@ -1,3 +1,4 @@
+@import "../../global.scss";
 .enhance-table-container {
   .MuiPaper-root {
     background: none;
@@ -49,7 +50,9 @@
       font-weight: 500;
       line-height: normal;
       // padding: 8px 10px;
-      
+      @include mobile_potrait{
+        padding: 8px 5px;
+      }
 
       &.is-green {
         color: #27AE60;
@@ -70,6 +73,10 @@
         cursor: pointer;
         font-weight: 600;
         transition: all 0.3s ease;
+        white-space: nowrap;
+        @include mobile_potrait{
+          font-size: 12px;
+        }
         &:hover{
           filter: brightness(0.7);
         }
