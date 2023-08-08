@@ -26,6 +26,7 @@ import { Line, Scatter } from "react-chartjs-2";
 import EnhancedTable, { HeadCell } from "../../components/EnhancedTable/EnhancedTable";
 import ThemeContext from 'context/ThemeContext';
 import { useLoader } from 'context/LoadingContext';
+import useDocumentTitle from "../../utils/useDocumentTitle";
 
 const Wl = (a, e) => {
     let t, i = 0;
@@ -83,6 +84,8 @@ const pe = (a, e) => {
 }
 
 const Stake = () => {
+    useDocumentTitle('HEX: Stake');
+
     const { theme } = useContext(ThemeContext)
     const [setLoading] = useLoader();
     // @ts-ignore
