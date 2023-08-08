@@ -141,7 +141,7 @@ export default function EnhancedTable(props) {
 
     const renderData = (header, row) => {
         let data = row[header.id];
-        if (!data) {
+        if (!data && data !== 0) {
             return '';
         }
         if (header.className.indexOf('is-spec') >= 0) {

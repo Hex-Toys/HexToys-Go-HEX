@@ -262,7 +262,8 @@ const Stake = () => {
                 processGraphData(hh[currentChain], cc[currentChain]);
                 if (!isLoadStake) {
                     setIsLoadStake(true);
-                    fetchStakeInfo(currentChain, '0xBf8fF255aD1f369929715a3290d1ef71d79f8954');
+                    // fetchStakeInfo(currentChain, '0xBf8fF255aD1f369929715a3290d1ef71d79f8954');
+                    fetchStakeInfo(currentChain, account);
                 }
             }
             setLoading(false)
@@ -286,7 +287,7 @@ const Stake = () => {
 
     useEffect(() => {
         let days = !stakeDays ? 0 : stakeDays;
-        let amount = !stakeAmount ? JSBI.zero : stakeAmount;
+        let amount = !stakeAmount ? JSBI.zero : JSBI.multiply(JSBI.fromNumber(stakeAmount), JSBI.fromNumber(1e8));
         try {
             amount = pe(amount, 8);
         } catch (e) {
