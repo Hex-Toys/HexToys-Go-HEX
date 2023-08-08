@@ -12,6 +12,7 @@ import { visuallyHidden } from '@mui/utils';
 import './style.scss';
 import {useEffect, useState} from "react";
 import ThemeContext from 'context/ThemeContext';
+import EndStakeButton from "../EndStakeButton/EndStakeButton";
 
 type Order = 'asc' | 'desc';
 
@@ -201,7 +202,13 @@ export default function EnhancedTable(props) {
                                                 
                                                 {onEndStake && hindex === headCells.length - 1 &&
                                                     <>
-                                                        <button className={`bg_${theme} ${renderData(headCells[2], row)} text_color_1_${theme}`} onClick={()=>onEndStake(index)}>End Stake</button>
+                                                        {
+                                                            renderData(headCells[2], row) == 'Pending' ? (
+                                                                <button className={`bg_${theme} ${renderData(headCells[2], row)} text_color_1_${theme}`} onClick={()=>onEndStake(index)}>End Stake</button>
+                                                            ) : (
+                                                                <EndStakeButton />
+                                                            )
+                                                        }
                                                     </>
                                                 }
                                             </TableCell>

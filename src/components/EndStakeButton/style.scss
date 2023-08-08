@@ -1,0 +1,28 @@
+.end-stake-button-container {
+  .btn-end-stake {
+    border: none;
+    padding: 8px 10px;
+    line-height: 1;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    background: #222;
+    font-size: 13.3333px;
+    color: white;
+    text-transform: capitalize;
+  }
+
+  .end-stake-popper {
+    background: #222;
+    border-radius: 10.68px;
+    overflow: hidden;
+
+    button {
+      color: white;
+      font-size: 13px;
+      text-transform: capitalize;
+    }
+  }
+}
