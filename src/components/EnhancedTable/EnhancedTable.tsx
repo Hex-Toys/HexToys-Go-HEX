@@ -206,7 +206,7 @@ export default function EnhancedTable(props) {
                                                             renderData(headCells[2], row) == 'Pending' ? (
                                                                 <button className={`bg_${theme} ${renderData(headCells[2], row)} text_color_1_${theme}`} onClick={()=>onEndStake(index)}>End Stake</button>
                                                             ) : (
-                                                                <EndStakeButton />
+                                                                <EndStakeButton index={index} onEndStake={onEndStake}/>
                                                             )
                                                         }
                                                     </>

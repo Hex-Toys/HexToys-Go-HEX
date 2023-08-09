@@ -22,6 +22,7 @@ import JSBI, {add} from "@pulsex/jsbi";
 import Grid from "@material-ui/core/Grid";
 import {useContractRead} from "../../context/useContractRead";
 import ThemeContext from "context/ThemeContext";
+import {useActiveWeb3} from "../../hooks/useActiveWeb3";
 
 ChartJS.register(
     CategoryScale,
@@ -79,7 +80,7 @@ const HomeChainInfo = (props) => {
     const [dailyChartData, setDailyChartData] = useState({datasets: []});
     const [isLoading, setIsLoading] = useState(false);
     const [isFetchStake, setIsFetchStake] = useState(false);
-    const [loginStatus, setLoginStatus] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [tableData, setTableData] = useState([]);
     const [hexInfoData, setHexInfoData] = useState({
         currentDay: 3,
@@ -97,6 +98,7 @@ const HomeChainInfo = (props) => {
     });
     const [balance, setBalance] = useState(JSBI.zero);
     const {hexBalance} = useContractRead();
+    const { loginStatus, account } = useActiveWeb3();
 
     const headCells: readonly HeadCell[] = [
         {
@@ -198,17 +200,17 @@ const HomeChainInfo = (props) => {
     }, [currentChain, N, S])
 
     useEffect(() => {
-        if (isConnected && address && currentChain) {
-            console.log('is-logged-in');
-            setLoginStatus(true);
+        if (loginStatus && account && currentChain) {
+            console.log('is-logged-in:', isConnected, account, currentChain);
+            setIsLoggedIn(true);
             if (!SD[currentChain]) {
                 if (!isFetchStake) {
                     setIsFetchStake(true);
-                    fetchStakeInfo(currentChain, address);
+                    fetchStakeInfo(currentChain, account);
                 }
             }
         }
-    }, [isConnected, currentChain, SD])
+    }, [loginStatus, account, SD])
 
     useEffect(() => {
         if(tableData.length !== 0 && hexInfoData.currentDay !== 3){
@@ -307,7 +309,7 @@ const HomeChainInfo = (props) => {
                                 <span className={`text_color_4_${theme}`}>Total Staked:</span>
                             </Grid>
                             <Grid item xs={5}>
-                                <label className={`text_color_1_${theme}`}>{!loginStatus ? '--' : FormatMixedHex(stakeInfoData.totalStaked)}</label>
+                                <label className={`text_color_1_${theme}`}>{!isLoggedIn ? '--' : FormatMixedHex(stakeInfoData.totalStaked)}</label>
                             </Grid>
                         </Grid>
                         <Grid container>
@@ -315,7 +317,7 @@ const HomeChainInfo = (props) => {
                                 <span className={`text_color_4_${theme}`}>Yield Due:</span>
                             </Grid>
                             <Grid item xs={5}>
-                                <label className={`text_color_1_${theme}`}>{!loginStatus ? '--' : FormatMixedHex(stakeInfoData.totalInterestLive)}</label>
+                                <label className={`text_color_1_${theme}`}>{!isLoggedIn ? '--' : FormatMixedHex(stakeInfoData.totalInterestLive)}</label>
                             </Grid>
                         </Grid>
                         <Grid container>
@@ -323,7 +325,7 @@ const HomeChainInfo = (props) => {
                                 <span className={`text_color_4_${theme}`}>Not Staked:</span>
                             </Grid>
                             <Grid item xs={5}>
-                                <label className={`text_color_1_${theme}`}>{!loginStatus ? '--' : FormatMixedHex(balance)}</label>
+                                <label className={`text_color_1_${theme}`}>{!isLoggedIn ? '--' : FormatMixedHex(balance)}</label>
                             </Grid>
                         </Grid>
                     </div>
