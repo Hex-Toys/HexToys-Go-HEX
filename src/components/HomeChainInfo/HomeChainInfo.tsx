@@ -18,10 +18,11 @@ import CardContent from '@mui/material/CardContent';
 import {useBearStore} from "../../store";
 import {Ei, Ot, ke, De, Re, Me, Ve} from '../../utils/table-helper';
 import EnhancedTable, {HeadCell} from "../EnhancedTable/EnhancedTable";
-import JSBI from "@pulsex/jsbi";
+import JSBI, {add} from "@pulsex/jsbi";
 import Grid from "@material-ui/core/Grid";
 import {useContractRead} from "../../context/useContractRead";
 import ThemeContext from "context/ThemeContext";
+import {useActiveWeb3} from "../../hooks/useActiveWeb3";
 
 ChartJS.register(
     CategoryScale,
@@ -64,7 +65,11 @@ const HomeChainInfo = (props) => {
     // @ts-ignore
     const S = useBearStore((state) => state.SS);
     // @ts-ignore
+    const SD = useBearStore((state) => state.SD);
+    // @ts-ignore
     const fetchInfo = useBearStore((state) => state.fetchInfo);
+    // @ts-ignore
+    const fetchStakeInfo = useBearStore((state) => state.fetchStakeInfo);
 
     const { isConnected, address } = useAccount();
     const [title, setTitle] = useState('');
@@ -74,6 +79,8 @@ const HomeChainInfo = (props) => {
     const [dailyChartLabels, setDailyChartLabels] = useState([]);
     const [dailyChartData, setDailyChartData] = useState({datasets: []});
     const [isLoading, setIsLoading] = useState(false);
+    const [isFetchStake, setIsFetchStake] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [tableData, setTableData] = useState([]);
     const [hexInfoData, setHexInfoData] = useState({
         currentDay: 3,
@@ -91,6 +98,7 @@ const HomeChainInfo = (props) => {
     });
     const [balance, setBalance] = useState(JSBI.zero);
     const {hexBalance} = useContractRead();
+    const { loginStatus, account } = useActiveWeb3();
 
     const headCells: readonly HeadCell[] = [
         {
@@ -175,12 +183,34 @@ const HomeChainInfo = (props) => {
             } else {
                 processGraphData(hh[props.chain], cc[props.chain]);
                 setTableData(cc[props.chain]);
-                setHexInfoData(N[props.chain]);
-                setStakeInfoData(S[props.chain]); 
             }
         }
         
-    }, [props, hh, cc, N]);
+    }, [props, hh, cc]);
+
+    useEffect(() => {
+        if (currentChain) {
+            if (N[currentChain]) {
+                setHexInfoData(N[props.chain]);
+            }
+            if (S[currentChain]) {
+                setStakeInfoData(S[props.chain]);
+            }
+        }
+    }, [currentChain, N, S])
+
+    useEffect(() => {
+        if (loginStatus && account && currentChain) {
+            console.log('is-logged-in:', isConnected, account, currentChain);
+            setIsLoggedIn(true);
+            if (!SD[currentChain]) {
+                if (!isFetchStake) {
+                    setIsFetchStake(true);
+                    fetchStakeInfo(currentChain, account);
+                }
+            }
+        }
+    }, [loginStatus, account, SD])
 
     useEffect(() => {
         if(tableData.length !== 0 && hexInfoData.currentDay !== 3){
@@ -189,7 +219,7 @@ const HomeChainInfo = (props) => {
     }, [tableData, hexInfoData.currentDay])
 
     useEffect(() => {
-        setBalance(JSBI.fromNumber(hexBalance));
+        setBalance(JSBI.multiply(JSBI.fromNumber(hexBalance), JSBI.fromNumber(1e8)));
     }, [hexBalance])
 
     const processGraphData = (h, c) => {
@@ -279,7 +309,7 @@ const HomeChainInfo = (props) => {
                                 <span className={`text_color_4_${theme}`}>Total Staked:</span>
                             </Grid>
                             <Grid item xs={5}>
-                                <label className={`text_color_1_${theme}`}>{FormatMixedHex(stakeInfoData.totalStaked)}</label>
+                                <label className={`text_color_1_${theme}`}>{!isLoggedIn ? '--' : FormatMixedHex(stakeInfoData.totalStaked)}</label>
                             </Grid>
                         </Grid>
                         <Grid container>
@@ -287,7 +317,7 @@ const HomeChainInfo = (props) => {
                                 <span className={`text_color_4_${theme}`}>Yield Due:</span>
                             </Grid>
                             <Grid item xs={5}>
-                                <label className={`text_color_1_${theme}`}>{FormatMixedHex(stakeInfoData.totalInterestLive)}</label>
+                                <label className={`text_color_1_${theme}`}>{!isLoggedIn ? '--' : FormatMixedHex(stakeInfoData.totalInterestLive)}</label>
                             </Grid>
                         </Grid>
                         <Grid container>
@@ -295,7 +325,7 @@ const HomeChainInfo = (props) => {
                                 <span className={`text_color_4_${theme}`}>Not Staked:</span>
                             </Grid>
                             <Grid item xs={5}>
-                                <label className={`text_color_1_${theme}`}>{FormatMixedHex(balance)}</label>
+                                <label className={`text_color_1_${theme}`}>{!isLoggedIn ? '--' : FormatMixedHex(balance)}</label>
                             </Grid>
                         </Grid>
                     </div>

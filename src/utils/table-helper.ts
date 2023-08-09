@@ -51,6 +51,6 @@ export const Ue = a => se(ce(a), re(Math.abs(a).toString(), 8));
 export const Ve = a => de(JSBI.toString10U(a), 8, " HEX", " Hearts");
 export const Ee = a => se(a.sign, de(JSBI.toString10U(a), 8, " HEX", " Hearts"))
 export const _e = (a, e) => ne(JSBI.toString10U(a), 8, e)
-export const Xa = a => Math.trunc((a - R) / 86400);
+export const Xa = a => Math.trunc((a - R) / 86400) + 1;
 export const Le = a => `${a.slice(0, 6)}...${a.slice(38)}`;
 export const Te = a => se(a.sign, re(JSBI.toString10U(a), 8));

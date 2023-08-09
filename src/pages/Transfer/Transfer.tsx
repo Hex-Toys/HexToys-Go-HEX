@@ -26,6 +26,7 @@ const Transfer = () => {
 
     const [receiver, setReceiver] = useState('');
     const [amount, setAmount] = useState(0.00);
+    const [sender, setSender] = useState('');
     const [isLoadStake, setIsLoadStake] = useState(false);
     const [tableData, setTableData] = useState([]);
     const [currentChain, setCurrentChain] = useState('');
@@ -91,12 +92,14 @@ const Transfer = () => {
                 return;
             }
 
-            if (chainName != currentChain) {
-                setCurrentChain(chainName);
+            if (chainName != currentChain || sender != account.toLowerCase()) {
                 if (!isLoadStake) {
+                    setCurrentChain(chainName);
+                    setSender(account.toLowerCase());
+
                     setIsLoadStake(true);
-                    fetchStakeInfo(chainName, '0xBf8fF255aD1f369929715a3290d1ef71d79f8954'.toLowerCase());
-                    // fetchStakeInfo(chainName, account.toLowerCase());
+                    // fetchStakeInfo(chainName, '0xBf8fF255aD1f369929715a3290d1ef71d79f8954'.toLowerCase());
+                    fetchStakeInfo(chainName, account.toLowerCase());
                 }
             }
         }
@@ -105,7 +108,7 @@ const Transfer = () => {
     useEffect(() => {
         if (tableData && tableData.length > 0) {
             for (let i = 0; i < tableData.length; i ++) {
-                tableData[i].balance = JSBI.fromNumber(hexBalance);
+                tableData[i].balance = JSBI.multiply(JSBI.fromNumber(hexBalance), JSBI.fromNumber(1e8));
             }
             setTableData(tableData);
         }
@@ -145,7 +148,7 @@ const Transfer = () => {
             }
             if (item.from === address) {
                 if (item.to && item.to !== Ol) {
-                    sa(o, 1, u, 3, l);
+                    sa(o, 1, u, 3, r);
                 } else {
                     sa(o, 1, u, 1, null);
                 }
@@ -214,7 +217,7 @@ const Transfer = () => {
                 <div className={`input-container ${theme}`}>
                     <label  className={`text_color_1_${theme}`}>From your wallet address</label>
                     <div className="input-box">
-                        <input type="text" defaultValue={account} className={`text_color_1_${theme}`}/>
+                        <input type="text" defaultValue={sender} className={`text_color_1_${theme}`} readOnly/>
                     </div>
                 </div>
 

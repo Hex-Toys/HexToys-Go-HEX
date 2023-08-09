@@ -312,6 +312,32 @@
       border: 1px solid #00000033;
     }
   }
+}
 
+.end-stake-modal {
+  #modal-modal-title {
+    color: white;
+  }
+  #modal-modal-description {
+    color: rgba(255, 255, 255, 0.6);
+  }
 
+  .modal-actions {
+    margin-top: 20px;
+    text-align: right;
+    button {
+      margin-left: 10px;
+      border: none;
+      padding: 8px 10px;
+      line-height: 1;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      background: #222;
+      font-size: 15px;
+      color: white;
+    }
+  }
 }
