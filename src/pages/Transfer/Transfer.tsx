@@ -108,7 +108,7 @@ const Transfer = () => {
     useEffect(() => {
         if (tableData && tableData.length > 0) {
             for (let i = 0; i < tableData.length; i ++) {
-                tableData[i].balance = hexBalance;
+                tableData[i].balance = hexBalance?.toFixed(3);
             }
             setTableData(tableData);
         }

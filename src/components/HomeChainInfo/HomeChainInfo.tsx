@@ -340,7 +340,7 @@ const HomeChainInfo = (props) => {
                                 <span className={`text_color_4_${theme}`}>Not Staked:</span>
                             </Grid>
                             <Grid item xs={5}>
-                                <label className={`text_color_1_${theme}`}>{!isLoggedIn ? '--' : balance + ' HEX'}</label>
+                                <label className={`text_color_1_${theme}`}>{!isLoggedIn ? '--' : balance?.toFixed(3) + ' HEX'}</label>
                             </Grid>
                         </Grid>
                     </div>

@@ -2,6 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
+import TableFooter from "@mui/material/TableFooter";
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
@@ -13,6 +14,7 @@ import './style.scss';
 import {useEffect, useState} from "react";
 import ThemeContext from 'context/ThemeContext';
 import EndStakeButton from "../EndStakeButton/EndStakeButton";
+import JSBI from "@pulsex/jsbi";
 
 type Order = 'asc' | 'desc';
 
@@ -104,7 +106,7 @@ export default function EnhancedTable(props) {
 
     const [order, setOrder] = React.useState<Order>('desc');
     const [orderBy, setOrderBy] = useState(props.orderBy);
-    const {headCells, rows, onEndStake} = props;
+    const {headCells, rows, onEndStake, footerCells} = props;
     const [visibleRows, setVisibleRows] = useState([]);
     const [hasMore, setHasMore] = useState(true);
     const [isShowAll, setIsShowAll] = useState(false);
@@ -158,7 +160,7 @@ export default function EnhancedTable(props) {
         }
         if (header.className.indexOf('is-percent') >= 0) {
             // @ts-ignore
-            if (Number(result) == result) {
+            if (result != 'Pending' && result != 'Cancelled') {
                 result += '%';
             }
         }
@@ -167,6 +169,26 @@ export default function EnhancedTable(props) {
 
     const showAll = () => {
         setIsShowAll(true);
+    }
+
+    const renderFooterData = (footer) => {
+        let sum = JSBI.zero;
+        for (let i = 0; i < rows.length; i ++) {
+            let value = rows[i][footer.key];
+            if ("[object String]" === Object.prototype.toString.call(value)) {
+                value = JSBI.fromString(value);
+                if (JSBI.nonZeroDefined(value)) {
+                    sum = JSBI.add(sum, value);
+                }
+            } else if ("[object Array]" === Object.prototype.toString.call(value)) {
+                if (JSBI.nonZeroDefined(value)) {
+                    sum = JSBI.add(sum, value);
+                }
+            }
+        }
+
+        let data = footer.renderValFn(sum);
+        return data.join('');
     }
 
     return (
@@ -218,6 +240,22 @@ export default function EnhancedTable(props) {
                                 );
                             })}
                         </TableBody>
+                        {
+                            footerCells && footerCells.length > 0 && (
+                                <TableFooter>
+                                    <TableRow>
+                                        {
+                                            footerCells.map((item, index) => (
+                                                <TableCell key={'footer-' + index} align={item.isLabel ? 'right' : 'center'} colSpan={item.colspan}>
+                                                    {item.isLabel && item.label}
+                                                    {!item.isLabel && renderFooterData(item)}
+                                                </TableCell>
+                                            ))
+                                        }
+                                    </TableRow>
+                                </TableFooter>
+                            )
+                        }
                     </Table>
                 </TableContainer>
                 {hasMore && (
