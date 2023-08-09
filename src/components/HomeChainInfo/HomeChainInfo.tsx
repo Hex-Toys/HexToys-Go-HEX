@@ -215,9 +215,10 @@ const HomeChainInfo = (props) => {
 
             if (currentChain == name) {
                 setIsLoggedIn(true);
-                if (!SD[currentChain]) {
+                if (!SD[currentChain] && hh[currentChain]) {
                     if (!isFetchStake) {
                         setIsFetchStake(true);
+                        // fetchStakeInfo(currentChain, '0xBf8fF255aD1f369929715a3290d1ef71d79f8954'.toLowerCase());
                         fetchStakeInfo(currentChain, account);
                     }
                 }
@@ -225,7 +226,7 @@ const HomeChainInfo = (props) => {
                 setIsLoggedIn(false);
             }
         }
-    }, [loginStatus, account, SD, currentChain])
+    }, [loginStatus, account, SD, currentChain, hh])
 
     useEffect(() => {
         if(tableData.length !== 0 && hexInfoData.currentDay !== 3){
