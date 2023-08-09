@@ -158,13 +158,54 @@ const Stake = () => {
 
     const { loginStatus, chainId, library, account } = useActiveWeb3();
 
+    const footerCells = [{
+        isLabel: true,
+        label: 'Totals',
+        colspan: 5,
+    }, {
+        isLabel: false,
+        key: 'amount',
+        colspan: 1,
+        renderValFn: ke
+    }, {
+        isLabel: false,
+        key: 'shares',
+        colspan: 1,
+        renderValFn: De
+    }, {
+        isLabel: false,
+        key: 'interest',
+        colspan: 1,
+        renderValFn: ke
+    }, {
+        isLabel: false,
+        key: 'equity',
+        colspan: 1,
+        renderValFn: ke
+    }, {
+        isLabel: false,
+        key: 'equityLiveUsd',
+        colspan: 1,
+        renderValFn: ke
+    }, {
+        isLabel: true,
+        label: '',
+        colspan: 1,
+        renderValFn: Pe
+    }]
+
     const headCells: readonly HeadCell[] = [
         {
             id: 'lockedDay',
             label: 'Start',
             compareValFn: Ei,
             renderValFn: a => {
-                let val = a.lockedDay || a.startDay - 1;
+                let val = 0;
+                if (a.tableType == 'start') {
+                    val = a.lockedDay || a.startDay - 1;
+                } else {
+                    val = a.lockedDay || a.startDay + 1;
+                }
                 if (!val) return "";
                 return "" + (val + 1);
             },
@@ -175,21 +216,26 @@ const Stake = () => {
             label: 'End',
             compareValFn: Ei,
             renderValFn: (a) => {
-                return "" + a;
+                if (a.tableType == 'start') {
+                    return "" + a.completesOnDay;
+                } else {
+                    return "" + (a.endDay + 1);
+                }
             },
-            className: ''
+            className: 'is-spec'
         },
         {
             id: 'progress',
             label: 'Progress',
             compareValFn: Ei,
             renderValFn: (a) => {
-                if (a < 0) {
-                    return 'Pending';
+                if (!a.lockedDay) {
+                    return a.tableType == 'start' ? 'Pending' : 'Cancelled';
                 }
-                return (a / 100).toFixed(2)
+                let data = Me(a.progress);
+                return data.join('');
             },
-            className: 'is-percent'
+            className: 'is-percent is-spec'
         },
         {
             id: 'apy1',
@@ -289,6 +335,7 @@ const Stake = () => {
 
     useEffect(() => {
         if (currentChain && SD[currentChain]) {
+            console.log('set-table-data:', SD[currentChain]);
             setTableData(SD[currentChain])
         }
         if (currentChain && SL[currentChain]) {
@@ -592,13 +639,13 @@ const Stake = () => {
                     Active Stakes
                 </div>
 
-                {tableData.length > 0 && <EnhancedTable headCells={headCells} rows={tableData} orderBy={'lockedDay'} onEndStake={confirmEndStake} />}
+                {tableData.length > 0 && <EnhancedTable headCells={headCells} rows={tableData} orderBy={'lockedDay'} onEndStake={confirmEndStake} footerCells={footerCells}/>}
 
                 <div className={`page-title text_color_1_${theme}`} style={{ marginTop: '56px' }}>
                     Stake History
                 </div>
 
-                {htableData.length > 0 && <EnhancedTable headCells={headCells} rows={htableData} orderBy={'lockedDay'} />}
+                {htableData.length > 0 && <EnhancedTable headCells={headCells} rows={htableData} orderBy={'lockedDay'} footerCells={footerCells}/>}
 
                 {!loginStatus && <div className="disabled-container"></div>}
             </div>

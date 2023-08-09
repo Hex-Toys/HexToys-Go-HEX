@@ -96,9 +96,9 @@ const HomeChainInfo = (props) => {
         hasEnteredXfLobbies: !1,
         xfLobbiesReady: 0,
     });
-    const [balance, setBalance] = useState(JSBI.zero);
+    const [balance, setBalance] = useState(0);
     const {hexBalance} = useContractRead();
-    const { loginStatus, account } = useActiveWeb3();
+    const { loginStatus, account, chainId } = useActiveWeb3();
 
     const headCells: readonly HeadCell[] = [
         {
@@ -202,15 +202,31 @@ const HomeChainInfo = (props) => {
     useEffect(() => {
         if (loginStatus && account && currentChain) {
             console.log('is-logged-in:', isConnected, account, currentChain);
-            setIsLoggedIn(true);
-            if (!SD[currentChain]) {
-                if (!isFetchStake) {
-                    setIsFetchStake(true);
-                    fetchStakeInfo(currentChain, account);
+            let name = '';
+            if (chainId === 369) {
+                name = 'pulse-main';
+            } else if (chainId === 1) {
+                name = 'eth-main';
+            } else if (chainId === 943) {
+                name = 'pulse-test';
+            } else {
+                return;
+            }
+
+            if (currentChain == name) {
+                setIsLoggedIn(true);
+                if (!SD[currentChain] && hh[currentChain]) {
+                    if (!isFetchStake) {
+                        setIsFetchStake(true);
+                        // fetchStakeInfo(currentChain, '0xBf8fF255aD1f369929715a3290d1ef71d79f8954'.toLowerCase());
+                        fetchStakeInfo(currentChain, account);
+                    }
                 }
+            } else {
+                setIsLoggedIn(false);
             }
         }
-    }, [loginStatus, account, SD])
+    }, [loginStatus, account, SD, currentChain, hh])
 
     useEffect(() => {
         if(tableData.length !== 0 && hexInfoData.currentDay !== 3){
@@ -219,7 +235,7 @@ const HomeChainInfo = (props) => {
     }, [tableData, hexInfoData.currentDay])
 
     useEffect(() => {
-        setBalance(JSBI.multiply(JSBI.fromNumber(hexBalance), JSBI.fromNumber(1e8)));
+        setBalance(hexBalance);
     }, [hexBalance])
 
     const processGraphData = (h, c) => {
@@ -325,7 +341,7 @@ const HomeChainInfo = (props) => {
                                 <span className={`text_color_4_${theme}`}>Not Staked:</span>
                             </Grid>
                             <Grid item xs={5}>
-                                <label className={`text_color_1_${theme}`}>{!isLoggedIn ? '--' : FormatMixedHex(balance)}</label>
+                                <label className={`text_color_1_${theme}`}>{!isLoggedIn ? '--' : balance?.toFixed(3) + ' HEX'}</label>
                             </Grid>
                         </Grid>
                     </div>

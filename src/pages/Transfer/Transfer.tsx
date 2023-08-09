@@ -74,7 +74,7 @@ const Transfer = () => {
             id: 'balance',
             label: 'Balance',
             compareValFn: JSBI.compare,
-            renderValFn: ke,
+            renderValFn: a => a,
             className: ''
         }
     ];
@@ -108,7 +108,7 @@ const Transfer = () => {
     useEffect(() => {
         if (tableData && tableData.length > 0) {
             for (let i = 0; i < tableData.length; i ++) {
-                tableData[i].balance = JSBI.multiply(JSBI.fromNumber(hexBalance), JSBI.fromNumber(1e8));
+                tableData[i].balance = hexBalance?.toFixed(3);
             }
             setTableData(tableData);
         }
@@ -209,59 +209,55 @@ const Transfer = () => {
     return (
         <Container className={`transfer-page-container ${theme}`}>
             <div className="content">
-            <div className="col_div">
-                <div className={`page-title text_color_1_${theme}`}>
-                    Tansfer
-                </div>
-
-                <div className={`input-container ${theme}`}>
-                    <label  className={`text_color_1_${theme}`}>From your wallet address</label>
-                    <div className="input-box">
-                        <input type="text" defaultValue={sender} className={`text_color_1_${theme}`} readOnly/>
+                <div className="col_div">
+                    <div className={`page-title text_color_1_${theme}`}>
+                        Tansfer
                     </div>
-                </div>
 
-                <div className={`input-container ${theme}`} style={{marginBottom: '64px'}}>
-                    <label className={`text_color_1_${theme}`}>To recipient wallet address</label>
-                    <div className="input-box">
-                        <input type="text" placeholder="Type wallet address here"  className={`text_color_1_${theme}`}onChange={e => {setReceiver(e.target.value)}}/>
-
-                        <button className="btn-paste" onClick={pasteClipBoard}><span>Paste</span></button>
+                    <div className={`input-container ${theme}`}>
+                        <label  className={`text_color_1_${theme}`}>From your wallet address</label>
+                        <div className="input-box">
+                            <input type="text" defaultValue={sender} className={`text_color_1_${theme}`} readOnly/>
+                        </div>
                     </div>
-                </div>
 
-                <div className={`input-container ${theme}`} style={{marginBottom: '8px'}}>
-                    <label className={`text_color_1_${theme}`}>Amount in HEX</label>
-                    <div className="input-box">
-                        <input type="number" placeholder="0.000"  className={`text_color_1_${theme}`}value={amount} onChange={e => {
-                            // @ts-ignore
-                            setAmount(e.target.value);
-                        }}/>
+                    <div className={`input-container ${theme}`} style={{marginBottom: '64px'}}>
+                        <label className={`text_color_1_${theme}`}>To recipient wallet address</label>
+                        <div className="input-box">
+                            <input type="text" placeholder="Type wallet address here"  className={`text_color_1_${theme}`}onChange={e => {setReceiver(e.target.value)}}/>
 
-                        <span className={`span-unit text_color_1_${theme}`}>HEX</span>
-                        <button className="btn-paste" onClick={setMaxAmount}><span>MAX</span></button>
+                            <button className="btn-paste" onClick={pasteClipBoard}><span>Paste</span></button>
+                        </div>
                     </div>
+
+                    <div className={`input-container ${theme}`} style={{marginBottom: '8px'}}>
+                        <label className={`text_color_1_${theme}`}>Amount in HEX</label>
+                        <div className="input-box">
+                            <input type="number" placeholder="0.000"  className={`text_color_1_${theme}`}value={amount} onChange={e => {
+                                // @ts-ignore
+                                setAmount(e.target.value);
+                            }}/>
+
+                            <span className={`span-unit text_color_1_${theme}`}>HEX</span>
+                            <button className="btn-paste" onClick={setMaxAmount}><span>MAX</span></button>
+                        </div>
+                    </div>
+
+                    <div className="balance-info">
+                        <label className={`text_color_1_${theme}`}>Balance: </label>
+                        <span className={`text_color_1_${theme}`}>{hexBalance?.toFixed(3)} HEX</span>
+                    </div>
+
+                    <button className="btn-send" onClick={onTransferHandler}>Send HEX</button>
                 </div>
+                <div className="col_div">
+                    <div className={`page-title text_color_1_${theme}`}>
+                        Transfer History
+                    </div>
 
-                <div className="balance-info">
-                    <label className={`text_color_1_${theme}`}>Balance: </label>
-                    <span className={`text_color_1_${theme}`}>{hexBalance?.toFixed(3)} HEX</span>
+                    {tableData.length > 0 && <EnhancedTable headCells={headCells} rows={tableData} orderBy={'timestamp'}/>}
                 </div>
-
-                <button className="btn-send" onClick={onTransferHandler}>Send HEX</button>
             </div>
-            <div className="col_div">
-                <div className={`page-title text_color_1_${theme}`}>
-                    Transfer History
-                </div>
-
-                {tableData.length > 0 && <EnhancedTable headCells={headCells} rows={tableData} orderBy={'timestamp'}/>}
-            </div>
-            </div>
-            
-            
-
-            
         </Container>
     )
 }
