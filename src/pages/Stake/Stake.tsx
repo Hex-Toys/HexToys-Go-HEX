@@ -395,7 +395,7 @@ const Stake = () => {
     }, [hexBalance]);
 
     console.log(stakingInfoList);
-    
+
     const processGraphData = (h, c) => {
         const t = [[0], [null]];
         const [i, l] = t;
@@ -441,9 +441,9 @@ const Stake = () => {
         setStakeDays(value.diff(today, 'days'));
     }
 
-    const getStakeIndexFromId = (stakeId) => {
+    const getStakeIndexFromId = (stakeId: number) => {
         for (let i = 0; i < stakingInfoList.length; i++) {
-            if (stakingInfoList[i].stakedId.toString() === stakeId.toString()) {
+            if (stakingInfoList[i].stakedId === stakeId) {
                 return stakingInfoList[i].stakedIndex;
             }
         }
@@ -483,7 +483,7 @@ const Stake = () => {
         toast.dismiss(load_toast_id);
     }
 
-    const confirmEndStake = async (stakeIdParam, isShow) => {
+    const confirmEndStake = async (stakeIdParam: number, isShow) => {
         setStakeParam(stakeIdParam);
         if (isShow) {
             setOpenModal(true);
@@ -501,6 +501,10 @@ const Stake = () => {
         const load_toast_id = toast.loading("Please wait for End Staking...");
         try {
             let stakeIndex = getStakeIndexFromId(stakeIdParam);
+
+            console.log(stakeIdParam);
+            console.log(stakeIndex);
+
             let bSuccess = await scHEXStakeEnd(chainId, library, stakeIndex, stakeIdParam);
 
             if (bSuccess) {
@@ -527,6 +531,10 @@ const Stake = () => {
         const load_toast_id = toast.loading("Please wait for Stake Good Accounting...");
         try {
             let stakeIndex = getStakeIndexFromId(stakeIdParam);
+
+            console.log(stakeIdParam);
+            console.log(stakeIndex);
+            
             let bSuccess = await scHEXStakeGoodAccounting(chainId, library, account, stakeIndex, stakeIdParam);
 
             if (bSuccess) {
