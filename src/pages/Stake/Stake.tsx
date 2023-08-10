@@ -332,8 +332,7 @@ const Stake = () => {
                 processGraphData(hh[currentChain], cc[currentChain]);
                 if (!isLoadStake) {
                     setIsLoadStake(true);
-                    fetchStakeInfo(currentChain, '0xBf8fF255aD1f369929715a3290d1ef71d79f8954');
-                    // fetchStakeInfo(currentChain, account);
+                    fetchStakeInfo(currentChain, account);
                 }
             }
             setLoading(false)
@@ -443,7 +442,7 @@ const Stake = () => {
 
     const getStakeIndexFromId = (stakeId: number) => {
         for (let i = 0; i < stakingInfoList.length; i++) {
-            if (stakingInfoList[i].stakedId === stakeId) {
+            if (stakingInfoList[i].stakedId * 1 === stakeId * 1) {
                 return stakingInfoList[i].stakedIndex;
             }
         }
@@ -512,6 +511,7 @@ const Stake = () => {
                 fetchStakeInfo(currentChain, account);
                 setStakeAmount(0);
                 setStakeDays(0);
+                setOpenModal(false);
             } else {
                 toast.error("End Staking Failed!");
             }
