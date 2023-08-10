@@ -318,33 +318,39 @@ const Stake = () => {
             } else {
                 return;
             }
+        } else {
+            setLoading(false);
         }
-    }, [isLoadStake, chainId, loginStatus]);
+    }, [isLoadStake, chainId, loginStatus])
 
     useEffect(() => {
         if (currentChain) {
             if (!hh[currentChain]) {
                 if (!isLoading) {
                     setIsLoading(true);
+                    setLoading(true);
                     fetchInfo(currentChain);
                 }
             } else {
+                setLoading(false);
                 processGraphData(hh[currentChain], cc[currentChain]);
                 if (!isLoadStake) {
                     setIsLoadStake(true);
+                    setLoading(true);
                     fetchStakeInfo(currentChain, account);
                 }
             }
-            setLoading(false)
         }
     }, [hh, currentChain, isLoading, fetchInfo]);
 
     useEffect(() => {
         if (currentChain && SD[currentChain]) {
             // console.log('set-table-data:', SD[currentChain]);
+            setLoading(false);
             setTableData(SD[currentChain])
         }
         if (currentChain && SL[currentChain]) {
+            setLoading(false);
             setHTableData(SL[currentChain])
         }
     }, [currentChain, SD, SS, SL])
