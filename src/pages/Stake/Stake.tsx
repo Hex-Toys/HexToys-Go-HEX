@@ -114,6 +114,8 @@ const Stake = () => {
     const [htableData, setHTableData] = useState([]);
     const [openModal, setOpenModal] = React.useState(false);
     const [stakeIndex, setStakeIndex] = useState(-1);
+    const [stakeParam, setStakeParam] = useState(-1);
+    const [balance, setBalance] = useState(0);
 
     const chartOptions = {
         responsive: true,
@@ -186,12 +188,11 @@ const Stake = () => {
         isLabel: false,
         key: 'equityLiveUsd',
         colspan: 1,
-        renderValFn: ke
+        renderValFn: Pe
     }, {
         isLabel: true,
         label: '',
-        colspan: 1,
-        renderValFn: Pe
+        colspan: 1
     }]
 
     const headCells: readonly HeadCell[] = [
@@ -237,6 +238,13 @@ const Stake = () => {
             },
             className: 'is-percent is-spec'
         },
+        // {
+        //     id: 'apyDaily',
+        //     label: 'Chart',
+        //     compareValFn: (a, e) => JSBI.compareExtended(a.apyN, e.apyN),
+        //     className: 'is-chart is-spec',
+        //     renderValFn: null
+        // },
         {
             id: 'apy1',
             label: 'APY Yesterday',
@@ -381,7 +389,11 @@ const Stake = () => {
             setStakeShare(ss[0] + ss[1]);
         }
 
-    }, [stakeDays, stakeAmount, shareRate])
+    }, [stakeDays, stakeAmount, shareRate]);
+
+    useEffect(() => {
+        setBalance(hexBalance);
+    }, [hexBalance]);
 
     const processGraphData = (h, c) => {
         const t = [[0], [null]];
@@ -450,6 +462,7 @@ const Stake = () => {
 
             if (bSuccess) {
                 toast.success("Staking Success!");
+                fetchStakeInfo(currentChain, account);
             } else {
                 toast.error("Staking Failed!");
             }
@@ -460,9 +473,15 @@ const Stake = () => {
         toast.dismiss(load_toast_id);
     }
 
-    const confirmEndStake = async (stakeIndex, stakeIdParam) => {
+    const confirmEndStake = async (stakeIndex, stakeIdParam, isShow) => {
+        console.log('call-confirm-end-stake:', stakeIndex, stakeIdParam);
         setStakeIndex(stakeIndex);
-        setOpenModal(true);
+        setStakeParam(stakeIdParam);
+        if (isShow) {
+            setOpenModal(true);
+        } else {
+            await onEndStakeHandler(stakeIndex, stakeIdParam);
+        }
     }
 
     const onEndStakeHandler = async (stakeIndex: number, stakeIdParam: number) => {
@@ -477,6 +496,9 @@ const Stake = () => {
 
             if (bSuccess) {
                 toast.success("End Staking Success!");
+                fetchStakeInfo(currentChain, account);
+                setStakeAmount(0);
+                setStakeDays(0);
             } else {
                 toast.error("End Staking Failed!");
             }
@@ -499,6 +521,7 @@ const Stake = () => {
 
             if (bSuccess) {
                 toast.success("Stake Good Accounting Success!");
+                fetchStakeInfo(currentChain, account);
             } else {
                 toast.error("Stake Good Accounting Failed!");
             }
@@ -510,8 +533,8 @@ const Stake = () => {
     }
 
     const setMaxAmount = () => {
-        if (hexBalance) {
-            setStakeAmount(hexBalance);
+        if (balance) {
+            setStakeAmount(balance);
         }
     }
 
@@ -549,7 +572,7 @@ const Stake = () => {
 
                         <div className="balance-info">
                             <label>Balance: </label>
-                            <span>{hexBalance?.toFixed(3)} HEX</span>
+                            <span>{balance?.toFixed(3)} HEX</span>
                         </div>
 
                         <div className={`text-group ${theme}`} style={{ marginTop: '32px' }}>
@@ -639,7 +662,7 @@ const Stake = () => {
                     Active Stakes
                 </div>
 
-                {tableData.length > 0 && <EnhancedTable headCells={headCells} rows={tableData} orderBy={'lockedDay'} onEndStake={confirmEndStake} footerCells={footerCells}/>}
+                {tableData.length > 0 && <EnhancedTable headCells={headCells} rows={tableData} orderBy={'lockedDay'} onEndStake={confirmEndStake} footerCells={footerCells} onGoodStake={onStakeGoodAccountinigHandler}/>}
 
                 <div className={`page-title text_color_1_${theme}`} style={{ marginTop: '56px' }}>
                     Stake History
@@ -665,7 +688,7 @@ const Stake = () => {
                     </Typography>
                     <div className={"modal-actions"}>
                         <button onClick={handleClose}>Cancel</button>
-                        <button onClick={() => {onEndStakeHandler(stakeIndex, 1)}}>End Stake</button>
+                        <button onClick={() => {onEndStakeHandler(stakeIndex, stakeParam)}}>End Stake</button>
                     </div>
                 </Box>
             </Modal>

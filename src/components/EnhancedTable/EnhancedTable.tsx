@@ -15,6 +15,41 @@ import {useEffect, useState} from "react";
 import ThemeContext from 'context/ThemeContext';
 import EndStakeButton from "../EndStakeButton/EndStakeButton";
 import JSBI from "@pulsex/jsbi";
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Filler,
+    Legend,
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
+
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Filler,
+    Legend
+);
+
+export const options = {
+    responsive: true,
+    plugins: {
+        legend: {
+            display: false
+        },
+        title: {
+            display: false,
+        },
+    },
+};
 
 type Order = 'asc' | 'desc';
 
@@ -106,7 +141,7 @@ export default function EnhancedTable(props) {
 
     const [order, setOrder] = React.useState<Order>('desc');
     const [orderBy, setOrderBy] = useState(props.orderBy);
-    const {headCells, rows, onEndStake, footerCells} = props;
+    const {headCells, rows, onEndStake, footerCells, onGoodStake} = props;
     const [visibleRows, setVisibleRows] = useState([]);
     const [hasMore, setHasMore] = useState(true);
     const [isShowAll, setIsShowAll] = useState(false);
@@ -139,32 +174,63 @@ export default function EnhancedTable(props) {
         } else {
             setHasMore(false);
         }
-    }, [order, orderBy, isShowAll])
+    }, [order, orderBy, isShowAll, rows])
 
     const renderData = (header, row) => {
-        let data = row[header.id];
-        if (!data && data !== 0) {
-            return '';
-        }
-        if (header.className.indexOf('is-spec') >= 0) {
-            data = header.renderValFn(row);
-        } else {
-            data = header.renderValFn(data);
-        }
-
-        let result = '';
-        if (typeof data == 'object') {
-            result = data.join('');
-        } else {
-            result = data;
-        }
-        if (header.className.indexOf('is-percent') >= 0) {
-            // @ts-ignore
-            if (result != 'Pending' && result != 'Cancelled') {
-                result += '%';
+        if (header.className.indexOf('is-chart') >= 0) {
+            let data = row[header.id];
+            if (row.tableType == 'start' && !row.lockedDay) {
+                return '';
             }
+            if (row.tableType == 'end' && row.apyDaily.length === 0) {
+                return ' --- ';
+            }
+
+            let labels = [];
+            for (let i = 0; i < row.apyDaily.length; i ++) {
+                labels.push(i);
+            }
+
+            data = {
+                labels,
+                datasets: [
+                    {
+                        fill: true,
+                        label: 'Dataset 2',
+                        data: row.apyDaily,
+                        borderColor: 'rgb(53, 162, 235)',
+                        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                    },
+                ],
+            };
+
+            return <Line options={options} data={data} />;
+
+        } else {
+            let data = row[header.id];
+            if (!data && data !== 0) {
+                return '';
+            }
+            if (header.className.indexOf('is-spec') >= 0) {
+                data = header.renderValFn(row);
+            } else {
+                data = header.renderValFn(data);
+            }
+
+            let result = '';
+            if (typeof data == 'object') {
+                result = data.join('');
+            } else {
+                result = data;
+            }
+            if (header.className.indexOf('is-percent') >= 0) {
+                // @ts-ignore
+                if (result != 'Pending' && result != 'Cancelled') {
+                    result += '%';
+                }
+            }
+            return result;
         }
-        return result;
     }
 
     const showAll = () => {
@@ -226,9 +292,9 @@ export default function EnhancedTable(props) {
                                                     <>
                                                         {
                                                             renderData(headCells[2], row) == 'Pending' ? (
-                                                                <button className={`bg_${theme} ${renderData(headCells[2], row)} text_color_1_${theme}`} onClick={()=>onEndStake(visibleRows.length - index - 1, 1)}>End Stake</button>
+                                                                <button className={`bg_${theme} ${renderData(headCells[2], row)} text_color_1_${theme}`} onClick={()=>onEndStake(visibleRows.length - index - 1, row.stakeId, true)}>End Stake</button>
                                                             ) : (
-                                                                <EndStakeButton index={visibleRows.length - index - 1} onEndStake={onEndStake}/>
+                                                                <EndStakeButton index={visibleRows.length - index - 1} stakeId={row.stakeId} onEndStake={onEndStake} onGoodStake={onGoodStake}/>
                                                             )
                                                         }
                                                     </>

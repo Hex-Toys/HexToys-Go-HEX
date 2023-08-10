@@ -63,10 +63,10 @@ const EndStakeButton = (props) => {
                             <ClickAwayListener onClickAway={handleClose}>
                                 <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
                                     <MenuItem className="share-menu-item" onClick={handleClose}>
-                                        <Button onClick={() => {props.onEndStake(props.index, 1)}}>End Stake</Button>
+                                        <Button onClick={() => {props.onEndStake(props.index, props.stakeId, false)}}>End Stake</Button>
                                     </MenuItem>
                                     <MenuItem className="share-menu-item" onClick={handleClose}>
-                                        <Button>Good Accounting</Button>
+                                        <Button onClick={() => {props.onGoodStake(props.index, props.stakeId)}}>Good Accounting</Button>
                                     </MenuItem>
                                 </MenuList>
                             </ClickAwayListener>
