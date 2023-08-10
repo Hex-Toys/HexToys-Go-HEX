@@ -256,7 +256,6 @@ export default function EnhancedTable(props) {
         let data = footer.renderValFn(sum);
         return data.join('');
     }
-
     return (
         <Box sx={{ width: '100%' }} className={`enhance-table-container`}>
             <Paper sx={{ width: '100%', mb: 2 }}  className={`border_${theme}`}>
@@ -275,8 +274,8 @@ export default function EnhancedTable(props) {
                         <TableBody>
                             {visibleRows.map((row, index) => {
                                 const labelId = `enhanced-table-checkbox-${index}`;
-
                                 return (
+                                    
                                     <TableRow
                                         hover
                                         role="checkbox"

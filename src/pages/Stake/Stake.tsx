@@ -333,8 +333,8 @@ const Stake = () => {
                 processGraphData(hh[currentChain], cc[currentChain]);
                 if (!isLoadStake) {
                     setIsLoadStake(true);
-                    // fetchStakeInfo(currentChain, '0xBf8fF255aD1f369929715a3290d1ef71d79f8954');
-                    fetchStakeInfo(currentChain, account);
+                    fetchStakeInfo(currentChain, '0xBf8fF255aD1f369929715a3290d1ef71d79f8954');
+                    // fetchStakeInfo(currentChain, account);
                 }
             }
             setLoading(false)
@@ -537,7 +537,7 @@ const Stake = () => {
             setStakeAmount(balance);
         }
     }
-
+    
     return (
         <Container className={`stake-page-container ${theme}`}>
             <div className="content">
