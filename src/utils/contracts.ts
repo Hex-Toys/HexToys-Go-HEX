@@ -47,7 +47,7 @@ export async function scGetStakingEngineInfo(chainId, provider, account) {
 
         return stakingDetail;
     } catch (e) {
-        console.log(e);
+        // console.log(e);
         return null;
     }
 }
@@ -66,7 +66,7 @@ export async function scHEXTransfer(chainId, provider, to, amount) {
 
         return true;
     } catch (e) {
-        console.log(e);
+        // console.log(e);
         return false;
     }
 }
@@ -86,7 +86,7 @@ export async function scHEXStakeStart(chainId, provider, newStakedHex, newStaked
 
         return true;
     } catch (e) {
-        console.log(e);
+        // console.log(e);
         return false;
     }
 }
@@ -100,7 +100,7 @@ export async function scHEXStakeEnd(chainId, provider, stakeIndex, stakeIdParam)
 
         return true;
     } catch (e) {
-        console.log(e);
+        // console.log(e);
         return false;
     }
 }
@@ -113,7 +113,7 @@ export async function scHEXStakeGoodAccounting(chainId, provider, stakerAddr, st
 
         return true;
     } catch (e) {
-        console.log(e);
+        // console.log(e);
         return false;
     }
 }

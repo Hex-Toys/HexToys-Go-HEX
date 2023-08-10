@@ -156,7 +156,7 @@ export default function EnhancedTable(props) {
     };
 
     useEffect(() => {
-        console.log('change-order');
+        // console.log('change-order');
         for (let i = 0; i < headCells.length; i ++) {
             if (headCells[i].id == orderBy) {
                 let sortData = stableSort(rows, getComparator(order, orderBy, headCells[i].compareValFn));

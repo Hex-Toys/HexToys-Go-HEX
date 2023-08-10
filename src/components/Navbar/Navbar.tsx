@@ -26,7 +26,7 @@ const NavBar = () => {
     useEffect(() => {
         const path = search.pathname.replace('/', '');
         setNavId(path);
-        console.log(path);
+        // console.log(path);
     }, [search]);
 
     const toggleDrawer = () => {

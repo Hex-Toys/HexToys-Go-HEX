@@ -44,7 +44,7 @@ export default function ContractReadProvider({
       setData(stakeData);
       setIsLoaded(true);
     } catch (error: any) {
-      console.log(error.message);
+      // console.log(error.message);
       setData({});
       setIsLoaded(true);
     }

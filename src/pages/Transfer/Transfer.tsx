@@ -163,7 +163,7 @@ const Transfer = () => {
             let text = await navigator.clipboard.readText();
             setReceiver(text);
         } catch (e) {
-            console.log(e);
+            // console.log(e);
         }
     }
 
