@@ -1,5 +1,5 @@
 import { getContractObj } from ".";
-import { StakingEngineDetail } from "./typs";
+import { StakingEngineDetail, StakingInfo } from "./typs";
 import { BigNumber, ethers } from "ethers";
 import toast from "react-hot-toast";
 
@@ -12,17 +12,37 @@ export async function scGetStakingEngineInfo(chainId, provider, account) {
             globalInfo,
             hexDecimals,
             hexBalance,
+            stakeCount,
         ] = await Promise.all([
             HEXContract.currentDay(),
             HEXContract.globalInfo(),
             HEXContract.decimals(),
-            account? HEXContract.balanceOf(account) : BigNumber.from(0),
+            account ? HEXContract.balanceOf(account) : BigNumber.from(0),
+            account ? HEXContract.stakeCount(account) : BigNumber.from(0),
         ]);
-        
+
+        const getStakeListsCmds = [];
+        for (let i = 0; i < stakeCount.toNumber(); i++) {
+            getStakeListsCmds.push(account ? HEXContract.stakeLists(account, i) : null);
+        }
+        const stakedInfos = await Promise.all(getStakeListsCmds);
+
+        const StakingInfoList: StakingInfo[] = [];
+        for (let i = 0; i < stakedInfos.length; i++) {
+            if (!stakedInfos[i]) continue;
+
+            const stakeInfo: StakingInfo = {
+                stakedIndex: i,
+                stakedId: stakedInfos[i].stakeId
+            }
+            StakingInfoList.push(stakeInfo);
+        }
+
         const stakingDetail: StakingEngineDetail = {
             currentDay: currentDay.toNumber(),
             sharePrice: globalInfo[2].toNumber(),
-            hexBalance: parseFloat(ethers.utils.formatUnits(hexBalance, hexDecimals))
+            hexBalance: parseFloat(ethers.utils.formatUnits(hexBalance, hexDecimals)),
+            stakingInfoList: StakingInfoList
         }
 
         return stakingDetail;

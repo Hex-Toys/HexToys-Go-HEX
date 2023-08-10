@@ -93,7 +93,7 @@ const Stake = () => {
     const [setLoading] = useLoader();
     // @ts-ignore
     const moment = extendMoment(originalMoment);
-    const { hexBalance } = useContractRead();
+    const { hexBalance, stakingInfoList } = useContractRead();
     const [stakeAmount, setStakeAmount] = useState(0.00);
     const [stakeDays, setStakeDays] = useState(0);
     const [showCalendar, setShowCalendar] = useState(false);
@@ -113,7 +113,6 @@ const Stake = () => {
     const [tableData, setTableData] = useState([]);
     const [htableData, setHTableData] = useState([]);
     const [openModal, setOpenModal] = React.useState(false);
-    const [stakeIndex, setStakeIndex] = useState(-1);
     const [stakeParam, setStakeParam] = useState(-1);
     const [balance, setBalance] = useState(0);
 
@@ -440,6 +439,13 @@ const Stake = () => {
         setStakeDays(value.diff(today, 'days'));
     }
 
+    const getStakeIndexFromId = (stakeId) => {
+        for (let i = 0; i < stakingInfoList.length; i++) {
+            if (stakingInfoList[i].stakedId.toString() === stakeId.toString()) {
+                return stakingInfoList[i].stakedIndex;
+            }
+        }
+    }
     const onStakeHandler = async () => {
         if (!loginStatus) {
             toast.error("Please connect wallet correctly!");
@@ -473,21 +479,16 @@ const Stake = () => {
         toast.dismiss(load_toast_id);
     }
 
-    const confirmEndStake = async (stakeIndex, stakeIdParam, isShow) => {
-        console.log('call-confirm-end-stake:', stakeIndex, stakeIdParam);
-        setStakeIndex(stakeIndex);
+    const confirmEndStake = async (stakeIdParam, isShow) => {
         setStakeParam(stakeIdParam);
         if (isShow) {
             setOpenModal(true);
         } else {
-            await onEndStakeHandler(stakeIndex, stakeIdParam);
+            await onEndStakeHandler(stakeIdParam);
         }
     }
 
-    const onEndStakeHandler = async (stakeIndex: number, stakeIdParam: number) => {
-        console.log(stakeIndex);
-        console.log(stakeIdParam);
-        
+    const onEndStakeHandler = async (stakeIdParam: number) => {
         if (!loginStatus) {
             toast.error("Please connect wallet correctly!");
             return;
@@ -495,6 +496,7 @@ const Stake = () => {
 
         const load_toast_id = toast.loading("Please wait for End Staking...");
         try {
+            let stakeIndex = getStakeIndexFromId(stakeIdParam);
             let bSuccess = await scHEXStakeEnd(chainId, library, stakeIndex, stakeIdParam);
 
             if (bSuccess) {
@@ -512,9 +514,7 @@ const Stake = () => {
         toast.dismiss(load_toast_id);
     }
 
-    const onStakeGoodAccountinigHandler = async (stakeIndex: number, stakeIdParam: number) => {
-        console.log(stakeIndex);
-        console.log(stakeIdParam);
+    const onStakeGoodAccountinigHandler = async (stakeIdParam: number) => {
         if (!loginStatus) {
             toast.error("Please connect wallet correctly!");
             return;
@@ -522,6 +522,7 @@ const Stake = () => {
 
         const load_toast_id = toast.loading("Please wait for Stake Good Accounting...");
         try {
+            let stakeIndex = getStakeIndexFromId(stakeIdParam);
             let bSuccess = await scHEXStakeGoodAccounting(chainId, library, account, stakeIndex, stakeIdParam);
 
             if (bSuccess) {
@@ -542,7 +543,7 @@ const Stake = () => {
             setStakeAmount(balance);
         }
     }
-    
+
     return (
         <Container className={`stake-page-container ${theme}`}>
             <div className="content">
@@ -667,13 +668,13 @@ const Stake = () => {
                     Active Stakes
                 </div>
 
-                {tableData.length > 0 && <EnhancedTable headCells={headCells} rows={tableData} orderBy={'lockedDay'} onEndStake={confirmEndStake} footerCells={footerCells} onGoodStake={onStakeGoodAccountinigHandler}/>}
+                {tableData.length > 0 && <EnhancedTable headCells={headCells} rows={tableData} orderBy={'lockedDay'} onEndStake={confirmEndStake} footerCells={footerCells} onGoodStake={onStakeGoodAccountinigHandler} />}
 
                 <div className={`page-title text_color_1_${theme}`} style={{ marginTop: '56px' }}>
                     Stake History
                 </div>
 
-                {htableData.length > 0 && <EnhancedTable headCells={headCells} rows={htableData} orderBy={'lockedDay'} footerCells={footerCells}/>}
+                {htableData.length > 0 && <EnhancedTable headCells={headCells} rows={htableData} orderBy={'lockedDay'} footerCells={footerCells} />}
 
                 {!loginStatus && <div className="disabled-container"></div>}
             </div>
@@ -693,7 +694,7 @@ const Stake = () => {
                     </Typography>
                     <div className={"modal-actions"}>
                         <button onClick={handleClose}>Cancel</button>
-                        <button onClick={() => {onEndStakeHandler(stakeIndex, stakeParam)}}>End Stake</button>
+                        <button onClick={() => { onEndStakeHandler(stakeParam) }}>End Stake</button>
                     </div>
                 </Box>
             </Modal>
