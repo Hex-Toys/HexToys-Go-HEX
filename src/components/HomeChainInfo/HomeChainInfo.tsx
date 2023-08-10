@@ -201,7 +201,7 @@ const HomeChainInfo = (props) => {
 
     useEffect(() => {
         if (loginStatus && account && currentChain) {
-            console.log('is-logged-in:', isConnected, account, currentChain);
+            console.log('is-logged-in:', isConnected, account, currentChain, loginStatus);
             let name = '';
             if (chainId === 369) {
                 name = 'pulse-main';
@@ -226,7 +226,7 @@ const HomeChainInfo = (props) => {
                 setIsLoggedIn(false);
             }
         }
-    }, [loginStatus, account, SD, currentChain, hh])
+    }, [loginStatus, account, SD, currentChain, hh, chainId])
 
     useEffect(() => {
         if(tableData.length !== 0 && hexInfoData.currentDay !== 3){
