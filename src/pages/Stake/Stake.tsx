@@ -486,6 +486,7 @@ const Stake = () => {
 
     const onEndStakeHandler = async (stakeIndex: number, stakeIdParam: number) => {
         console.log(stakeIndex);
+        console.log(stakeIdParam);
         
         if (!loginStatus) {
             toast.error("Please connect wallet correctly!");
@@ -513,6 +514,7 @@ const Stake = () => {
 
     const onStakeGoodAccountinigHandler = async (stakeIndex: number, stakeIdParam: number) => {
         console.log(stakeIndex);
+        console.log(stakeIdParam);
         if (!loginStatus) {
             toast.error("Please connect wallet correctly!");
             return;
