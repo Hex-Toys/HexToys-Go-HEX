@@ -325,8 +325,8 @@ const Stake = () => {
                 processGraphData(hh[currentChain], cc[currentChain]);
                 if (!isLoadStake) {
                     setIsLoadStake(true);
-                    // fetchStakeInfo(currentChain, '0xBf8fF255aD1f369929715a3290d1ef71d79f8954');
-                    fetchStakeInfo(currentChain, account);
+                    fetchStakeInfo(currentChain, '0xBf8fF255aD1f369929715a3290d1ef71d79f8954');
+                    // fetchStakeInfo(currentChain, account);
                 }
             }
             setLoading(false)
@@ -514,7 +514,7 @@ const Stake = () => {
             setStakeAmount(hexBalance);
         }
     }
-
+    
     return (
         <Container className={`stake-page-container ${theme}`}>
             <div className="content">
@@ -639,7 +639,15 @@ const Stake = () => {
                     Active Stakes
                 </div>
 
-                {tableData.length > 0 && <EnhancedTable headCells={headCells} rows={tableData} orderBy={'lockedDay'} onEndStake={confirmEndStake} footerCells={footerCells}/>}
+                {tableData.length > 0 && 
+                    <EnhancedTable 
+                        headCells={headCells} 
+                        rows={tableData} 
+                        orderBy={'lockedDay'} 
+                        footerCells={footerCells}
+                        confirmEndStake={confirmEndStake} 
+                    />
+                }
 
                 <div className={`page-title text_color_1_${theme}`} style={{ marginTop: '56px' }}>
                     Stake History
