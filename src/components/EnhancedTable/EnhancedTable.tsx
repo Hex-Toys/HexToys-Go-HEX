@@ -106,7 +106,7 @@ export default function EnhancedTable(props) {
 
     const [order, setOrder] = React.useState<Order>('desc');
     const [orderBy, setOrderBy] = useState(props.orderBy);
-    const {headCells, rows, onEndStake, footerCells} = props;
+    const {headCells, rows, footerCells, confirmEndStake, onEndStakeHandler, onStakeGoodAccountinigHandler} = props;
     const [visibleRows, setVisibleRows] = useState([]);
     const [hasMore, setHasMore] = useState(true);
     const [isShowAll, setIsShowAll] = useState(false);
@@ -190,7 +190,6 @@ export default function EnhancedTable(props) {
         let data = footer.renderValFn(sum);
         return data.join('');
     }
-
     return (
         <Box sx={{ width: '100%' }} className={`enhance-table-container`}>
             <Paper sx={{ width: '100%', mb: 2 }}  className={`border_${theme}`}>
@@ -209,8 +208,8 @@ export default function EnhancedTable(props) {
                         <TableBody>
                             {visibleRows.map((row, index) => {
                                 const labelId = `enhanced-table-checkbox-${index}`;
-
                                 return (
+                                    
                                     <TableRow
                                         hover
                                         role="checkbox"
@@ -222,13 +221,16 @@ export default function EnhancedTable(props) {
                                             <TableCell key={index + '-' + hindex} className={`${item.className} text_color_1_${theme}`} align={'center'}>
                                                 {renderData(item, row)}
                                                 
-                                                {onEndStake && hindex === headCells.length - 1 &&
+                                                {(confirmEndStake || onEndStakeHandler || onStakeGoodAccountinigHandler) && hindex === headCells.length - 1 &&
                                                     <>
                                                         {
-                                                            renderData(headCells[2], row) == 'Pending' ? (
-                                                                <button className={`bg_${theme} ${renderData(headCells[2], row)} text_color_1_${theme}`} onClick={()=>onEndStake(visibleRows.length - index - 1, 1)}>End Stake</button>
+                                                            renderData(headCells[2], row) === 'Pending' ? (
+                                                                <button className={`bg_${theme} ${renderData(headCells[2], row)} text_color_1_${theme}`} onClick={()=>confirmEndStake(visibleRows.length - index - 1)}>End Stake</button>
                                                             ) : (
-                                                                <EndStakeButton index={visibleRows.length - index - 1} onEndStake={onEndStake}/>
+                                                                <EndStakeButton 
+                                                                    onEndStakeHandler={()=>onEndStakeHandler(visibleRows.length - index - 1, row.stakeId)}
+                                                                    onStakeGoodAccountinigHandler = {()=>onStakeGoodAccountinigHandler(visibleRows.length - index - 1, row.stakeId)}
+                                                                />
                                                             )
                                                         }
                                                     </>
