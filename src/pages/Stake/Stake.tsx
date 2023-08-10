@@ -64,7 +64,7 @@ const Ga = a => null === a || void 0 === a;
 
 function ir(a, e, t) {
     const i = Wl(e, t), l = JSBI.divide(JSBI.multiply(JSBI.add(e, i), JSBI.fromUint32NZ(1e5)), a);
-    console.log('bonus-hearts', a, e, t, i, l);
+    // console.log('bonus-hearts', a, e, t, i, l);
     return { bonusHearts: i, stakeShares: l }
 }
 
@@ -304,7 +304,7 @@ const Stake = () => {
 
     useEffect(() => {
         if (loginStatus) {
-            console.log('chain-id:', chainId);
+            // console.log('chain-id:', chainId);
             let chainName = '';
             if (chainId === 369) {
                 chainName = 'pulse-main';
@@ -318,33 +318,39 @@ const Stake = () => {
             } else {
                 return;
             }
+        } else {
+            setLoading(false);
         }
-    }, [isLoadStake, chainId, loginStatus]);
+    }, [isLoadStake, chainId, loginStatus])
 
     useEffect(() => {
         if (currentChain) {
             if (!hh[currentChain]) {
                 if (!isLoading) {
                     setIsLoading(true);
+                    setLoading(true);
                     fetchInfo(currentChain);
                 }
             } else {
+                setLoading(false);
                 processGraphData(hh[currentChain], cc[currentChain]);
                 if (!isLoadStake) {
                     setIsLoadStake(true);
+                    setLoading(true);
                     fetchStakeInfo(currentChain, account);
                 }
             }
-            setLoading(false)
         }
     }, [hh, currentChain, isLoading, fetchInfo]);
 
     useEffect(() => {
         if (currentChain && SD[currentChain]) {
-            console.log('set-table-data:', SD[currentChain]);
+            // console.log('set-table-data:', SD[currentChain]);
+            setLoading(false);
             setTableData(SD[currentChain])
         }
         if (currentChain && SL[currentChain]) {
+            setLoading(false);
             setHTableData(SL[currentChain])
         }
     }, [currentChain, SD, SS, SL])
@@ -364,7 +370,7 @@ const Stake = () => {
             // console.log(e);
         }
         let est = lr(shareRate, amount, days);
-        console.log(est);
+        // console.log(est);
         let bh = Ve(est.bonusHearts);
         let lpb = Ee(est.bonusHeartsLpb);
         let bpb = Ee(est.bonusHeartsBpb);
@@ -380,7 +386,7 @@ const Stake = () => {
         setHeartsPerTShare(hpts.join(''));
 
         let ss = De(est.stakeShares);
-        console.log(ss);
+        // console.log(ss);
         if (ss[0] === '0' && ss[1] === ".000") {
             setStakeShare("<0.001");
         } else {
@@ -393,7 +399,7 @@ const Stake = () => {
         setBalance(hexBalance);
     }, [hexBalance]);
 
-    console.log(stakingInfoList);
+    // console.log(stakingInfoList);
 
     const processGraphData = (h, c) => {
         const t = [[0], [null]];
@@ -427,15 +433,15 @@ const Stake = () => {
     }
 
     const onSelectDays = (value, states) => {
-        console.log(value, states);
+        // console.log(value, states);
         setDays(value);
     }
 
     const onSelectDaysStart = (value) => {
-        console.log(value);
+        // console.log(value);
         let today = moment();
         let range = moment.range(moment(today.clone().format('YYYY-MM-DD')), value.format('YYYY-MM-DD'));
-        console.log(range);
+        // console.log(range);
         setDays(range);
         setStakeDays(value.diff(today, 'days'));
     }
@@ -501,8 +507,8 @@ const Stake = () => {
         try {
             let stakeIndex = getStakeIndexFromId(stakeIdParam);
 
-            console.log(stakeIdParam);
-            console.log(stakeIndex);
+            // console.log(stakeIdParam);
+            // console.log(stakeIndex);
 
             let bSuccess = await scHEXStakeEnd(chainId, library, stakeIndex, stakeIdParam);
 
@@ -531,9 +537,6 @@ const Stake = () => {
         const load_toast_id = toast.loading("Please wait for Stake Good Accounting...");
         try {
             let stakeIndex = getStakeIndexFromId(stakeIdParam);
-
-            console.log(stakeIdParam);
-            console.log(stakeIndex);
             
             let bSuccess = await scHEXStakeGoodAccounting(chainId, library, account, stakeIndex, stakeIdParam);
 
@@ -544,7 +547,7 @@ const Stake = () => {
                 toast.error("Stake Good Accounting Failed!");
             }
         } catch (error) {
-            console.error(error);
+            // console.error(error);
             toast.error("Stake Good Accounting Failed!");
         }
         toast.dismiss(load_toast_id);

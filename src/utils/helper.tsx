@@ -68,7 +68,7 @@ export const loadHexInfo = async (skip, chain, result) => {
         }
 
     } catch (e) {
-        console.log(e);
+        // console.log(e);
         return [];
     }
 }
@@ -126,7 +126,7 @@ export const loadGlobalInfos = async (skip, chain, result) => {
             return infoData;
         }
     } catch (e) {
-        console.log(e);
+        // console.log(e);
         return {};
     }
 }
@@ -181,7 +181,7 @@ export const loadDailyData = async(skip, chain, result) => {
             return infoData;
         }
     } catch (e) {
-        console.log(e);
+        // console.log(e);
         return {};
     }
 }
@@ -301,7 +301,7 @@ export const loadStakeInfo = async(chain, address) => {
         let data = res.data.data;
         return data;
     } catch (e) {
-        console.log(e);
+        // console.log(e);
         return {};
     }
 }
@@ -470,7 +470,7 @@ export const processData = (globalInfoData, dailyData, tokenDayData) => {
 }
 
 export const processStakeData = (tokenDayData, globalData, dailyData, stakeData, N, uu) => {
-    console.log('process-stake-data:', uu);
+    // console.log('process-stake-data:', uu);
     const {currentDay: e} = N;
     let C = [];
     let L = [];
@@ -544,7 +544,7 @@ export const processStakeData = (tokenDayData, globalData, dailyData, stakeData,
             N.stakeSharesTotal = JSBI.add(N.stakeSharesTotal, N.nextStakeSharesTotal);
             N.nextStakeSharesTotal = g;
         } catch (e) {
-            console.log(a, e);
+            // console.log(a, e);
         }
 
 
@@ -625,7 +625,7 @@ export const processStakeData = (tokenDayData, globalData, dailyData, stakeData,
                 H.progress = Math.trunc(Math.min((a - H.startDay) / H.duration * Ha, Ha));
             }
             if (null !== uu && void 0 !== uu) {
-                console.log('calc-usd:', uu);
+                // console.log('calc-usd:', uu);
                 H.equityLiveUsd = JSBI.divide(JSBI.multiply(H.equityLive, uu), Ca);
             }
             const i = H.equityDaily[H.equityDaily.length - 1], l = JSBI.subtract(H.equity, i);
@@ -742,7 +742,7 @@ export const processStakeData = (tokenDayData, globalData, dailyData, stakeData,
                 c.hasBpd && t <= O && ea(c, g);
             }
             if (e) {
-                console.log('call-helper-683');
+                // console.log('call-helper-683');
                 c.endDay = c.startDay - 1 + s;
                 S.totalInterest = JSBI.subtract(S.totalInterest, c.interest);
                 S.totalInterestLive = JSBI.subtract(S.totalInterestLive, c.interestLive);
