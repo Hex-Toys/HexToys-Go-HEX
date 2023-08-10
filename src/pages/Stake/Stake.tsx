@@ -445,7 +445,9 @@ const Stake = () => {
                 return stakingInfoList[i].stakedIndex;
             }
         }
+        return -1;
     }
+    
     const onStakeHandler = async () => {
         if (!loginStatus) {
             toast.error("Please connect wallet correctly!");
