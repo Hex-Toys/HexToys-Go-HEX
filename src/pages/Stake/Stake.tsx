@@ -394,6 +394,8 @@ const Stake = () => {
         setBalance(hexBalance);
     }, [hexBalance]);
 
+    console.log(stakingInfoList);
+    
     const processGraphData = (h, c) => {
         const t = [[0], [null]];
         const [i, l] = t;
@@ -447,7 +449,7 @@ const Stake = () => {
         }
         return -1;
     }
-    
+
     const onStakeHandler = async () => {
         if (!loginStatus) {
             toast.error("Please connect wallet correctly!");
