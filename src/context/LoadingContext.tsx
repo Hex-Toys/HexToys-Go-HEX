@@ -5,7 +5,7 @@ import { createContext, useState, useContext } from 'react'
 
 
 const LoadingCtx = createContext({
-  loading : true,
+  loading : false,
   setLoading: (val : boolean) => {}
   // message : '',
   // setMessage: (val : string) => {},
@@ -16,7 +16,7 @@ export default LoadingCtx;
 
 
 export function LoadingProvider(props) {
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const value = { loading , setLoading }
 
   return (

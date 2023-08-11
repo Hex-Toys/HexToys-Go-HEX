@@ -12,14 +12,13 @@ import JSBI from "@pulsex/jsbi";
 import EnhancedTable, {HeadCell} from "../../components/EnhancedTable/EnhancedTable";
 import {Ei, ke, Xa, Le, Te} from "../../utils/table-helper";
 import ThemeContext from 'context/ThemeContext';
-import { useLoader } from 'context/LoadingContext';
+// import { useLoader } from 'context/LoadingContext';
 import useDocumentTitle from "../../utils/useDocumentTitle";
 
 const Transfer = () => {
     useDocumentTitle('HEX: Transfer');
 
     const { theme } = useContext(ThemeContext)
-    const [setLoading] = useLoader();
     
     const {loginStatus, chainId, library, account} = useActiveWeb3();
     const {hexBalance} = useContractRead();
@@ -156,7 +155,6 @@ const Transfer = () => {
 
         setIsLoadStake(false);
         setTableData(D);
-        setLoading(false)
     }
     const pasteClipBoard = async () => {
         try {

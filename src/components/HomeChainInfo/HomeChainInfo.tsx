@@ -227,11 +227,11 @@ const HomeChainInfo = (props) => {
         }
     }, [loginStatus, account, SD, currentChain, hh, chainId])
 
-    useEffect(() => {
-        if(tableData.length !== 0 && hexInfoData.currentDay !== 3){
-            props.setIsLoading(false)
-        }
-    }, [tableData, hexInfoData.currentDay])
+    // useEffect(() => {
+    //     if(tableData.length !== 0 && hexInfoData.currentDay !== 3){
+    //         props.setIsLoading(false)
+    //     }
+    // }, [tableData, hexInfoData.currentDay])
 
     useEffect(() => {
         setBalance(hexBalance);
