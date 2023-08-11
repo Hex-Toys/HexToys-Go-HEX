@@ -87,9 +87,12 @@ const NavBar = () => {
                         </div>
                         
                     </div>
+                    <div className="time_div">
                     <MySelect options={color_option} value={theme} onChange={setTheme} className={'my_theme_slelct'}/>
                     <div className="day-info">
                         <label className={`text_color_1_${theme}`}>{currentDate}d {remainTime}</label>
+                    </div>
+                    
                     </div>
                     <div className="btn_div">
                         <ConnectButton />

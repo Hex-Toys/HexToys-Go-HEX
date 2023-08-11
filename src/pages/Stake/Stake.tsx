@@ -90,7 +90,6 @@ const Stake = () => {
     useDocumentTitle('HEX: Stake');
 
     const { theme } = useContext(ThemeContext)
-    const [setLoading] = useLoader();
     // @ts-ignore
     const moment = extendMoment(originalMoment);
     const { hexBalance, stakingInfoList } = useContractRead();
@@ -319,7 +318,6 @@ const Stake = () => {
                 return;
             }
         } else {
-            setLoading(false);
         }
     }, [isLoadStake, chainId, loginStatus])
 
@@ -328,15 +326,12 @@ const Stake = () => {
             if (!hh[currentChain]) {
                 if (!isLoading) {
                     setIsLoading(true);
-                    setLoading(true);
                     fetchInfo(currentChain);
                 }
             } else {
-                setLoading(false);
                 processGraphData(hh[currentChain], cc[currentChain]);
                 if (!isLoadStake) {
                     setIsLoadStake(true);
-                    setLoading(true);
                     fetchStakeInfo(currentChain, account);
                 }
             }
@@ -346,11 +341,9 @@ const Stake = () => {
     useEffect(() => {
         if (currentChain && SD[currentChain]) {
             // console.log('set-table-data:', SD[currentChain]);
-            setLoading(false);
             setTableData(SD[currentChain])
         }
         if (currentChain && SL[currentChain]) {
-            setLoading(false);
             setHTableData(SL[currentChain])
         }
     }, [currentChain, SD, SS, SL])

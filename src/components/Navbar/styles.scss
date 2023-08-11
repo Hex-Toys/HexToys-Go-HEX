@@ -37,7 +37,6 @@
     }
   }
   .my_theme_slelct{
-    margin-right: 16px;
   }
   
 
@@ -75,6 +74,18 @@
       }
     }
   }
+  .time_div{
+    display: flex;
+    align-items: center;
+    grid-area: auto;
+    gap : 16px;
+    @include mobile_potrait{
+      right: 46px;
+      top : 12px;
+      position: absolute;
+
+    }
+  }
   .btn_div{
     @include mobile_potrait{
       width: 100%;
@@ -101,12 +112,10 @@
   .day-info {
     text-align: center;
     margin-right: 10px;
-    @include mobile_potrait{
-      margin-right: 46px;
-    }
+   
 
     label {
-      font-size: 14px;
+      font-size: 13px;
       font-style: normal;
       font-weight: 600;
       line-height: normal;

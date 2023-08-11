@@ -165,22 +165,39 @@ div[data-rk]{
 
     }
 }
-.effect1{
-    position: absolute;
-    left: 0;
-    top: 0;
-    opacity: 0.04;
+._9pm4ki3{
     @include mobile_potrait{
-        width: 30vw;
+        padding: 0 !important;
+        top : -200px !important;
+        // transform: translateY(-50%);
+    }
+    ._1ckjpok1{
+        @include mobile_potrait{
+            max-width: 95vw !important;
+            border-radius: 12px !important;
+        }
+    }
+    ._1ckjpok7{
+        @include mobile_potrait{
+            padding: 0 !important;
+            top : 0 !important;
+        }
+    }
+    .ju367v7r{
+        @include mobile_potrait{
+            padding-right: 8px !important;
+
+        }
+    }
+    .ju367v76{
+        @include mobile_potrait{
+            padding-left: 8px !important;
+        }
     }
 }
-.effect2{
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    opacity: 0.04;
+.check-account-container{
     @include mobile_potrait{
-        width: 30vw;
+        display: none;
     }
 }
 
