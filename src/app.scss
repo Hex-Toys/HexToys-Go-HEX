@@ -196,9 +196,7 @@ div[data-rk]{
     }
 }
 .check-account-container{
-    @include mobile_potrait{
         display: none;
-    }
 }
 
 ::-webkit-scrollbar {
