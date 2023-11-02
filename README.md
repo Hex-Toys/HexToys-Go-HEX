@@ -1,1 +1,1 @@
-# HexToys-Chat-UI
+# Hex Crypto Staking Front-End
