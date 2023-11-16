@@ -208,7 +208,7 @@ const Transfer = () => {
             <div className="content">
                 <div className="col_div">
                     <div className={`page-title text_color_1_${theme}`}>
-                        Tansfer
+                        Transfer
                     </div>
 
                     <div className={`input-container ${theme}`}>
